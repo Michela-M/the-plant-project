@@ -1,4 +1,3 @@
-import { useState } from 'react';
 import Dashboard from './pages/Dashboard';
 import Encyclopedia from './pages/Encyclopedia';
 import MyCollection from './pages/MyCollection';
@@ -7,8 +6,6 @@ import './App.css';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 
 function App() {
-  const [count, setCount] = useState(0);
-
   return (
     <div className="bg-stone-100 min-h-screen">
       <BrowserRouter>
