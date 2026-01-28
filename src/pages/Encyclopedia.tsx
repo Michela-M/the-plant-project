@@ -19,7 +19,7 @@ export default function Encyclopedia() {
   return (
     <div className="w-1/2 mx-auto py-8 flex flex-col gap-4">
       <div className="flex justify-between items-center">
-        <h1 className="text-3xl">Encyclopedia</h1>
+        <h1 className="text-3xl font-bold text-green-900">Encyclopedia</h1>
         <ButtonRadio
           icons={icons}
           selectedIndex={selectedIndex}
