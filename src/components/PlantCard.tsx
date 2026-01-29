@@ -18,7 +18,7 @@ export default function PlantCard({
         }
         alt={commonName ? commonName : 'Plant Image'}
       />
-      <p className="text-stone-500">{family ? family : 'Family Unknown'}</p>
+      <p className="text-stone-600">{family ? family : 'Family Unknown'}</p>
       <p className="text-lg">{commonName ? commonName : 'Unknown'}</p>
     </div>
   );
