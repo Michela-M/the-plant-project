@@ -2,7 +2,7 @@
 
 ## Purpose
 
-The **PlantCard** component displays a plant’s core identifying information: image, family, and common name. It is a presentational component with no internal state
+The **PlantCard** component displays a plant’s core identifying information: image, family, and common name. It is a presentational component with no internal state.
 
 ## Props
 

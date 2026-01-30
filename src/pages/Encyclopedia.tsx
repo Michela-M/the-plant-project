@@ -11,10 +11,6 @@ export default function Encyclopedia() {
     { Icon: LayoutList, id: 'list' },
   ];
 
-  function handleChange(index: number) {
-    setSelectedIndex(index);
-  }
-
   return (
     <div className="w-1/2 mx-auto py-8 flex flex-col gap-4">
       <div className="flex justify-between items-center">
@@ -22,7 +18,7 @@ export default function Encyclopedia() {
         <ButtonRadio
           icons={icons}
           selectedIndex={selectedIndex}
-          onChange={handleChange}
+          onChange={setSelectedIndex}
         />
       </div>
 

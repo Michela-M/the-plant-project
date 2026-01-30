@@ -22,11 +22,17 @@ export default function ButtonRadio({
 
         return (
           <button
+            type="button"
             key={iconOption.id ?? index}
             onClick={() => onChange(index)}
-            className={`p-1 cursor-pointer rounded-sm  ${
-              isSelected ? 'border border-green-800 border-2' : ''
+            className={`p-1 cursor-pointer rounded-sm ${
+              isSelected ? 'border-2 border-green-800' : ''
             }`}
+            aria-label={
+              isSelected
+                ? `Selected view option ${index + 1}`
+                : `Select view option ${index + 1}`
+            }
           >
             <iconOption.Icon color={color} />
           </button>

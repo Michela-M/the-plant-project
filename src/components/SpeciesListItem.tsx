@@ -28,22 +28,28 @@ export default function SpeciesListItem({
       <div className="w-3/4">
         <div className="flex">
           <div className="grow">
-            <p className="text-stone-600">
-              {family ? family : 'Unknown Family'}
-            </p>
-            <p className="text-lg">{commonName ? commonName : 'Unknown'}</p>
+            <p className="text-stone-600">{family || 'Unknown Family'}</p>
+            <p className="text-lg">{commonName || 'Unknown'}</p>
           </div>
           <div
             className="opacity-0 group-hover:opacity-100"
             data-testid="icon-container"
           >
-            <IconButton variant="ghost" icon={<CirclePlus />} />
+            <IconButton
+              variant="ghost"
+              icon={<CirclePlus />}
+              aria-label={
+                commonName
+                  ? `Add ${commonName} to collection`
+                  : 'Add plant to collection'
+              }
+            />
           </div>
         </div>
-        <p className="line-clamp-2 ">{description}</p>
+        <p className="line-clamp-2">{description}</p>
         <div className="flex flex-wrap gap-2 mt-1">
-          {tags.map((tag) => (
-            <Tag key={tag} label={tag} />
+          {tags.map((tag, index) => (
+            <Tag key={`${tag}-${index}`} label={tag} />
           ))}
         </div>
       </div>

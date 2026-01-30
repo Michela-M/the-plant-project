@@ -15,22 +15,29 @@ export default function PlantCard({
       <img
         className="aspect-square overflow-hidden object-cover w-full"
         src={
-          imageUrl
-            ? imageUrl
-            : 'https://larchcottage.co.uk/wp-content/uploads/2024/05/placeholder.jpg'
+          imageUrl ||
+          'https://larchcottage.co.uk/wp-content/uploads/2024/05/placeholder.jpg'
         }
-        alt={commonName ? commonName : 'Plant Image'}
+        alt={commonName || 'Plant Image'}
       />
       <div className="flex">
         <div className="grow">
-          <p className="text-stone-600">{family ? family : 'Unknown Family'}</p>
-          <p className="text-lg">{commonName ? commonName : 'Unknown'}</p>
+          <p className="text-stone-600">{family || 'Unknown Family'}</p>
+          <p className="text-lg">{commonName || 'Unknown'}</p>
         </div>
         <div
-          className="opacity-0 group-hover:opacity-100"
+          className="opacity-0 group-hover:opacity-100 py-2"
           data-testid="icon-container"
         >
-          <IconButton variant="ghost" icon={<CirclePlus size={16} />} />
+          <IconButton
+            variant="ghost"
+            icon={<CirclePlus size={16} />}
+            aria-label={
+              commonName
+                ? `Add ${commonName} to collection`
+                : 'Add plant to collection'
+            }
+          />
         </div>
       </div>
     </div>

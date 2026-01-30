@@ -8,9 +8,9 @@ The **ButtonRadio** component provides a controlled, icon‑based radio selectio
 
 | Prop            | Type                      | Required | Description                                                    |
 | --------------- | ------------------------- | -------- | -------------------------------------------------------------- |
-| `icon`          | `IconOption[]`            | yes      | Array of icons to display. Each icon must accept a color prop. |
+| `icons`         | `IconOption[]`            | yes      | Array of icons to display. Each icon must accept a color prop. |
 | `selectedIndex` | `number`                  | yes      | Index of the currently selected icon.                          |
-| `onChange`      | `(index: number) => void` | no       | Callback fired when the user selects a different icon.         |
+| `onChange`      | `(index: number) => void` | yes      | Callback fired when the user selects a different icon.         |
 
 ### IconOption
 

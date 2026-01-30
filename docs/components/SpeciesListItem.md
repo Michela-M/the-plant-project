@@ -6,13 +6,13 @@
 
 ## Props
 
-| Prop          | Type       | Required | Description                                                                                |
-| ------------- | ---------- | -------- | ------------------------------------------------------------------------------------------ |
-| `family`      | `string`   | yes      | Botanical family name. Falls back to "Unknown family" if empty.                            |
-| `commonName`  | `string`   | yes      | Common plant name. Falls back to "Unknown" if empty.                                       |
-| `description` | `string`   | yes      | Short text describing the species. Only displays 2 line, no matter the length of the text. |
-| `tags`        | `string[]` | yes      | Array of tag labels passed to the Tag component.                                           |
-| `imageUrl`    | `string`   | yes      | URL of the plant image. Falls back to a placeholder if empty.                              |
+| Prop          | Type       | Required | Description                                                                                 |
+| ------------- | ---------- | -------- | ------------------------------------------------------------------------------------------- |
+| `family`      | `string`   | yes      | Botanical family name. Falls back to "Unknown family" if empty.                             |
+| `commonName`  | `string`   | yes      | Common plant name. Falls back to "Unknown" if empty.                                        |
+| `description` | `string`   | yes      | Short text describing the species. Only displays 2 lines, no matter the length of the text. |
+| `tags`        | `string[]` | yes      | Array of tag labels passed to the Tag component.                                            |
+| `imageUrl`    | `string`   | yes      | URL of the plant image. Falls back to a placeholder if empty.                               |
 
 ## Example Usage
 

@@ -18,6 +18,7 @@ export default function Button({
 }) {
   return (
     <button
+      type="button"
       onClick={onClick}
       className={`px-3 py-2 rounded-md ${variantClasses[variant]}`}
     >
@@ -37,6 +38,7 @@ export function IconButton({
 }) {
   return (
     <button
+      type="button"
       onClick={onClick}
       className={`p-2 rounded-md ${variantClasses[variant]}`}
     >
