@@ -30,7 +30,7 @@ export default function PlantCard({
           className="opacity-0 group-hover:opacity-100"
           data-testid="icon-container"
         >
-          <IconButton variant="ghost" icon={<CirclePlus />} />
+          <IconButton variant="ghost" icon={<CirclePlus size={16} />} />
         </div>
       </div>
     </div>
