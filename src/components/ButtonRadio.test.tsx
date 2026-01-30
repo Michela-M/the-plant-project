@@ -3,7 +3,6 @@ import userEvent from '@testing-library/user-event';
 import ButtonRadio from './ButtonRadio';
 import { describe, it, vi, expect } from 'vitest';
 
-// A simple fake icon component for testing
 function FakeIcon({ color }: { color: string }) {
   return <svg data-testid={`icon-${color}`} />;
 }
@@ -36,10 +35,8 @@ describe('ButtonRadio', () => {
 
     render(<ButtonRadio icons={icons} selectedIndex={1} onChange={() => {}} />);
 
-    // Selected icon should be green
     expect(screen.getByTestId('icon-#166534')).toBeInTheDocument();
 
-    // Non-selected icon should be grey
     expect(screen.getByTestId('icon-#9CA3AF')).toBeInTheDocument();
   });
 

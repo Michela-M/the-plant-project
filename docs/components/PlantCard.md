@@ -6,11 +6,11 @@ The **PlantCard** component displays a plant’s core identifying information: i
 
 ## Props
 
-| Prop       | Type   | Required | Description                                                     |
-| ---------- | ------ | -------- | --------------------------------------------------------------- |
-| imageUrl   | string | no       | URL of the plant image. Falls back to a placeholder if missing. |
-| family     | string | no       | Displays “Unknown Family” if not provided.                      |
-| commonName | string | no       | Displays “Unknown” if missing.                                  |
+| Prop         | Type     | Required | Description                                                     |
+| ------------ | -------- | -------- | --------------------------------------------------------------- |
+| `imageUrl`   | `string` | no       | URL of the plant image. Falls back to a placeholder if missing. |
+| `family`     | `string` | no       | Displays “Unknown Family” if missing.                           |
+| `commonName` | `string` | no       | Displays “Unknown” if missing.                                  |
 
 ## Example Usage
 

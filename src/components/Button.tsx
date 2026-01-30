@@ -27,13 +27,13 @@ export default function Button({
 }
 
 export function IconButton({
-  variant = 'filled',
   icon,
+  variant = 'filled',
   onClick,
 }: {
+  icon: ReactNode;
   variant?: 'filled' | 'outlined' | 'ghost';
   onClick?: () => void;
-  icon: ReactNode;
 }) {
   return (
     <button

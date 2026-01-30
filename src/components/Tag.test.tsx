@@ -4,7 +4,7 @@ import { describe, it, expect } from 'vitest';
 
 describe('Tag component', () => {
   it('renders the label', () => {
-    render(<Tag label="Low Maintenance" color="green" />);
+    render(<Tag label="Low Maintenance" />);
     expect(screen.getByText('Low Maintenance')).toBeInTheDocument();
   });
 
@@ -13,7 +13,6 @@ describe('Tag component', () => {
 
     const tag = screen.getByText('Air Purifying');
 
-    // Expect Tailwind classes for blue
     expect(tag.className).toContain('bg-blue-100');
     expect(tag.className).toContain('text-blue-700');
   });

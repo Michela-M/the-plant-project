@@ -2,15 +2,15 @@
 
 ## Purpose
 
-The ButtonRadio component provides a controlled, icon‑based radio selection mechanism. It renders a row of clickable icon buttons and highlights the currently selected option. The parent component owns the state.
+The **ButtonRadio** component provides a controlled, icon‑based radio selection mechanism. It renders a row of clickable icon buttons and highlights the currently selected option. The parent component owns the state.
 
 ## Props
 
-| Prop          | Type                    | Required | Description                                                    |
-| ------------- | ----------------------- | -------- | -------------------------------------------------------------- |
-| icon          | IconOption[]            | yes      | Array of icons to display. Each icon must accept a color prop. |
-| selectedIndex | number                  | yes      | Index of the currently selected icon.                          |
-| onChange      | (index: number) => void | no       | Callback fired when the user selects a different icon.         |
+| Prop            | Type                      | Required | Description                                                    |
+| --------------- | ------------------------- | -------- | -------------------------------------------------------------- |
+| `icon`          | `IconOption[]`            | yes      | Array of icons to display. Each icon must accept a color prop. |
+| `selectedIndex` | `number`                  | yes      | Index of the currently selected icon.                          |
+| `onChange`      | `(index: number) => void` | no       | Callback fired when the user selects a different icon.         |
 
 ### IconOption
 

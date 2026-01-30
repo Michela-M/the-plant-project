@@ -41,7 +41,7 @@ describe('SpeciesListItem', () => {
 
     expect(screen.getByText('A plant with missing data.')).toBeInTheDocument();
 
-    const img = screen.getByAltText('plant image');
+    const img = screen.getByAltText('Plant Image');
     expect(img).toHaveAttribute(
       'src',
       'https://larchcottage.co.uk/wp-content/uploads/2024/05/placeholder.jpg'
@@ -51,11 +51,11 @@ describe('SpeciesListItem', () => {
   it('icon button is hidden by default', () => {
     render(
       <SpeciesListItem
-        family=""
-        commonName=""
-        description="A plant with missing data."
-        tags={[]}
-        imageUrl=""
+        family="Asparagaceae"
+        commonName="Snake Plant"
+        description="A very resilient plant."
+        tags={['low-maintenance', 'air-purifying']}
+        imageUrl="https://example.com/snake.jpg"
       />
     );
 

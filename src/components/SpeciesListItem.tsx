@@ -23,7 +23,7 @@ export default function SpeciesListItem({
           imageUrl ||
           'https://larchcottage.co.uk/wp-content/uploads/2024/05/placeholder.jpg'
         }
-        alt={commonName || 'plant image'}
+        alt={commonName || 'Plant Image'}
       />
       <div className="w-3/4">
         <div className="flex">

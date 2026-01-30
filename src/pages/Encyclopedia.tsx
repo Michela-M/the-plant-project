@@ -12,7 +12,6 @@ export default function Encyclopedia() {
   ];
 
   function handleChange(index: number) {
-    console.log('Selected index: ', index);
     setSelectedIndex(index);
   }
 
