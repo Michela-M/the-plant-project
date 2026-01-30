@@ -5,7 +5,7 @@ import { useState } from 'react';
 import SpeciesListItem from '../components/SpeciesListItem';
 
 export default function Encyclopedia() {
-  const [selectedIndex, setSelectedIndex] = useState(1);
+  const [selectedIndex, setSelectedIndex] = useState(0);
   const icons = [
     { Icon: LayoutGrid, id: 'grid' },
     { Icon: LayoutList, id: 'list' },

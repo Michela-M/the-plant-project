@@ -20,6 +20,14 @@ describe('PlantCard component', () => {
     expect(screen.getByText('Snake Plant')).toBeInTheDocument();
   });
 
+  it('icon button is hidden by default', () => {
+    render(<PlantCard family="Asparagaceae" commonName="Snake Plant" />);
+
+    const button = screen.getByTestId('icon-container');
+
+    expect(button).toHaveClass('opacity-0');
+  });
+
   it('handles missing props gracefully', () => {
     render(<PlantCard />);
 
@@ -27,7 +35,7 @@ describe('PlantCard component', () => {
       'src',
       'https://larchcottage.co.uk/wp-content/uploads/2024/05/placeholder.jpg'
     );
-    expect(screen.getByText('Family Unknown')).toBeInTheDocument();
+    expect(screen.getByText('Unknown Family')).toBeInTheDocument();
     expect(screen.getByText('Unknown')).toBeInTheDocument();
   });
 });

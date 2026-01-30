@@ -1,4 +1,6 @@
 import Tag from './Tag';
+import { IconButton } from './Button';
+import { CirclePlus } from 'lucide-react';
 
 export default function SpeciesListItem({
   family,
@@ -14,7 +16,7 @@ export default function SpeciesListItem({
   imageUrl: string;
 }) {
   return (
-    <div className="flex flex-row gap-2">
+    <div className="flex flex-row gap-2 group">
       <img
         className="aspect-square overflow-hidden object-cover w-1/4 h-full"
         src={
@@ -24,8 +26,20 @@ export default function SpeciesListItem({
         alt={commonName || 'plant image'}
       />
       <div className="w-3/4">
-        <p className="text-stone-500">{family || 'Unknown family'}</p>
-        <p className="text-lg">{commonName || 'Unknown'}</p>
+        <div className="flex">
+          <div className="grow">
+            <p className="text-stone-600">
+              {family ? family : 'Unknown Family'}
+            </p>
+            <p className="text-lg">{commonName ? commonName : 'Unknown'}</p>
+          </div>
+          <div
+            className="opacity-0 group-hover:opacity-100"
+            data-testid="icon-container"
+          >
+            <IconButton variant="ghost" icon={<CirclePlus />} />
+          </div>
+        </div>
         <p className="line-clamp-2 ">{description}</p>
         <div className="flex flex-wrap gap-2 mt-1">
           {tags.map((tag) => (

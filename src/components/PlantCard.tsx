@@ -1,3 +1,6 @@
+import { CirclePlus } from 'lucide-react';
+import { IconButton } from './Button';
+
 export default function PlantCard({
   imageUrl,
   family,
@@ -8,7 +11,7 @@ export default function PlantCard({
   commonName?: string;
 }) {
   return (
-    <div className="">
+    <div className="group">
       <img
         className="aspect-square overflow-hidden object-cover w-full"
         src={
@@ -18,8 +21,18 @@ export default function PlantCard({
         }
         alt={commonName ? commonName : 'Plant Image'}
       />
-      <p className="text-stone-600">{family ? family : 'Family Unknown'}</p>
-      <p className="text-lg">{commonName ? commonName : 'Unknown'}</p>
+      <div className="flex">
+        <div className="grow">
+          <p className="text-stone-600">{family ? family : 'Unknown Family'}</p>
+          <p className="text-lg">{commonName ? commonName : 'Unknown'}</p>
+        </div>
+        <div
+          className="opacity-0 group-hover:opacity-100"
+          data-testid="icon-container"
+        >
+          <IconButton variant="ghost" icon={<CirclePlus />} />
+        </div>
+      </div>
     </div>
   );
 }

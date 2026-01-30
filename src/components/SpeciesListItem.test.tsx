@@ -36,7 +36,7 @@ describe('SpeciesListItem', () => {
       />
     );
 
-    expect(screen.getByText('Unknown family')).toBeInTheDocument();
+    expect(screen.getByText('Unknown Family')).toBeInTheDocument();
     expect(screen.getByText('Unknown')).toBeInTheDocument();
 
     expect(screen.getByText('A plant with missing data.')).toBeInTheDocument();
@@ -46,6 +46,22 @@ describe('SpeciesListItem', () => {
       'src',
       'https://larchcottage.co.uk/wp-content/uploads/2024/05/placeholder.jpg'
     );
+  });
+
+  it('icon button is hidden by default', () => {
+    render(
+      <SpeciesListItem
+        family=""
+        commonName=""
+        description="A plant with missing data."
+        tags={[]}
+        imageUrl=""
+      />
+    );
+
+    const button = screen.getByTestId('icon-container');
+
+    expect(button).toHaveClass('opacity-0');
   });
 
   it('renders the correct number of tags', () => {
