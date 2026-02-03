@@ -3,54 +3,89 @@ import userEvent from '@testing-library/user-event';
 import ButtonRadio from './ButtonRadio';
 import { describe, it, vi, expect } from 'vitest';
 
-function FakeIcon({ color }: { color: string }) {
-  return <svg data-testid={`icon-${color}`} />;
-}
+const FakeIcon = () => <span data-testid="fake-icon">Icon</span>;
 
 describe('ButtonRadio', () => {
-  it('calls onChange with the correct index when clicked', async () => {
-    const user = userEvent.setup();
-    const handleChange = vi.fn();
-
+  it('renders buttons with provided icons', () => {
     const icons = [
       { Icon: FakeIcon, id: 1 },
       { Icon: FakeIcon, id: 2 },
       { Icon: FakeIcon, id: 3 },
     ];
 
+    render(<ButtonRadio icons={icons} selectedIndex={0} onChange={() => {}} />);
+
+    const buttons = screen.getAllByRole('tab');
+    expect(buttons).toHaveLength(3);
+    buttons.forEach((button) => {
+      expect(
+        button.querySelector('[data-testid="fake-icon"]')
+      ).toBeInTheDocument();
+    });
+  });
+
+  it("renders buttons with provided labels when icons aren't given", () => {
+    const labels = ['Option 1', 'Option 2', 'Option 3'];
+
     render(
-      <ButtonRadio icons={icons} selectedIndex={0} onChange={handleChange} />
+      <ButtonRadio labels={labels} selectedIndex={0} onChange={() => {}} />
     );
 
-    await user.click(screen.getAllByTestId(/icon/)[1]);
-
-    expect(handleChange).toHaveBeenCalledWith(1);
+    labels.forEach((label) => {
+      expect(screen.getByRole('tab', { name: label })).toBeInTheDocument();
+    });
   });
 
-  it('applies green color to the selected icon and grey to others', () => {
-    const icons = [
-      { Icon: FakeIcon, id: 1 },
-      { Icon: FakeIcon, id: 2 },
-    ];
+  it('calls onChange with correct index when a button is clicked', async () => {
+    const user = userEvent.setup();
+    const onChange = vi.fn();
+    const labels = ['Option 1', 'Option 2', 'Option 3'];
 
-    render(<ButtonRadio icons={icons} selectedIndex={1} onChange={() => {}} />);
+    render(
+      <ButtonRadio labels={labels} selectedIndex={0} onChange={onChange} />
+    );
 
-    expect(screen.getByTestId('icon-#166534')).toBeInTheDocument();
+    const secondButton = screen.getByRole('tab', { name: 'Option 2' });
+    await user.click(secondButton);
 
-    expect(screen.getByTestId('icon-#9CA3AF')).toBeInTheDocument();
+    expect(onChange).toHaveBeenCalledWith(1);
   });
 
-  it('adds border classes to the selected icon container', () => {
-    const icons = [
-      { Icon: FakeIcon, id: 1 },
-      { Icon: FakeIcon, id: 2 },
-    ];
+  it('applies disabled styles and prevents interaction when disabled', async () => {
+    const user = userEvent.setup();
+    const onChange = vi.fn();
+    const labels = ['Option 1', 'Option 2'];
 
-    render(<ButtonRadio icons={icons} selectedIndex={1} onChange={() => {}} />);
+    render(
+      <ButtonRadio
+        labels={labels}
+        selectedIndex={0}
+        onChange={onChange}
+        disabled
+      />
+    );
 
-    const containers = screen.getAllByRole('button', { hidden: true });
+    const buttons = screen.getAllByRole('tab');
+    buttons.forEach((button) => {
+      expect(button).toBeDisabled();
+      expect(button).toHaveClass('cursor-not-allowed');
+    });
 
-    expect(containers[1].className).toContain('border-green-800');
-    expect(containers[0].className).not.toContain('border-green-800');
+    await user.click(buttons[1]);
+    expect(onChange).not.toHaveBeenCalled();
+  });
+
+  it('applies selected styles to the selected button', () => {
+    const labels = ['Option 1', 'Option 2'];
+
+    render(
+      <ButtonRadio labels={labels} selectedIndex={1} onChange={() => {}} />
+    );
+
+    const firstButton = screen.getByRole('tab', { name: 'Option 1' });
+    const secondButton = screen.getByRole('tab', { name: 'Option 2' });
+
+    expect(firstButton).toHaveClass('text-green-800');
+    expect(secondButton).toHaveClass('bg-green-800', 'text-stone-50');
   });
 });

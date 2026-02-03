@@ -11,14 +11,16 @@ export default function Button({
   label,
   variant = 'filled',
   onClick,
+  type,
 }: {
   label: string;
   variant?: 'filled' | 'outlined' | 'ghost';
   onClick?: () => void;
+  type?: 'button' | 'submit' | 'reset';
 }) {
   return (
     <button
-      type="button"
+      type={type}
       onClick={onClick}
       className={`px-3 py-2 rounded-md ${variantClasses[variant]}`}
     >
