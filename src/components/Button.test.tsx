@@ -12,6 +12,12 @@ describe('Button', () => {
     ).toBeInTheDocument();
   });
 
+  it('renders the icon when provided', () => {
+    render(<Button label="With Icon" icon={<span data-testid="icon" />} />);
+
+    expect(screen.getByTestId('icon')).toBeInTheDocument();
+  });
+
   it('uses filled variant by default', () => {
     render(<Button label="Default" />);
 
@@ -31,6 +37,13 @@ describe('Button', () => {
 
     const button = screen.getByRole('button');
     expect(button.className).toContain('text-green-800');
+  });
+
+  it('applies error tone classes', () => {
+    render(<Button label="Error" tone="error" />);
+
+    const button = screen.getByRole('button');
+    expect(button.className).toContain('bg-red-800');
   });
 
   it('calls onClick when clicked', async () => {
