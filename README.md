@@ -1,73 +1,77 @@
-# React + TypeScript + Vite
+# The plant project
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+A web application for plant collectors to manage and organize their plant collections.
+Built as part of a React training course.
 
-Currently, two official plugins are available:
+## Features
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) (or [oxc](https://oxc.rs) when used in [rolldown-vite](https://vite.dev/guide/rolldown)) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+- React + TypeScript
+- Tailwind CSS for styling
+- Vite for fast development
+- ESLint + Prettier for code quality
+- Vitest + React Testing Library for testing
+- GitHub Actions for CI
 
-## React Compiler
+## Getting Started
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
-
-## Expanding the ESLint configuration
-
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
-
-```js
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-
-      // Remove tseslint.configs.recommended and replace with this
-      tseslint.configs.recommendedTypeChecked,
-      // Alternatively, use this for stricter rules
-      tseslint.configs.strictTypeChecked,
-      // Optionally, add this for stylistic rules
-      tseslint.configs.stylisticTypeChecked,
-
-      // Other configs...
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-]);
+### Install dependencies
+```
+npm install
+# or
+yarn install
 ```
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
-
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x';
-import reactDom from 'eslint-plugin-react-dom';
-
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-      // Enable lint rules for React
-      reactX.configs['recommended-typescript'],
-      // Enable lint rules for React DOM
-      reactDom.configs.recommended,
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-]);
+### Run the development server
 ```
+npm run dev
+# or
+yarn dev
+```
+
+Open http://localhost:5173
+ to view in the browser.
+
+### Build for production
+```
+npm run build
+# or
+yarn build
+```
+
+### Run tests
+```
+npm run test
+# or
+yarn test
+```
+
+### Lint and Format
+```
+npm run lint
+npm run format
+```
+
+### GitHub Actions
+Runs lint and tests automatically on push and pull requests.
+
+## Folder Structure
+```
+/src
+  ├── /assets/           # Static assets (images, fonts, etc.)
+  ├── /components/       # Reusable components
+  ├── /features/         # Feature-specific logic and components (could be feature folders)
+  ├── /hooks/            # Custom React hooks
+  ├── /layouts/          # Layout components (e.g., Header, Footer, Sidebar)
+  ├── /pages/            # Page components (routes)
+  ├── /services/         # API requests, utilities, external service integrations
+  ├── /store/            # State management (Redux, Zustand, Context API)
+  ├── /styles/           # Global styles (CSS, SASS, Styled Components)
+  ├── /utils/            # Utility functions, helpers, and constants
+  ├── /app.tsx           # App component (entry point)
+  ├── /index.tsx         # Main entry point for React
+  └── /router.tsx        # Routing (React Router setup)
+```
+
+## License
+
+This project is licensed under the MIT License — see the LICENSE file for details.
