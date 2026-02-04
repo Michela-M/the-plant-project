@@ -18,6 +18,20 @@ It is intended to be used as a building block for forms and form-like UI.
 
 ## Props
 
+| Prop          | Type                                               | Required | Default  | Description                                                                      |
+| ------------- | -------------------------------------------------- | -------- | -------- | -------------------------------------------------------------------------------- |
+| `label`       | `string`                                           | No       | —        | Label displayed above the input                                                  |
+| `placeholder` | `string`                                           | No       | —        | Placeholder text for the input. Falls back to `label` or `"Enter text"`          |
+| `helperText`  | `string`                                           | No       | —        | Helper text displayed below the input when there is no error                     |
+| `disabled`    | `boolean`                                          | No       | `false`  | Disables the input and applies disabled styles                                   |
+| `icon`        | `React.ReactNode`                                  | No       | —        | Icon displayed inside the input on the right                                     |
+| `type`        | `'text' \| 'password' \| 'email'`                  | No       | `'text'` | HTML input type                                                                  |
+| `value`       | `string`                                           | No       | —        | Controlled input value                                                           |
+| `onChange`    | `(e: React.ChangeEvent<HTMLInputElement>) => void` | No       | —        | Change event handler                                                             |
+| `onBlur`      | `(e: React.FocusEvent<HTMLInputElement>) => void`  | No       | —        | Blur event handler                                                               |
+| `error`       | `string`                                           | No       | —        | Error message; when provided, the input is marked invalid and styled accordingly |
+| `name`        | `string`                                           | No       | —        | Input name and `id`, used to associate the label                                 |
+
 ## Example Usage
 
 ### Basic text field
