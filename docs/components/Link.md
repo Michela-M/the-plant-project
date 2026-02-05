@@ -2,7 +2,7 @@
 
 ## Purpose
 
-The `Link` component provides a consistent, styled hyperlink throughout the application. It ensures uniform colors, hover and active states, and can be easily customized or extended.
+The `Link` component provides a consistent, styled link throughout the application. It wraps React Router's `Link` to ensure uniform colors, hover and active states, and can be easily customized or extended. It must be rendered inside a Router.
 
 ## Props
 

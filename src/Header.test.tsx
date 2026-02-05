@@ -30,10 +30,10 @@ describe('Header', () => {
     firebaseAuth.onAuthStateChanged as unknown as Mock;
   const mockedSignOut = firebaseAuth.signOut as unknown as Mock;
 
-  function mockAuthState(user: User | null) {
+  function mockAuthState(user: Partial<User> | null) {
     mockedOnAuthStateChanged.mockImplementation(
       (auth: Auth, callback: (user: User | null) => void) => {
-        callback(user);
+        callback(user as User | null);
         return () => {};
       }
     );
@@ -50,11 +50,11 @@ describe('Header', () => {
         <Routes>
           <Route path="/" element={<TestPage label="Dashboard Page" />} />
           <Route
-            path="/Encyclopedia"
+            path="/encyclopedia"
             element={<TestPage label="Encyclopedia Page" />}
           />
           <Route
-            path="/Collection"
+            path="/collection"
             element={<TestPage label="Collection Page" />}
           />
         </Routes>

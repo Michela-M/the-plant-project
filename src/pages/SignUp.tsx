@@ -1,79 +1,20 @@
 import TextField from '../components/TextField';
 import Button from '../components/Button';
-import * as Yup from 'yup';
 import { useFormik } from 'formik';
 import { createUserWithEmailAndPassword } from 'firebase/auth';
 import { FirebaseError } from 'firebase/app';
 import { auth } from '../firebase';
 import Toast from '../components/Toast';
 import { useState } from 'react';
-import { Eye, EyeOff } from 'lucide-react';
+import PasswordToggleIcon from '../components/PasswordToggleIcon';
 import Link from '../components/Link';
 import { useNavigate } from 'react-router-dom';
-
-const PASSWORD_REGEX = {
-  uppercase: /[A-Z]/,
-  lowercase: /[a-z]/,
-  number: /[0-9]/,
-  special: /[@$!%*?&]/,
-};
-
-const validationSchema = Yup.object().shape({
-  email: Yup.string().email('Invalid email').required('Email is required'),
-  password: Yup.string()
-    .min(8, 'Password must be at least 8 characters')
-    .matches(
-      PASSWORD_REGEX.uppercase,
-      'Password must contain at least one uppercase letter'
-    )
-    .matches(
-      PASSWORD_REGEX.lowercase,
-      'Password must contain at least one lowercase letter'
-    )
-    .matches(PASSWORD_REGEX.number, 'Password must contain at least one number')
-    .matches(
-      PASSWORD_REGEX.special,
-      'Password must contain at least one special character (@$!%*?&)'
-    )
-    .required('Password is required'),
-  confirmPassword: Yup.string()
-    .oneOf([Yup.ref('password'), undefined], 'Passwords must match')
-    .required('Confirm Password is required'),
-});
-
-const PasswordToggleIcon = ({
-  visible,
-  onToggle,
-}: {
-  visible: boolean;
-  onToggle: () => void;
-}) =>
-  visible ? (
-    <EyeOff onClick={onToggle} className="cursor-pointer" />
-  ) : (
-    <Eye onClick={onToggle} className="cursor-pointer" />
-  );
+import { useToast } from '../hooks/useToast';
+import { signupValidationSchema } from '../utils/validation';
 
 export default function SignUp() {
   const navigate = useNavigate();
-  const [toast, setToast] = useState({
-    message: '',
-    detail: '',
-    type: 'info' as 'info' | 'error' | 'success' | 'warning',
-    open: false,
-  });
-
-  const showToast = (
-    message: string,
-    type: 'success' | 'error',
-    detail?: string
-  ) => {
-    setToast({ message, detail: detail || '', type, open: true });
-  };
-
-  const showErrorToast = (message: string, detail?: string) => {
-    showToast(message, 'error', detail);
-  };
+  const { toast, showSuccessToast, showErrorToast, closeToast } = useToast();
 
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
@@ -84,7 +25,7 @@ export default function SignUp() {
       password: '',
       confirmPassword: '',
     },
-    validationSchema: validationSchema,
+    validationSchema: signupValidationSchema,
     onSubmit: async (values) => {
       try {
         await createUserWithEmailAndPassword(
@@ -92,7 +33,7 @@ export default function SignUp() {
           values.email,
           values.password
         );
-        showToast('User registered successfully!', 'success');
+        showSuccessToast('Registration successful');
         navigate('/collection');
       } catch (error) {
         if (error instanceof FirebaseError) {
@@ -191,7 +132,7 @@ export default function SignUp() {
         detail={toast.detail}
         type={toast.type}
         open={toast.open}
-        onClose={() => setToast({ ...toast, open: false })}
+        onClose={closeToast}
       />
     </div>
   );

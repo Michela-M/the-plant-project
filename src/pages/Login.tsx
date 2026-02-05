@@ -5,50 +5,16 @@ import Toast from '../components/Toast';
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useFormik } from 'formik';
-import * as Yup from 'yup';
-import { Eye, EyeOff } from 'lucide-react';
+import { loginValidationSchema } from '../utils/validation';
+import PasswordToggleIcon from '../components/PasswordToggleIcon';
 import { signInWithEmailAndPassword } from 'firebase/auth';
 import { FirebaseError } from 'firebase/app';
 import { auth } from '../firebase';
-
-const validationSchema = Yup.object().shape({
-  email: Yup.string().email('Invalid email').required('Email is required'),
-  password: Yup.string().required('Password is required'),
-});
-
-const PasswordToggleIcon = ({
-  visible,
-  onToggle,
-}: {
-  visible: boolean;
-  onToggle: () => void;
-}) =>
-  visible ? (
-    <EyeOff onClick={onToggle} className="cursor-pointer" />
-  ) : (
-    <Eye onClick={onToggle} className="cursor-pointer" />
-  );
+import { useToast } from '../hooks/useToast';
 
 export default function Login() {
   const navigate = useNavigate();
-  const [toast, setToast] = useState({
-    message: '',
-    detail: '',
-    type: 'info' as 'info' | 'error' | 'success' | 'warning',
-    open: false,
-  });
-
-  const showToast = (
-    message: string,
-    type: 'success' | 'error',
-    detail?: string
-  ) => {
-    setToast({ message, detail: detail || '', type, open: true });
-  };
-
-  const showErrorToast = (message: string, detail?: string) => {
-    showToast(message, 'error', detail);
-  };
+  const { toast, showSuccessToast, showErrorToast, closeToast } = useToast();
 
   const [showPassword, setShowPassword] = useState(false);
 
@@ -57,17 +23,32 @@ export default function Login() {
       email: '',
       password: '',
     },
-    validationSchema: validationSchema,
+    validationSchema: loginValidationSchema,
     onSubmit: async (values) => {
       try {
         await signInWithEmailAndPassword(auth, values.email, values.password);
-        showToast('Logged in successfully', 'success');
+        showSuccessToast('Login successful');
         navigate('/collection');
       } catch (error) {
         if (error instanceof FirebaseError) {
-          showErrorToast('Login failed', error.message);
+          switch (error.code) {
+            case 'auth/user-not-found':
+              showErrorToast('User not found.');
+              break;
+            case 'auth/wrong-password':
+              showErrorToast('Incorrect password.');
+              break;
+            case 'auth/invalid-email':
+              showErrorToast('Invalid email address.');
+              break;
+            case 'auth/invalid-credential':
+              showErrorToast('Invalid credentials.');
+              break;
+            default:
+              showErrorToast('Login failed', error.message);
+          }
         } else {
-          showErrorToast('Login failed', 'An unexpected error occurred');
+          showErrorToast('Login failed', 'An unknown error occurred');
         }
       }
     },
@@ -123,7 +104,7 @@ export default function Login() {
         detail={toast.detail}
         type={toast.type}
         open={toast.open}
-        onClose={() => setToast({ ...toast, open: false })}
+        onClose={closeToast}
       />
     </div>
   );

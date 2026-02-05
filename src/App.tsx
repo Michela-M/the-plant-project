@@ -15,10 +15,10 @@ function App() {
 
         <Routes>
           <Route path="/" element={<Dashboard />} />
-          <Route path="/Encyclopedia" element={<Encyclopedia />} />
-          <Route path="/Collection" element={<MyCollection />} />
-          <Route path="/Login" element={<Login />} />
-          <Route path="/SignUp" element={<SignUp />} />
+          <Route path="/encyclopedia" element={<Encyclopedia />} />
+          <Route path="/collection" element={<MyCollection />} />
+          <Route path="/login" element={<Login />} />
+          <Route path="/signup" element={<SignUp />} />
         </Routes>
       </BrowserRouter>
     </div>
