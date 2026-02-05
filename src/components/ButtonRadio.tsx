@@ -1,43 +1,76 @@
+import clsx from 'clsx';
+
 interface IconOption {
-  Icon: React.ComponentType<{ color: string }>;
+  Icon: React.ComponentType<React.SVGProps<SVGSVGElement>>;
   id?: string | number;
 }
 
 interface ButtonRadioProps {
-  icons: IconOption[];
+  icons?: IconOption[];
+  labels?: string[];
   selectedIndex: number;
   onChange: (index: number) => void;
+  disabled?: boolean;
+}
+
+function getButtonClasses(isSelected: boolean, disabled?: boolean) {
+  return clsx('rounded-sm transition-colors', {
+    'text-stone-50 bg-stone-400 cursor-not-allowed': disabled && isSelected,
+
+    'text-stone-400 cursor-not-allowed': disabled && !isSelected,
+
+    'bg-green-800 text-stone-50 border-green-800': !disabled && isSelected,
+
+    'text-green-800 border-transparent hover:bg-green-800/10 active:bg-green-800/20':
+      !disabled && !isSelected,
+  });
 }
 
 export default function ButtonRadio({
   icons,
+  labels,
   selectedIndex,
   onChange,
+  disabled,
 }: ButtonRadioProps) {
   return (
-    <div className="border border-stone-200 rounded-sm p-1 flex gap-1 items-center">
-      {icons.map((iconOption, index) => {
-        const isSelected = selectedIndex === index;
-        const color = isSelected ? '#166534' : '#9CA3AF'; // green-800 / gray-400
-
-        return (
+    <div
+      role="tablist"
+      className="border border-stone-200 rounded-md p-1 flex gap-1"
+    >
+      {icons &&
+        icons.map((option, index) => {
+          const Icon = option.Icon;
+          return (
+            <button
+              key={option.id || index}
+              role="tab"
+              aria-selected={selectedIndex === index}
+              onClick={() => onChange(index)}
+              disabled={disabled}
+              className={
+                getButtonClasses(selectedIndex === index, disabled) + ' p-2'
+              }
+            >
+              <Icon />
+            </button>
+          );
+        })}
+      {!icons &&
+        labels?.map((label, index) => (
           <button
-            type="button"
-            key={iconOption.id ?? index}
+            key={index}
+            role="tab"
+            aria-selected={selectedIndex === index}
             onClick={() => onChange(index)}
-            className={`p-1 cursor-pointer rounded-sm ${
-              isSelected ? 'border-2 border-green-800' : ''
-            }`}
-            aria-label={
-              isSelected
-                ? `Selected view option ${index + 1}`
-                : `Select view option ${index + 1}`
+            disabled={disabled}
+            className={
+              getButtonClasses(selectedIndex === index, disabled) + ' px-3 py-2'
             }
           >
-            <iconOption.Icon color={color} />
+            {label}
           </button>
-        );
-      })}
+        ))}
     </div>
   );
 }
