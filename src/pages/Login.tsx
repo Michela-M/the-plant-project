@@ -3,6 +3,7 @@ import TextField from '../components/TextField';
 import Button from '../components/Button';
 import Toast from '../components/Toast';
 import { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { useFormik } from 'formik';
 import * as Yup from 'yup';
 import { Eye, EyeOff } from 'lucide-react';
@@ -29,6 +30,7 @@ const PasswordToggleIcon = ({
   );
 
 export default function Login() {
+  const navigate = useNavigate();
   const [toast, setToast] = useState({
     message: '',
     detail: '',
@@ -60,6 +62,7 @@ export default function Login() {
       try {
         await signInWithEmailAndPassword(auth, values.email, values.password);
         showToast('Logged in successfully', 'success');
+        navigate('/collection');
       } catch (error) {
         if (error instanceof FirebaseError) {
           showErrorToast('Login failed', error.message);

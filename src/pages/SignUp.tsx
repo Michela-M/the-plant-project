@@ -9,6 +9,7 @@ import Toast from '../components/Toast';
 import { useState } from 'react';
 import { Eye, EyeOff } from 'lucide-react';
 import Link from '../components/Link';
+import { useNavigate } from 'react-router-dom';
 
 const PASSWORD_REGEX = {
   uppercase: /[A-Z]/,
@@ -54,6 +55,7 @@ const PasswordToggleIcon = ({
   );
 
 export default function SignUp() {
+  const navigate = useNavigate();
   const [toast, setToast] = useState({
     message: '',
     detail: '',
@@ -91,6 +93,7 @@ export default function SignUp() {
           values.password
         );
         showToast('User registered successfully!', 'success');
+        navigate('/collection');
       } catch (error) {
         if (error instanceof FirebaseError) {
           switch (error.code) {
