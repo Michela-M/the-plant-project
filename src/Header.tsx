@@ -1,6 +1,25 @@
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
+import Button from './components/Button';
+import { auth } from './firebase';
+import { onAuthStateChanged, signOut } from 'firebase/auth';
+import { useEffect, useState } from 'react';
 
 export default function Header() {
+  const navigate = useNavigate();
+  const [user, setUser] = useState<null | { email: string }>(null);
+
+  useEffect(() => {
+    const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
+      if (currentUser) {
+        setUser({ email: currentUser.email || '' });
+      } else {
+        setUser(null);
+      }
+    });
+
+    return () => unsubscribe();
+  }, []);
+
   return (
     <>
       <nav className="p-4 px-8 flex justify-between items-baseline text-green-900">
@@ -8,9 +27,26 @@ export default function Header() {
           the plant project
         </Link>
         <MenuItem label="Dashboard" link="/" />
-        <MenuItem label="Encyclopedia" link="/Encyclopedia" />
-        <MenuItem label="My Collection" link="/Collection" />
-        <MenuItem label="Settings" />
+        <MenuItem label="Encyclopedia" link="/encyclopedia" />
+        <MenuItem label="My Collection" link="/collection" />
+        {user ? (
+          <Button
+            label="Logout"
+            onClick={async () => {
+              await signOut(auth);
+              navigate('/encyclopedia');
+            }}
+          />
+        ) : (
+          <div className="flex gap-2">
+            <Button label="Login" onClick={() => navigate('/login')} />
+            <Button
+              label="Sign Up"
+              variant="outlined"
+              onClick={() => navigate('/signup')}
+            />
+          </div>
+        )}
       </nav>
     </>
   );
