@@ -32,7 +32,7 @@ describe('Header', () => {
 
   function mockAuthState(user: Partial<User> | null) {
     mockedOnAuthStateChanged.mockImplementation(
-      (auth: Auth, callback: (user: User | null) => void) => {
+      (_auth: Auth, callback: (user: User | null) => void) => {
         callback(user as User | null);
         return () => {};
       }
