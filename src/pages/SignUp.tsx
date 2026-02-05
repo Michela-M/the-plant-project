@@ -40,6 +40,19 @@ const validationSchema = Yup.object().shape({
     .required('Confirm Password is required'),
 });
 
+const PasswordToggleIcon = ({
+  visible,
+  onToggle,
+}: {
+  visible: boolean;
+  onToggle: () => void;
+}) =>
+  visible ? (
+    <EyeOff onClick={onToggle} className="cursor-pointer" />
+  ) : (
+    <Eye onClick={onToggle} className="cursor-pointer" />
+  );
+
 export default function SignUp() {
   const [toast, setToast] = useState({
     message: '',
@@ -62,19 +75,6 @@ export default function SignUp() {
 
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
-
-  const PasswordToggleIcon = ({
-    visible,
-    onToggle,
-  }: {
-    visible: boolean;
-    onToggle: () => void;
-  }) =>
-    visible ? (
-      <EyeOff onClick={onToggle} className="cursor-pointer" />
-    ) : (
-      <Eye onClick={onToggle} className="cursor-pointer" />
-    );
 
   const formik = useFormik({
     initialValues: {
