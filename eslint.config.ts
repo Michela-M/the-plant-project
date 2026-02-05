@@ -18,9 +18,7 @@ export default defineConfig([
   pluginReact.configs.flat.recommended,
   {
     files: ['**/*.json'],
-    plugins: { json },
-    language: 'json/json',
-    extends: ['json/recommended'],
+    ...json.configs.recommended,
   },
   {
     files: ['**/*.md'],
