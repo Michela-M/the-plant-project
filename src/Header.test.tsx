@@ -4,17 +4,18 @@ import { MemoryRouter, Routes, Route } from 'react-router-dom';
 import Header from './Header';
 import { expect, describe, it, vi, beforeEach, type Mock } from 'vitest';
 import * as firebaseAuth from 'firebase/auth';
+import type { Auth, User } from 'firebase/auth';
 
 function TestPage({ label }: { label: string }) {
   return <div>{label}</div>;
 }
 
-// Mock firebase/auth
 vi.mock('firebase/auth', async () => {
-  const original: any = await vi.importActual('firebase/auth');
+  const original =
+    await vi.importActual<typeof import('firebase/auth')>('firebase/auth');
   return {
     ...original,
-    auth: {}, // dummy auth object
+    auth: {},
     onAuthStateChanged: vi.fn(),
     signOut: vi.fn(),
   };
@@ -29,9 +30,9 @@ describe('Header', () => {
     firebaseAuth.onAuthStateChanged as unknown as Mock;
   const mockedSignOut = firebaseAuth.signOut as unknown as Mock;
 
-  function mockAuthState(user: { email?: string } | null) {
+  function mockAuthState(user: User | null) {
     mockedOnAuthStateChanged.mockImplementation(
-      (_authObj: any, callback: (user: any) => void) => {
+      (auth: Auth, callback: (user: User | null) => void) => {
         callback(user);
         return () => {};
       }
