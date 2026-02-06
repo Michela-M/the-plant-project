@@ -1,4 +1,5 @@
 import { Eye, EyeOff } from 'lucide-react';
+import { IconButton } from './Button';
 
 export default function PasswordToggleIcon({
   visible,
@@ -8,16 +9,18 @@ export default function PasswordToggleIcon({
   onToggle: () => void;
 }) {
   return visible ? (
-    <EyeOff
+    <IconButton
       onClick={onToggle}
-      className="cursor-pointer"
-      aria-label="Hide password"
+      icon={<EyeOff className="inline text-stone-500" />}
+      variant="ghost"
+      label="hide password"
     />
   ) : (
-    <Eye
+    <IconButton
       onClick={onToggle}
-      className="cursor-pointer"
-      aria-label="Show password"
+      icon={<Eye className="inline text-stone-500" />}
+      variant="ghost"
+      label="show password"
     />
   );
 }

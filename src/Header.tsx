@@ -34,7 +34,13 @@ export default function Header() {
             label="Logout"
             onClick={async () => {
               await signOut(auth);
-              navigate('/encyclopedia');
+              try {
+                await signOut(auth);
+                navigate('/encyclopedia');
+              } catch (error) {
+                console.error('Failed to log out:', error);
+                window.alert('Logout failed. Please try again.');
+              }
             }}
           />
         ) : (

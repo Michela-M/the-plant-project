@@ -32,7 +32,7 @@ export default function PlantCard({
           <IconButton
             variant="ghost"
             icon={<CirclePlus size={16} />}
-            aria-label={
+            label={
               commonName
                 ? `Add ${commonName} to collection`
                 : 'Add plant to collection'

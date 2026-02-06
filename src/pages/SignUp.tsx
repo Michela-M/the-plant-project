@@ -11,6 +11,7 @@ import Link from '../components/Link';
 import { useNavigate } from 'react-router-dom';
 import { useToast } from '../hooks/useToast';
 import { signupValidationSchema } from '../utils/validation';
+import { onAuthStateChanged } from 'firebase/auth';
 
 export default function SignUp() {
   const navigate = useNavigate();
@@ -34,11 +35,17 @@ export default function SignUp() {
           values.password
         );
         showSuccessToast('Registration successful');
-        navigate('/collection');
+
+        const unsubscribe = onAuthStateChanged(auth, (user) => {
+          if (user) {
+            unsubscribe();
+            navigate('/collection');
+          }
+        });
       } catch (error) {
         if (error instanceof FirebaseError) {
           switch (error.code) {
-            case 'auth/email-already-in-use':
+            case 'auth/email-already-exists':
               showErrorToast('Email is already in use.');
               break;
             case 'auth/invalid-email':
@@ -46,9 +53,6 @@ export default function SignUp() {
               break;
             case 'auth/operation-not-allowed':
               showErrorToast('Operation not allowed.');
-              break;
-            case 'auth/weak-password':
-              showErrorToast('Password is too weak.');
               break;
             default:
               showErrorToast('Error registering user', error.message);

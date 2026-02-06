@@ -21,7 +21,7 @@ export default function Button({
   variant = 'filled',
   tone = 'primary',
   onClick,
-  type,
+  type = 'button',
 }: {
   label: string;
   icon?: ReactNode;
@@ -46,16 +46,19 @@ export function IconButton({
   icon,
   variant = 'filled',
   onClick,
+  label,
 }: {
   icon: ReactNode;
   variant?: 'filled' | 'outlined' | 'ghost';
   onClick?: () => void;
+  label?: string;
 }) {
   return (
     <button
       type="button"
       onClick={onClick}
       className={`p-2 rounded-md ${variantClasses['primary'][variant]}`}
+      aria-label={label}
     >
       {icon}
     </button>

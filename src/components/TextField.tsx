@@ -70,7 +70,7 @@ export default function TextField({
         />
 
         {icon && (
-          <div className="absolute right-3 top-1/2 -translate-y-1/2 text-stone-400">
+          <div className="absolute right-2 top-1/2 -translate-y-1/2 text-stone-400">
             {icon}
           </div>
         )}

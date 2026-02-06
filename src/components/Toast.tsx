@@ -68,6 +68,7 @@ export default function Toast({
             icon={<X color="#fff" />}
             variant="ghost"
             onClick={onClose}
+            label="close toast"
           />
         </div>
       )}

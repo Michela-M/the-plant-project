@@ -11,6 +11,7 @@ import { signInWithEmailAndPassword } from 'firebase/auth';
 import { FirebaseError } from 'firebase/app';
 import { auth } from '../firebase';
 import { useToast } from '../hooks/useToast';
+import { onAuthStateChanged } from 'firebase/auth';
 
 export default function Login() {
   const navigate = useNavigate();
@@ -28,16 +29,16 @@ export default function Login() {
       try {
         await signInWithEmailAndPassword(auth, values.email, values.password);
         showSuccessToast('Login successful');
-        navigate('/collection');
+
+        const unsubscribe = onAuthStateChanged(auth, (user) => {
+          if (user) {
+            unsubscribe();
+            navigate('/collection');
+          }
+        });
       } catch (error) {
         if (error instanceof FirebaseError) {
           switch (error.code) {
-            case 'auth/user-not-found':
-              showErrorToast('User not found.');
-              break;
-            case 'auth/wrong-password':
-              showErrorToast('Incorrect password.');
-              break;
             case 'auth/invalid-email':
               showErrorToast('Invalid email address.');
               break;
@@ -47,6 +48,8 @@ export default function Login() {
             default:
               showErrorToast('Login failed', error.message);
           }
+        } else if (error instanceof Error) {
+          showErrorToast('Login failed', error.message);
         } else {
           showErrorToast('Login failed', 'An unknown error occurred');
         }
