@@ -38,7 +38,7 @@ export default function SpeciesListItem({
             <IconButton
               variant="ghost"
               icon={<CirclePlus />}
-              aria-label={
+              label={
                 commonName
                   ? `Add ${commonName} to collection`
                   : 'Add plant to collection'

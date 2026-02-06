@@ -15,6 +15,7 @@ Built as part of a React training course.
 ## Getting Started
 
 ### Install dependencies
+
 ```
 npm install
 # or
@@ -22,6 +23,7 @@ yarn install
 ```
 
 ### Run the development server
+
 ```
 npm run dev
 # or
@@ -29,9 +31,10 @@ yarn dev
 ```
 
 Open http://localhost:5173
- to view in the browser.
+to view in the browser.
 
 ### Build for production
+
 ```
 npm run build
 # or
@@ -39,6 +42,7 @@ yarn build
 ```
 
 ### Run tests
+
 ```
 npm run test
 # or
@@ -46,15 +50,30 @@ yarn test
 ```
 
 ### Lint and Format
+
 ```
 npm run lint
 npm run format
 ```
 
 ### GitHub Actions
+
 Runs lint and tests automatically on push and pull requests.
 
+## Environment Variables
+
+This project uses Firebase for authentication and requires environment variables to be set.
+
+An example file is provided: `.env.example`
+
+To run the project locally:
+
+1. Create a `.env` file in the project root
+2. Copy the contents of `.env.example` into `.env`
+3. Replace the placeholder values with your own Firebase project credentials
+
 ## Folder Structure
+
 ```
 /src
   ├── /assets/           # Static assets (images, fonts, etc.)
