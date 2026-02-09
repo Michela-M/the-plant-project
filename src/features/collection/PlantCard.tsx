@@ -1,0 +1,20 @@
+export default function PlantCard({ plant }: { plant: any }) {
+  return (
+    <div className="group">
+      <img
+        className="aspect-square overflow-hidden object-cover w-full"
+        src={
+          plant.imageUrl ||
+          'https://larchcottage.co.uk/wp-content/uploads/2024/05/placeholder.jpg'
+        }
+        alt={plant.commonName || 'Plant Image'}
+      />
+      <div className="flex">
+        <div className="grow">
+          <p className="text-stone-600">{plant.commonName || ''}</p>
+          <p className="text-lg">{plant.name}</p>
+        </div>
+      </div>
+    </div>
+  );
+}
