@@ -2,6 +2,7 @@ import Dashboard from './pages/Dashboard';
 import Encyclopedia from './pages/Encyclopedia';
 import MyCollection from './pages/MyCollection';
 import Login from './pages/Login';
+import AddPlant from './pages/AddPlant';
 import Header from './Header';
 import './App.css';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
@@ -19,6 +20,7 @@ function App() {
           <Route path="/collection" element={<MyCollection />} />
           <Route path="/login" element={<Login />} />
           <Route path="/signup" element={<SignUp />} />
+          <Route path="/add-plant" element={<AddPlant />} />
         </Routes>
       </BrowserRouter>
     </div>
