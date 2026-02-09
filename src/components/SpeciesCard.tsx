@@ -1,7 +1,7 @@
 import { CirclePlus } from 'lucide-react';
 import { IconButton } from './Button';
 
-export default function PlantCard({
+export default function SpeciesCard({
   imageUrl,
   family,
   commonName,

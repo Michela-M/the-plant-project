@@ -1,11 +1,11 @@
 import { render, screen } from '@testing-library/react';
-import PlantCard from './PlantCard';
+import SpeciesCard from './SpeciesCard';
 import { describe, it, expect } from 'vitest';
 
-describe('PlantCard component', () => {
+describe('SpeciesCard component', () => {
   it('renders image, family, and common name', () => {
     render(
-      <PlantCard
+      <SpeciesCard
         imageUrl="https://example.com/plant.jpg"
         family="Asparagaceae"
         commonName="Snake Plant"
@@ -21,7 +21,7 @@ describe('PlantCard component', () => {
   });
 
   it('icon button is hidden by default', () => {
-    render(<PlantCard family="Asparagaceae" commonName="Snake Plant" />);
+    render(<SpeciesCard family="Asparagaceae" commonName="Snake Plant" />);
 
     const button = screen.getByTestId('icon-container');
 
@@ -29,7 +29,7 @@ describe('PlantCard component', () => {
   });
 
   it('handles missing props gracefully', () => {
-    render(<PlantCard />);
+    render(<SpeciesCard />);
 
     expect(screen.getByAltText('Plant Image')).toHaveAttribute(
       'src',
