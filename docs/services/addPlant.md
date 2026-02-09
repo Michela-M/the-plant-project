@@ -41,15 +41,19 @@ await addPlant({
 
 ## Edge Cases
 
-- Missing optional fields  
-  All optional fields are safely normalized:
-  - `species` → `""`
-  - `wateringFrequency` → `0`
-  - `lastWatered` → `null`
-  - `notes` → `""`
+### Missing optional fields
 
-- Invalid or unexpected Firestore errors  
-   If Firestore throws a non‑Error value (e.g., a string), the service wraps it in a new `Error('Unknown error')`.
+All optional fields are safely normalized:
 
-- Network or permission failures  
-   Any Firestore failure is rethrown so the UI can show a toast or fallback state.
+- `species` → `""`
+- `wateringFrequency` → `0`
+- `lastWatered` → `null`
+- `notes` → `""`
+
+### Invalid or unexpected Firestore errors
+
+If Firestore throws a non‑Error value (e.g., a string), the service wraps it in a new `Error('Unknown error')`.
+
+### Network or permission failures
+
+Any Firestore failure is rethrown so the UI can show a toast or fallback state.
