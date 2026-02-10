@@ -1,4 +1,12 @@
-export default function PlantCard({ plant }: { plant: any }) {
+type PlantCardProps = {
+  plant: {
+    imageUrl?: string;
+    commonName?: string;
+    name: string;
+  };
+};
+
+export default function PlantCard({ plant }: PlantCardProps) {
   return (
     <div className="group">
       <img
