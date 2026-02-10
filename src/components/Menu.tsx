@@ -1,6 +1,6 @@
 export default function Menu({ children }: { children: React.ReactNode }) {
   return (
-    <div className="absolute bg-stone-50 shadow-md rounded-md mt-2 left-0 min-w-48 max-w-[20rem] w-max z-10">
+    <div className="absolute bg-stone-50 shadow-md rounded-md mt-2 right-0 min-w-48 max-w-[20rem] w-max z-10">
       {children}
     </div>
   );
