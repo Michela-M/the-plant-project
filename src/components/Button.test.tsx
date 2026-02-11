@@ -46,6 +46,16 @@ describe('Button', () => {
     expect(button.className).toContain('bg-red-800');
   });
 
+  it('applies small size classes', () => {
+    render(<Button label="Small" size="sm" />);
+
+    const button = screen.getByRole('button');
+    expect(button.className).toContain('text-sm');
+    expect(button.className).toContain('px-2');
+    expect(button.className).toContain('py-1');
+    expect(button.className).toContain('rounded-sm');
+  });
+
   it('calls onClick when clicked', async () => {
     const user = userEvent.setup();
     const onClick = vi.fn();
@@ -84,6 +94,21 @@ describe('IconButton', () => {
 
     const button = screen.getByRole('button');
     expect(button.className).toContain('text-green-800');
+  });
+
+  it('applies small size classes', () => {
+    render(<IconButton size="sm" icon={<span />} />);
+
+    const button = screen.getByRole('button');
+    expect(button.className).toContain('p-1');
+    expect(button.className).toContain('rounded-sm');
+  });
+
+  it('uses label for aria-label when provided', () => {
+    render(<IconButton icon={<span />} label="Delete" />);
+
+    const button = screen.getByRole('button');
+    expect(button).toHaveAttribute('aria-label', 'Delete');
   });
 
   it('calls onClick when clicked', async () => {

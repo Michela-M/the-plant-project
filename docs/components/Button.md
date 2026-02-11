@@ -13,6 +13,7 @@
 | `variant` | `'filled' / 'outlined' / 'ghost'` | no       | `'filled'`  | Visual style of the button              |
 | `tone`    | `'primary' / 'error'`             | no       | `'primary'` | Color tone of the button                |
 | `type`    | `'button' / 'submit' / 'reset'`   | no       | `'button'`  | Native button type                      |
+| `size`    | `'sm' / 'md'`                     | no       | `'md'`      | Button size                             |
 | `onClick` | `() => void`                      | no       | —           | Click handler                           |
 
 ## Example Usage
@@ -46,15 +47,16 @@ Icon Buttons are compact action buttons that display an icon instead of text.
 | --------- | ----------------------------- | -------- | ---------- | --------------------------------------- |
 | `icon`    | `ReactNode`                   | yes      | —          | Icon element rendered inside the button |
 | `variant` | `'filled'/'outlined'/'ghost'` | no       | `'filled'` | Visual style of the button              |
+| `size`    | `'sm' / 'md'`                 | no       | `'md'`     | Button size                             |
 | `onClick` | `() => void`                  | no       | —          | Click handler                           |
-| `label`   | `string`                      | no       | -          | Aria label                              |
+| `label`   | `string`                      | no       | —          | Aria label                              |
 
 ## Usage Example
 
 ```jsx
-<IconButton icon={<TrashIcon />} onClick={handleDelete} label="Delete />
+<IconButton icon={<TrashIcon />} onClick={handleDelete} label="Delete" />
 ```
 
 ```jsx
-<IconButton variant="ghost" icon={<EditIcon />} label="Edit" />
+<IconButton variant="ghost" icon={<EditIcon />} label="Edit" size="sm" />
 ```
