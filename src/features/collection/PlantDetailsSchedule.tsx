@@ -6,7 +6,8 @@ export default function PlantDetailsSchedule({
   plant: { wateringFrequency?: number; lastWatered?: Date | null };
 }) {
   const hasLastWatered = !!plant.lastWatered;
-  const hasFrequency = typeof plant.wateringFrequency === 'number';
+  const hasFrequency =
+    plant.wateringFrequency !== undefined && plant.wateringFrequency > 0;
 
   // 1. Empty state: no info at all
   if (!hasLastWatered && !hasFrequency) {

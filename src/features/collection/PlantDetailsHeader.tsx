@@ -5,7 +5,7 @@ import { ChevronDown } from 'lucide-react';
 import { EllipsisVertical } from 'lucide-react';
 import { useState } from 'react';
 import Menu, { MenuItem } from '../../components/Menu';
-import { useNavigate } from 'react-router';
+import { useNavigate } from 'react-router-dom';
 
 export default function PlantDetailsHeader({
   plant,
