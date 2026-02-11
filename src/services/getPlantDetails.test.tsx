@@ -1,7 +1,6 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest';
 import { getPlantDetails } from './getPlantDetails';
 import { doc, getDoc } from 'firebase/firestore';
-import { db } from '../firebase';
 import type { Mock } from 'vitest';
 
 vi.mock('firebase/firestore', () => ({
