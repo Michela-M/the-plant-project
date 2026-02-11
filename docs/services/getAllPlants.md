@@ -3,7 +3,7 @@
 ## Description
 
 `getAllPlants` retrieves all plant documents from the Firestore `test-plants` collection.
-It sorts the results by `creationDate` (newest first), normalizes missing fields to safe defaults, and converts Firestore timestamps into JavaScript `Date` objects.
+It sorts the results by `creationDate` (newest first) and normalizes missing fields to safe defaults.
 
 If Firestore throws an error, the service logs it and returns an empty array, ensuring the UI can safely handle failures without crashing.
 
@@ -13,10 +13,10 @@ This service does not accept any parameters.
 
 ## Return Value
 
-| Type            | Description                                                        |
-| --------------- | ------------------------------------------------------------------ |
-| PromisePlant[]> | Returns an array of normalized plant objects                       |
-| Promise<[]>     | Returns an empty array if no documents exist or if an error occurs |
+| Type             | Description                                                        |
+| ---------------- | ------------------------------------------------------------------ |
+| Promise<Plant[]> | Returns an array of normalized plant objects                       |
+| Promise<[]>      | Returns an empty array if no documents exist or if an error occurs |
 
 Each returned plant object has the shape:
 
@@ -25,10 +25,6 @@ Each returned plant object has the shape:
   id: string;
   name: string;
   species: string;
-  wateringFrequency: number;
-  lastWatered: Date | null;
-  notes: string;
-  creationDate: Date | null;
 }
 ```
 
@@ -56,15 +52,8 @@ Returns an empty array (`[]`).
 
 The service normalizes missing fields to prevent UI crashes:
 
+- `name` → `"Unnamed Plant"`
 - `species` → `""`
-- `wateringFrequency` → `0`
-- `lastWatered` → `null`
-- `notes` → `""`
-- `creationDate` → `null`
-
-### Firestore timestamp fields
-
-`lastWatered` and `creationDate` are converted using `.toDate()` when available.
 
 ### Firestore errors
 

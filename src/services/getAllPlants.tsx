@@ -15,12 +15,8 @@ export const getAllPlants = async () => {
 
       return {
         id: doc.id,
-        name: data.name ?? '',
+        name: data.name ?? 'Unnamed Plant',
         species: data.species ?? '',
-        wateringFrequency: data.wateringFrequency ?? 0,
-        lastWatered: data.lastWatered?.toDate?.() ?? null,
-        notes: data.notes ?? '',
-        creationDate: data.creationDate?.toDate?.() ?? null,
       };
     });
   } catch (error) {

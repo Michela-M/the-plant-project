@@ -34,10 +34,6 @@ describe('getAllPlants', () => {
         data: () => ({
           name: 'Aloe',
           species: 'Aloe Vera',
-          wateringFrequency: 7,
-          lastWatered: { toDate: () => new Date('2024-01-01') },
-          notes: 'Sunlight',
-          creationDate: { toDate: () => new Date('2024-02-01') },
         }),
       },
     ];
@@ -59,10 +55,6 @@ describe('getAllPlants', () => {
         id: '1',
         name: 'Aloe',
         species: 'Aloe Vera',
-        wateringFrequency: 7,
-        lastWatered: new Date('2024-01-01'),
-        notes: 'Sunlight',
-        creationDate: new Date('2024-02-01'),
       },
     ]);
   });
@@ -95,12 +87,8 @@ describe('getAllPlants', () => {
       {
         id: '123',
         data: () => ({
-          name: 'Fern',
+          // name missing
           // species missing
-          // wateringFrequency missing
-          // lastWatered missing
-          // notes missing
-          creationDate: { toDate: () => new Date('2024-02-10') },
         }),
       },
     ];
@@ -112,12 +100,8 @@ describe('getAllPlants', () => {
     expect(result).toEqual([
       {
         id: '123',
-        name: 'Fern',
+        name: 'Unnamed Plant',
         species: '',
-        wateringFrequency: 0,
-        lastWatered: null,
-        notes: '',
-        creationDate: new Date('2024-02-10'),
       },
     ]);
   });
