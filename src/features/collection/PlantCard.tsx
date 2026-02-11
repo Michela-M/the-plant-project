@@ -1,14 +1,24 @@
+import { useNavigate } from 'react-router-dom';
+
 type PlantCardProps = {
   plant: {
     imageUrl?: string;
     commonName?: string;
     name: string;
+    id: string;
   };
 };
 
 export default function PlantCard({ plant }: PlantCardProps) {
+  const navigate = useNavigate();
+
   return (
-    <div className="group">
+    <div
+      className="group"
+      onClick={() => {
+        navigate(`/plants/${plant.id}`);
+      }}
+    >
       <img
         className="aspect-square overflow-hidden object-cover w-full"
         src={
@@ -20,7 +30,7 @@ export default function PlantCard({ plant }: PlantCardProps) {
       <div className="flex">
         <div className="grow">
           <p className="text-stone-600">{plant.commonName || ''}</p>
-          <p className="text-lg">{plant.name}</p>
+          <p className="text-lg">{plant.name || 'Unnamed Plant'}</p>
         </div>
       </div>
     </div>

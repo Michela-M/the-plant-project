@@ -1,17 +1,21 @@
 import { describe, it, expect } from 'vitest';
 import { render, screen } from '@testing-library/react';
 import PlantCard from './PlantCard';
+import { BrowserRouter } from 'react-router-dom';
 
 describe('PlantCard component', () => {
   it('renders plant information correctly', () => {
     render(
-      <PlantCard
-        plant={{
-          imageUrl: 'https://example.com/plant.jpg',
-          commonName: 'Snake Plant',
-          name: 'Sansevieria trifasciata',
-        }}
-      />
+      <BrowserRouter>
+        <PlantCard
+          plant={{
+            id: 'plant-1',
+            imageUrl: 'https://example.com/plant.jpg',
+            commonName: 'Snake Plant',
+            name: 'Sansevieria trifasciata',
+          }}
+        />
+      </BrowserRouter>
     );
 
     expect(screen.getByAltText('Snake Plant')).toHaveAttribute(
@@ -23,11 +27,14 @@ describe('PlantCard component', () => {
   });
   it('handles missing image and common name gracefully', () => {
     render(
-      <PlantCard
-        plant={{
-          name: 'Sansevieria trifasciata',
-        }}
-      />
+      <BrowserRouter>
+        <PlantCard
+          plant={{
+            id: 'plant-2',
+            name: 'Sansevieria trifasciata',
+          }}
+        />
+      </BrowserRouter>
     );
 
     expect(screen.getByAltText('Plant Image')).toHaveAttribute(

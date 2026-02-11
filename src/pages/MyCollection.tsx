@@ -2,7 +2,7 @@ import Button from '../components/Button';
 import PlantCard from '../features/collection/PlantCard';
 import { useEffect, useState } from 'react';
 import { useToast } from '../hooks/useToast';
-import { useNavigate } from 'react-router';
+import { useNavigate } from 'react-router-dom';
 import { getAllPlants } from '../services/getAllPlants';
 
 export default function MyCollection() {
@@ -53,6 +53,7 @@ export default function MyCollection() {
               <PlantCard
                 key={plant.id}
                 plant={{
+                  id: plant.id,
                   name: plant.name,
                   commonName: plant.species,
                 }}
