@@ -1,9 +1,9 @@
 import Button from '../components/Button';
 import PlantCard from '../features/collection/PlantCard';
 import { useEffect, useState } from 'react';
-import { useToast } from '../hooks/useToast';
 import { useNavigate } from 'react-router-dom';
 import { getAllPlants } from '../services/getAllPlants';
+import { useToast } from '../context/ToastContext';
 
 export default function MyCollection() {
   const [plants, setPlants] = useState<
@@ -14,7 +14,7 @@ export default function MyCollection() {
       imageUrl?: string | null;
     }[]
   >([]);
-  const { showErrorToast } = useToast();
+  const { showError } = useToast();
   const navigate = useNavigate();
   const [loading, setLoading] = useState(true);
 
@@ -25,7 +25,7 @@ export default function MyCollection() {
         console.log('Fetched plants:', plantsData);
         setPlants(plantsData);
       } catch (error) {
-        showErrorToast(
+        showError(
           'Error loading plants',
           error instanceof Error ? error.message : 'Unknown error'
         );
@@ -34,7 +34,7 @@ export default function MyCollection() {
       }
     };
     fetchPlants();
-  }, [showErrorToast]);
+  }, [showError]);
 
   return (
     <div className="w-1/2 mx-auto py-8 flex flex-col gap-4">

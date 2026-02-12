@@ -8,6 +8,7 @@ import Menu, { MenuItem } from '../../components/Menu';
 import { useNavigate } from 'react-router-dom';
 import Modal from '../../components/Modal';
 import deletePlant from '../../services/deletePlant';
+import { useToast } from '../../context/ToastContext';
 
 export default function PlantDetailsHeader({
   plant,
@@ -19,14 +20,20 @@ export default function PlantDetailsHeader({
   const [showAddMenu, setShowAddMenu] = useState(false);
   const [showOptionsMenu, setShowOptionsMenu] = useState(false);
   const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
+  const { showError, showSuccess } = useToast();
 
   const handleDelete = async () => {
     try {
       await deletePlant(plant.id);
       setShowDeleteConfirm(false);
       navigate('/collection');
+      showSuccess('Plant deleted successfully');
     } catch (error) {
       console.error(error);
+      showError(
+        'Error deleting plant',
+        error instanceof Error ? error.message : 'Unknown error'
+      );
     }
   };
 

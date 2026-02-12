@@ -3,8 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import * as Yup from 'yup';
 import Button from '../components/Button';
 import TextField from '../components/TextField';
-import Toast from '../components/Toast';
-import { useToast } from '../hooks/useToast';
+import { useToast } from '../context/ToastContext';
 import { addPlant } from '../services/addPlant';
 
 const addPlantValidationSchema = Yup.object({
@@ -21,7 +20,7 @@ const addPlantValidationSchema = Yup.object({
 
 export default function AddPlant() {
   const navigate = useNavigate();
-  const { toast, showErrorToast, closeToast } = useToast();
+  const { showSuccess, showError } = useToast();
 
   const formik = useFormik({
     initialValues: {
@@ -42,10 +41,11 @@ export default function AddPlant() {
           notes: values.notes,
         });
         formik.resetForm();
+        showSuccess('Plant added successfully');
         navigate('/collection');
       } catch (error) {
         console.error('Error adding plant:', error);
-        showErrorToast(
+        showError(
           'Error adding plant',
           error instanceof Error ? error.message : 'Unknown error'
         );
@@ -128,13 +128,6 @@ export default function AddPlant() {
           <Button label="Add Plant" type="submit" />
         </div>
       </form>
-      <Toast
-        message={toast.message}
-        detail={toast.detail}
-        type={toast.type}
-        open={toast.open}
-        onClose={closeToast}
-      />
     </div>
   );
 }

@@ -4,9 +4,11 @@ import { getPlantDetails } from '../services/getPlantDetails';
 import PlantDetailsHeader from '../features/collection/PlantDetailsHeader';
 import ImagePreview from '../components/ImagePreview';
 import PlantDetailsSchedule from '../features/collection/PlantDetailsSchedule';
+import { useToast } from '../context/ToastContext';
 
 export default function PlantDetails() {
   const { id } = useParams();
+  const { showError } = useToast();
   const [plantDetails, setPlantDetails] = useState<{
     id: string;
     name: string;
@@ -24,9 +26,11 @@ export default function PlantDetails() {
       try {
         const details = await getPlantDetails(id);
         setPlantDetails(details);
-        console.log('Fetched plant details:', details);
       } catch (error) {
-        console.error('Error fetching plant details:', error);
+        showError(
+          'Error loading plant details',
+          error instanceof Error ? error.message : 'Unknown error'
+        );
       }
     };
 

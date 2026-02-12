@@ -12,6 +12,8 @@ import { savePlant } from '../services/savePlant';
 import { uploadPlantImage } from '../services/uploadPlantImage';
 import ImagePicker from '../components/ImagePicker';
 
+import { useToast } from '../context/ToastContext';
+
 const editPlantValidationSchema = Yup.object({
   name: Yup.string().required('Name is required'),
   species: Yup.string(),
@@ -24,6 +26,7 @@ const editPlantValidationSchema = Yup.object({
 export default function EditPlant() {
   const navigate = useNavigate();
   const { id } = useParams();
+  const { showError, showSuccess } = useToast();
 
   const [plantDetails, setPlantDetails] = useState<any>(null);
   const [file, setFile] = useState<File | null>(null);
@@ -39,14 +42,17 @@ export default function EditPlant() {
         const details = await getPlantDetails(id);
         setPlantDetails(details);
       } catch (error) {
-        console.error('Error fetching plant details:', error);
+        showError(
+          'Error loading plant details',
+          error instanceof Error ? error.message : 'Unknown error'
+        );
       } finally {
         setLoading(false);
       }
     }
 
     fetchPlant();
-  }, [id]);
+  }, [id, showError]);
 
   const formik = useFormik({
     enableReinitialize: true,
@@ -77,9 +83,13 @@ export default function EditPlant() {
           imageUrl,
         });
 
+        showSuccess('Plant saved successfully');
         navigate('/collection');
       } catch (error) {
-        console.error('Error saving plant:', error);
+        showError(
+          'Error saving plant',
+          error instanceof Error ? error.message : 'Unknown error'
+        );
       }
     },
   });
