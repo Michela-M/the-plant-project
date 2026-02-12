@@ -6,6 +6,8 @@ import { EllipsisVertical } from 'lucide-react';
 import { useState } from 'react';
 import Menu, { MenuItem } from '../../components/Menu';
 import { useNavigate } from 'react-router-dom';
+import Modal from '../../components/Modal';
+import deletePlant from '../../services/deletePlant';
 
 export default function PlantDetailsHeader({
   plant,
@@ -16,6 +18,17 @@ export default function PlantDetailsHeader({
 
   const [showAddMenu, setShowAddMenu] = useState(false);
   const [showOptionsMenu, setShowOptionsMenu] = useState(false);
+  const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
+
+  const handleDelete = async () => {
+    try {
+      await deletePlant(plant.id);
+      setShowDeleteConfirm(false);
+      navigate('/collection');
+    } catch (error) {
+      console.error(error);
+    }
+  };
 
   return (
     <div className="flex items-center gap-4">
@@ -64,7 +77,14 @@ export default function PlantDetailsHeader({
                   navigate(`/plants/${plant.id}/edit`);
                 }}
               />
-              <MenuItem label="Delete" onClick={() => {}} danger disabled />
+              <MenuItem
+                label="Delete"
+                onClick={() => {
+                  setShowOptionsMenu(false);
+                  setShowDeleteConfirm(true);
+                }}
+                danger
+              />
               <MenuItem
                 label="Remove from schedule"
                 onClick={() => {}}
@@ -74,6 +94,20 @@ export default function PlantDetailsHeader({
           )}
         </div>
       </div>
+      {showDeleteConfirm && (
+        <Modal
+          title="Delete plant"
+          onClose={() => setShowDeleteConfirm(false)}
+          type="acknowledgement"
+          label="Delete"
+          onConfirm={handleDelete}
+        >
+          <p>
+            This will remove {plant?.name} from your collection. This action
+            cannot be undone.
+          </p>
+        </Modal>
+      )}
     </div>
   );
 }
