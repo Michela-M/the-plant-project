@@ -36,6 +36,7 @@ export default function PlantDetails() {
     <div className="w-2/3 mx-auto py-8 flex flex-col gap-4">
       <PlantDetailsHeader
         plant={{
+          id: plantDetails?.id || '',
           name: plantDetails?.name || '',
           commonName: plantDetails?.species || '',
         }}

@@ -10,7 +10,7 @@ import { useNavigate } from 'react-router-dom';
 export default function PlantDetailsHeader({
   plant,
 }: {
-  plant: { name: string; commonName?: string };
+  plant: { id: string; name: string; commonName?: string };
 }) {
   const navigate = useNavigate();
 
@@ -58,7 +58,12 @@ export default function PlantDetailsHeader({
           />
           {showOptionsMenu && (
             <Menu>
-              <MenuItem label="Edit" onClick={() => {}} disabled />
+              <MenuItem
+                label="Edit"
+                onClick={() => {
+                  navigate(`/plants/${plant.id}/edit`);
+                }}
+              />
               <MenuItem label="Delete" onClick={() => {}} danger disabled />
               <MenuItem
                 label="Remove from schedule"
