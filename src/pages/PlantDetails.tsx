@@ -15,6 +15,7 @@ export default function PlantDetails() {
     lastWatered: Date;
     notes: string;
     creationDate: Date;
+    imageUrl: string | null;
   } | null>(null);
 
   useEffect(() => {
@@ -57,8 +58,11 @@ export default function PlantDetails() {
         </div>
         <div className="w-3/8 flex flex-col gap-6">
           <ImagePreview
-            url="https://img.freepik.com/photos-gratuite/codage-programme-informatique-ecran_53876-138060.jpg?semt=ais_wordcount_boost&w=740&q=80"
-            alt="Placeholder image"
+            url={
+              plantDetails?.imageUrl ||
+              'https://larchcottage.co.uk/wp-content/uploads/2024/05/placeholder.jpg'
+            }
+            alt="Plant image"
           />
           <PlantDetailsSchedule
             plant={{

@@ -37,6 +37,7 @@ The returned `Plant` object has the following shape:
   lastWatered: Date | null;
   notes: string;
   creationDate: Date | null;
+  imageUrl: string | null;
 }
 ```
 
@@ -72,6 +73,7 @@ All optional fields are normalized:
 - `lastWatered` → `null`
 - `notes` → `""`
 - `creationDate` → `null`
+- `imageUrl` → `null`
 
 This prevents undefined values from leaking into the UI.
 

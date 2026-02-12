@@ -34,6 +34,7 @@ describe('getAllPlants', () => {
         data: () => ({
           name: 'Aloe',
           species: 'Aloe Vera',
+          imageUrl: 'https://example.com/aloe.jpg',
         }),
       },
     ];
@@ -55,6 +56,7 @@ describe('getAllPlants', () => {
         id: '1',
         name: 'Aloe',
         species: 'Aloe Vera',
+        imageUrl: 'https://example.com/aloe.jpg',
       },
     ]);
   });
@@ -102,6 +104,7 @@ describe('getAllPlants', () => {
         id: '123',
         name: 'Unnamed Plant',
         species: '',
+        imageUrl: null,
       },
     ]);
   });

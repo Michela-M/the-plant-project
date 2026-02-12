@@ -16,6 +16,7 @@ export const getPlantDetails = async (plantId: string) => {
         lastWatered: data.lastWatered?.toDate?.() ?? null,
         notes: data.notes ?? '',
         creationDate: data.creationDate?.toDate?.() ?? null,
+        imageUrl: data.imageUrl ?? null,
       };
     } else {
       console.log('No such document!');

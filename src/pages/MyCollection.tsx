@@ -11,6 +11,7 @@ export default function MyCollection() {
       id: string;
       name: string;
       species: string;
+      imageUrl?: string | null;
     }[]
   >([]);
   const { showErrorToast } = useToast();
@@ -56,6 +57,9 @@ export default function MyCollection() {
                   id: plant.id,
                   name: plant.name,
                   commonName: plant.species,
+                  imageUrl:
+                    plant.imageUrl ||
+                    'https://larchcottage.co.uk/wp-content/uploads/2024/05/placeholder.jpg',
                 }}
               />
             ))}

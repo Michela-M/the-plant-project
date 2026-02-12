@@ -28,6 +28,7 @@ describe('getPlantDetails', () => {
         lastWatered: { toDate: () => new Date('2024-01-01') },
         notes: 'Sunlight',
         creationDate: { toDate: () => new Date('2024-02-01') },
+        imageUrl: 'https://example.com/aloe.jpg',
       }),
     };
 
@@ -45,6 +46,7 @@ describe('getPlantDetails', () => {
       lastWatered: new Date('2024-01-01'),
       notes: 'Sunlight',
       creationDate: new Date('2024-02-01'),
+      imageUrl: 'https://example.com/aloe.jpg',
     });
   });
 

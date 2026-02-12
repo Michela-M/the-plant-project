@@ -25,6 +25,7 @@ Each returned plant object has the shape:
   id: string;
   name: string;
   species: string;
+  imageUrl: string | null;
 }
 ```
 
@@ -54,6 +55,7 @@ The service normalizes missing fields to prevent UI crashes:
 
 - `name` → `"Unnamed Plant"`
 - `species` → `""`
+- `imageUrl` → `null`
 
 ### Firestore errors
 

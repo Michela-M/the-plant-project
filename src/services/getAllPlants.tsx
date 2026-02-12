@@ -17,6 +17,7 @@ export const getAllPlants = async () => {
         id: doc.id,
         name: data.name ?? 'Unnamed Plant',
         species: data.species ?? '',
+        imageUrl: data.imageUrl ?? null,
       };
     });
   } catch (error) {
