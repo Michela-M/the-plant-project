@@ -9,25 +9,28 @@ import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import SignUp from './pages/SignUp';
 import PlantDetails from './pages/PlantDetails';
 import EditPlant from './pages/EditPlant';
+import { ToastProvider } from './context/ToastContext';
 
 function App() {
   return (
-    <div className="bg-stone-100 min-h-screen">
-      <BrowserRouter>
-        <Header />
+    <ToastProvider>
+      <div className="bg-stone-100 min-h-screen">
+        <BrowserRouter>
+          <Header />
 
-        <Routes>
-          <Route path="/" element={<Dashboard />} />
-          <Route path="/encyclopedia" element={<Encyclopedia />} />
-          <Route path="/collection" element={<MyCollection />} />
-          <Route path="/login" element={<Login />} />
-          <Route path="/signup" element={<SignUp />} />
-          <Route path="/add-plant" element={<AddPlant />} />
-          <Route path="/plants/:id" element={<PlantDetails />} />
-          <Route path="/plants/:id/edit" element={<EditPlant />} />
-        </Routes>
-      </BrowserRouter>
-    </div>
+          <Routes>
+            <Route path="/" element={<Dashboard />} />
+            <Route path="/encyclopedia" element={<Encyclopedia />} />
+            <Route path="/collection" element={<MyCollection />} />
+            <Route path="/login" element={<Login />} />
+            <Route path="/signup" element={<SignUp />} />
+            <Route path="/add-plant" element={<AddPlant />} />
+            <Route path="/plants/:id" element={<PlantDetails />} />
+            <Route path="/plants/:id/edit" element={<EditPlant />} />
+          </Routes>
+        </BrowserRouter>
+      </div>
+    </ToastProvider>
   );
 }
 
