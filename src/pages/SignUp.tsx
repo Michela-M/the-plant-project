@@ -18,6 +18,7 @@ export default function SignUp() {
 
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
+  const [loading, setLoading] = useState(false);
 
   const formik = useFormik({
     initialValues: {
@@ -27,6 +28,7 @@ export default function SignUp() {
     },
     validationSchema: signupValidationSchema,
     onSubmit: async (values) => {
+      setLoading(true);
       try {
         await createUserWithEmailAndPassword(
           auth,
@@ -61,6 +63,8 @@ export default function SignUp() {
         } else {
           showError('Error registering user', 'An unknown error occurred');
         }
+      } finally {
+        setLoading(false);
       }
     },
   });
@@ -124,7 +128,12 @@ export default function SignUp() {
                 : ''
             }
           />
-          <Button label="Sign Up" variant="filled" type="submit" />
+          <Button
+            label="Sign Up"
+            variant="filled"
+            type="submit"
+            loading={loading}
+          />
         </form>
         <p className="text-sm">
           Already have an account? <Link href="/login">Log in</Link>

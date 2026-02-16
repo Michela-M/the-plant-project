@@ -5,6 +5,7 @@ import Button from '../components/Button';
 import TextField from '../components/TextField';
 import { useToast } from '../context/ToastContext';
 import { addPlant } from '../services/addPlant';
+import { useState } from 'react';
 
 const addPlantValidationSchema = Yup.object({
   name: Yup.string().required('Name is required'),
@@ -21,6 +22,7 @@ const addPlantValidationSchema = Yup.object({
 export default function AddPlant() {
   const navigate = useNavigate();
   const { showSuccess, showError } = useToast();
+  const [loading, setLoading] = useState(false);
 
   const formik = useFormik({
     initialValues: {
@@ -32,6 +34,7 @@ export default function AddPlant() {
     },
     validationSchema: addPlantValidationSchema,
     onSubmit: async (values) => {
+      setLoading(true);
       try {
         await addPlant({
           name: values.name,
@@ -44,11 +47,12 @@ export default function AddPlant() {
         showSuccess('Plant added successfully');
         navigate('/collection');
       } catch (error) {
-        console.error('Error adding plant:', error);
         showError(
           'Error adding plant',
           error instanceof Error ? error.message : 'Unknown error'
         );
+      } finally {
+        setLoading(false);
       }
     },
   });
@@ -125,7 +129,7 @@ export default function AddPlant() {
             variant="outlined"
             onClick={() => navigate('/collection')}
           />
-          <Button label="Add Plant" type="submit" />
+          <Button label="Add Plant" type="submit" loading={loading} />
         </div>
       </form>
     </div>

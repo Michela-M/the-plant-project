@@ -5,6 +5,7 @@ import PlantDetailsHeader from '../features/collection/PlantDetailsHeader';
 import ImagePreview from '../components/ImagePreview';
 import PlantDetailsSchedule from '../features/collection/PlantDetailsSchedule';
 import { useToast } from '../context/ToastContext';
+import Spinner from '../components/Spinner';
 
 export default function PlantDetails() {
   const { id } = useParams();
@@ -20,9 +21,12 @@ export default function PlantDetails() {
     imageUrl: string | null;
   } | null>(null);
 
+  const [loading, setLoading] = useState(true);
+
   useEffect(() => {
     const fetchPlantDetails = async () => {
       if (!id) return;
+      setLoading(true);
       try {
         const details = await getPlantDetails(id);
         setPlantDetails(details);
@@ -31,11 +35,17 @@ export default function PlantDetails() {
           'Error loading plant details',
           error instanceof Error ? error.message : 'Unknown error'
         );
+      } finally {
+        setLoading(false);
       }
     };
 
     fetchPlantDetails();
   }, [id]);
+
+  if (loading) {
+    return <Spinner />;
+  }
 
   return (
     <div className="w-2/3 mx-auto py-8 flex flex-col gap-4">

@@ -15,6 +15,7 @@ import { onAuthStateChanged } from 'firebase/auth';
 export default function Login() {
   const navigate = useNavigate();
   const { showSuccess, showError } = useToast();
+  const [loading, setLoading] = useState(false);
 
   const [showPassword, setShowPassword] = useState(false);
 
@@ -25,6 +26,7 @@ export default function Login() {
     },
     validationSchema: loginValidationSchema,
     onSubmit: async (values) => {
+      setLoading(true);
       try {
         await signInWithEmailAndPassword(auth, values.email, values.password);
         showSuccess('Login successful');
@@ -52,6 +54,8 @@ export default function Login() {
         } else {
           showError('Login failed', 'An unknown error occurred');
         }
+      } finally {
+        setLoading(false);
       }
     },
   });
@@ -95,7 +99,12 @@ export default function Login() {
               />
             }
           />
-          <Button label="Log In" variant="filled" type="submit" />
+          <Button
+            label="Log In"
+            variant="filled"
+            type="submit"
+            loading={loading}
+          />
         </form>
         <p className="text-sm">
           Don't have an account? <Link href="/signup">Sign up</Link>

@@ -4,6 +4,7 @@ import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { getAllPlants } from '../services/getAllPlants';
 import { useToast } from '../context/ToastContext';
+import Spinner from '../components/Spinner';
 
 export default function MyCollection() {
   const [plants, setPlants] = useState<
@@ -20,6 +21,7 @@ export default function MyCollection() {
 
   useEffect(() => {
     const fetchPlants = async () => {
+      setLoading(true);
       try {
         const plantsData = await getAllPlants();
         console.log('Fetched plants:', plantsData);
@@ -36,36 +38,34 @@ export default function MyCollection() {
     fetchPlants();
   }, [showError]);
 
+  if (loading) {
+    return <Spinner />;
+  }
+
   return (
     <div className="w-1/2 mx-auto py-8 flex flex-col gap-4">
       <div className="flex justify-between items-center">
         <h1 className="text-3xl font-bold text-green-900">My Collection</h1>
         <Button label="Add Plant" onClick={() => navigate('/add-plant')} />
       </div>
-      {loading ? (
-        <p>Loading...</p>
-      ) : (
-        <>
-          {plants.length === 0 && (
-            <p className="text-stone-500">No plants yet. Add your first one!</p>
-          )}
-          <div className="grid grid-cols-3 gap-4">
-            {plants.map((plant) => (
-              <PlantCard
-                key={plant.id}
-                plant={{
-                  id: plant.id,
-                  name: plant.name,
-                  commonName: plant.species,
-                  imageUrl:
-                    plant.imageUrl ||
-                    'https://larchcottage.co.uk/wp-content/uploads/2024/05/placeholder.jpg',
-                }}
-              />
-            ))}
-          </div>
-        </>
+      {plants.length === 0 && (
+        <p className="text-stone-500">No plants yet. Add your first one!</p>
       )}
+      <div className="grid grid-cols-3 gap-4">
+        {plants.map((plant) => (
+          <PlantCard
+            key={plant.id}
+            plant={{
+              id: plant.id,
+              name: plant.name,
+              commonName: plant.species,
+              imageUrl:
+                plant.imageUrl ||
+                'https://larchcottage.co.uk/wp-content/uploads/2024/05/placeholder.jpg',
+            }}
+          />
+        ))}
+      </div>
     </div>
   );
 }

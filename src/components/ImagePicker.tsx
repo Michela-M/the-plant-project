@@ -1,5 +1,6 @@
 import { useRef } from 'react';
 import Button from './Button';
+import { useState } from 'react';
 
 export default function ImagePicker({
   previewUrl,
@@ -9,6 +10,7 @@ export default function ImagePicker({
   onSelect: (file: File) => void;
 }) {
   const inputRef = useRef<HTMLInputElement | null>(null);
+  const [loading, setLoading] = useState(false);
 
   return (
     <div className="flex flex-col gap-2">
@@ -27,7 +29,11 @@ export default function ImagePicker({
         label="Change picture"
         variant="outlined"
         size="sm"
-        onClick={() => inputRef.current?.click()}
+        onClick={() => {
+          setLoading(true);
+          inputRef.current?.click();
+        }}
+        loading={loading}
       />
 
       <input
@@ -39,6 +45,7 @@ export default function ImagePicker({
         onChange={(e) => {
           const file = e.target.files?.[0];
           if (file) onSelect(file);
+          setLoading(false);
         }}
       />
     </div>

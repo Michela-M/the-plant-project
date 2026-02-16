@@ -13,6 +13,7 @@ import { uploadPlantImage } from '../services/uploadPlantImage';
 import ImagePicker from '../components/ImagePicker';
 
 import { useToast } from '../context/ToastContext';
+import Spinner from '../components/Spinner';
 
 const editPlantValidationSchema = Yup.object({
   name: Yup.string().required('Name is required'),
@@ -32,6 +33,7 @@ export default function EditPlant() {
   const [file, setFile] = useState<File | null>(null);
   const [previewUrl, setPreviewUrl] = useState<string | null>(null);
   const [loading, setLoading] = useState(true);
+  const [loadingSave, setLoadingSave] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
@@ -64,6 +66,8 @@ export default function EditPlant() {
     },
     validationSchema: editPlantValidationSchema,
     onSubmit: async (values) => {
+      setLoadingSave(true);
+
       if (!id) return;
 
       try {
@@ -90,6 +94,8 @@ export default function EditPlant() {
           'Error saving plant',
           error instanceof Error ? error.message : 'Unknown error'
         );
+      } finally {
+        setLoadingSave(false);
       }
     },
   });
@@ -106,7 +112,7 @@ export default function EditPlant() {
   };
 
   if (loading) {
-    return <p className="text-center mt-10">Loading plant...</p>;
+    return <Spinner />;
   }
 
   if (!plantDetails) {
@@ -194,7 +200,7 @@ export default function EditPlant() {
           variant="outlined"
           onClick={() => navigate(-1)}
         />
-        <Button label="Save" type="submit" />
+        <Button label="Save" type="submit" loading={loadingSave} />
       </div>
     </form>
   );
