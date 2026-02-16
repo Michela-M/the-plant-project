@@ -14,6 +14,7 @@
 | `tone`    | `'primary' / 'error'`             | no       | `'primary'` | Color tone of the button                |
 | `type`    | `'button' / 'submit' / 'reset'`   | no       | `'button'`  | Native button type                      |
 | `size`    | `'sm' / 'md'`                     | no       | `'md'`      | Button size                             |
+| `loading` | `boolean`                         | no       | `false`     | Shows spinner and disables interaction  |
 | `onClick` | `() => void`                      | no       | —           | Click handler                           |
 
 ## Example Usage
@@ -33,6 +34,10 @@
   icon={<TrashIcon />}
   onClick={handleDelete}
 />
+```
+
+```jsx
+<Button label="Save" loading={true} />
 ```
 
 # `Icon Button`

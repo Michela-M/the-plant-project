@@ -66,6 +66,20 @@ describe('Button', () => {
 
     expect(onClick).toHaveBeenCalledTimes(1);
   });
+
+  it('shows spinner when loading is true', () => {
+    render(<Button label="Loading" loading={true} />);
+
+    const button = screen.getByRole('button');
+    expect(button.querySelector('svg')).toBeInTheDocument();
+  });
+
+  it('does not show spinner when loading is false', () => {
+    render(<Button label="Not Loading" loading={false} />);
+
+    const button = screen.getByRole('button');
+    expect(button.querySelector('.absolute')).not.toBeInTheDocument();
+  });
 });
 
 describe('IconButton', () => {
