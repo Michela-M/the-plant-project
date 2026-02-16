@@ -24,12 +24,23 @@ const editPlantValidationSchema = Yup.object({
   notes: Yup.string(),
 });
 
+type PlantDetails = {
+  id: string;
+  name: string;
+  species: string;
+  wateringFrequency: number;
+  lastWatered: Date | null;
+  notes: string;
+  creationDate: Date | null;
+  imageUrl: string | null;
+};
+
 export default function EditPlant() {
   const navigate = useNavigate();
   const { id } = useParams();
   const { showError, showSuccess } = useToast();
 
-  const [plantDetails, setPlantDetails] = useState<any>(null);
+  const [plantDetails, setPlantDetails] = useState<PlantDetails | null>(null);
   const [file, setFile] = useState<File | null>(null);
   const [previewUrl, setPreviewUrl] = useState<string | null>(null);
   const [loading, setLoading] = useState(true);
@@ -71,7 +82,7 @@ export default function EditPlant() {
       if (!id) return;
 
       try {
-        let imageUrl = plantDetails?.imageUrl || null;
+        let imageUrl = plantDetails?.imageUrl || undefined;
 
         // Upload only if user selected a new file
         if (file) {
