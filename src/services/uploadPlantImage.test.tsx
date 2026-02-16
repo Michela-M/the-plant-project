@@ -1,6 +1,7 @@
 import { describe, it, expect, vi } from 'vitest';
 import { uploadPlantImage } from './uploadPlantImage';
 import { ref, uploadBytes, getDownloadURL } from 'firebase/storage';
+import type { Mock } from 'vitest';
 
 // --- Mock Firebase Storage ---
 vi.mock('firebase/storage', () => ({
@@ -21,9 +22,9 @@ describe('uploadPlantImage', () => {
     const id = '123';
 
     const mockRef = {};
-    (ref as any).mockReturnValue(mockRef);
-    (uploadBytes as any).mockResolvedValue({ ref: mockRef });
-    (getDownloadURL as any).mockResolvedValue('mocked-url');
+    (ref as Mock).mockReturnValue(mockRef);
+    (uploadBytes as Mock).mockResolvedValue({ ref: mockRef });
+    (getDownloadURL as Mock).mockResolvedValue('mocked-url');
 
     const result = await uploadPlantImage(file, id);
 
