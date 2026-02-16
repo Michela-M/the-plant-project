@@ -8,7 +8,7 @@ import Menu, { MenuItem } from '../../components/Menu';
 import { useNavigate } from 'react-router-dom';
 import Modal from '../../components/Modal';
 import deletePlant from '../../services/deletePlant';
-import { useToast } from '../../context/ToastContext';
+import { useToast } from '../../context/useToast';
 
 export default function PlantDetailsHeader({
   plant,

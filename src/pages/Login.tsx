@@ -9,7 +9,7 @@ import PasswordToggleIcon from '../components/PasswordToggleIcon';
 import { signInWithEmailAndPassword } from 'firebase/auth';
 import { FirebaseError } from 'firebase/app';
 import { auth } from '../firebase';
-import { useToast } from '../context/ToastContext';
+import { useToast } from '../context/useToast';
 import { onAuthStateChanged } from 'firebase/auth';
 
 export default function Login() {
