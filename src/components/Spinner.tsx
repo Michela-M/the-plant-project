@@ -1,3 +1,10 @@
+const colorMap = {
+  'stone-50': 'text-stone-50',
+  'green-600': 'text-green-600',
+  'green-800': 'text-green-800',
+  'red-800': 'text-red-800',
+};
+
 export default function Spinner() {
   return (
     <div className="w-full h-64 flex items-center justify-center">
@@ -34,7 +41,7 @@ export function InlineSpinner({
   return (
     <>
       <svg
-        className={`animate-spin h-5 w-5 text-${color} inline-block`}
+        className={`animate-spin h-5 w-5 ${colorMap[color]} inline-block`}
         xmlns="http://www.w3.org/2000/svg"
         fill="none"
         viewBox="0 0 24 24"
