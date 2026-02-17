@@ -65,4 +65,27 @@ describe('ImagePicker', () => {
     const input = screen.getByTestId('file-input') as HTMLInputElement;
     expect(input.accept).toBe('image/png, image/jpeg');
   });
+
+  it('returns null for unsafe URLs', () => {
+    const { rerender } = render(
+      <ImagePicker previewUrl="javascript:alert('XSS')" onSelect={() => {}} />
+    );
+
+    let img = screen.getByRole('img') as HTMLImageElement;
+    expect(img.src).toBe(
+      'https://larchcottage.co.uk/wp-content/uploads/2024/05/placeholder.jpg'
+    );
+
+    // Test another unsafe URL
+    rerender(
+      <ImagePicker
+        previewUrl="data:text/html;base64,PHNjcmlwdD5hbGVydCgnWFNTJyk8L3NjcmlwdD4K"
+        onSelect={() => {}}
+      />
+    );
+    img = screen.getByRole('img') as HTMLImageElement;
+    expect(img.src).toBe(
+      'https://larchcottage.co.uk/wp-content/uploads/2024/05/placeholder.jpg'
+    );
+  });
 });

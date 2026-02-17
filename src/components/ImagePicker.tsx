@@ -12,12 +12,21 @@ export default function ImagePicker({
   const inputRef = useRef<HTMLInputElement | null>(null);
   const [loading, setLoading] = useState(false);
 
-  const safeUrl =
-    previewUrl && previewUrl.startsWith('blob:') ? previewUrl : null;
+  const isSafeImageUrl = (url: string | null): string | null => {
+    if (!url) return null;
+    try {
+      const parsed = new URL(url, window.location.origin);
+      const allowedSchemes = ['http:', 'https:', 'blob:'];
+      if (!allowedSchemes.includes(parsed.protocol)) {
+        return null;
+      }
+      return url;
+    } catch {
+      return null;
+    }
+  };
 
-  useEffect(() => {
-    console.log('ImagePicker previewUrl:', previewUrl);
-  }, [previewUrl]);
+  const safeUrl = isSafeImageUrl(previewUrl);
 
   return (
     <div className="flex flex-col gap-2">
