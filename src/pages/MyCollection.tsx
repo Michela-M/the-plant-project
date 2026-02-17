@@ -24,7 +24,6 @@ export default function MyCollection() {
       setLoading(true);
       try {
         const plantsData = await getAllPlants();
-        console.log('Fetched plants:', plantsData);
         setPlants(plantsData);
       } catch (error) {
         showError(

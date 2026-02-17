@@ -29,7 +29,6 @@ export default function PlantDetailsHeader({
       navigate('/collection');
       showSuccess('Plant deleted successfully');
     } catch (error) {
-      console.error(error);
       showError(
         'Error deleting plant',
         error instanceof Error ? error.message : 'Unknown error'
@@ -105,7 +104,7 @@ export default function PlantDetailsHeader({
         <Modal
           title="Delete plant"
           onClose={() => setShowDeleteConfirm(false)}
-          type="acknowledgement"
+          type="destructive"
           label="Delete"
           onConfirm={handleDelete}
         >

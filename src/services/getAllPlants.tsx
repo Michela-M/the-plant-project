@@ -21,7 +21,6 @@ export const getAllPlants = async () => {
       };
     });
   } catch (error) {
-    console.error('Error fetching plants:', error);
     return [];
   }
 };

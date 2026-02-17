@@ -19,11 +19,9 @@ export const getPlantDetails = async (plantId: string) => {
         imageUrl: data.imageUrl ?? null,
       };
     } else {
-      console.log('No such document!');
       return null;
     }
   } catch (error) {
-    console.error(error);
     throw error;
   }
 };
