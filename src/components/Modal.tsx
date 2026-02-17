@@ -1,6 +1,15 @@
 import Button, { IconButton } from './Button';
 import { X } from 'lucide-react';
 
+interface ModalProps {
+  title: string;
+  children: React.ReactNode;
+  onClose: () => void;
+  type: 'passive' | 'transactional' | 'destructive' | 'acknowledgement';
+  label?: string;
+  onConfirm?: () => void;
+}
+
 export default function Modal({
   title,
   children,
@@ -8,42 +17,40 @@ export default function Modal({
   type,
   label,
   onConfirm,
-}: {
-  title: string;
-  children: React.ReactNode;
-  onClose: () => void;
-  type: 'passive' | 'transactional' | 'destructive' | 'acknowledgement';
-  label?: string;
-  onConfirm?: () => void;
-}) {
+}: ModalProps) {
+  const isDestructive = type === 'destructive';
+  const isPassive = type === 'passive';
+  const isAcknowledgement = type === 'acknowledgement';
+  const showTwoButtons = !isPassive && !isAcknowledgement;
+
+  const confirmLabel = label || (isAcknowledgement ? 'OK' : 'Confirm');
+  const confirmHandler = onConfirm || onClose;
+
+  const renderActions = () => {
+    if (isPassive) return null;
+
+    return (
+      <div className="flex gap-2 justify-end mt-4">
+        {showTwoButtons && (
+          <Button
+            label="Cancel"
+            variant="outlined"
+            onClick={onClose}
+            tone={isDestructive ? 'destructive' : undefined}
+          />
+        )}
+        <Button
+          label={confirmLabel}
+          onClick={confirmHandler}
+          tone={isDestructive ? 'destructive' : undefined}
+        />
+      </div>
+    );
+  };
+
   return (
     <div className="fixed inset-0 bg-black/20 flex items-center justify-center z-50">
       <div className="bg-stone-50 rounded-lg shadow-lg w-full max-w-md p-6 relative">
-        <h2 className="text-2xl mb-4">{title}</h2>
-        {children}
-        {type !== 'passive' && type !== 'acknowledgement' && (
-          <div className="flex gap-2 justify-end mt-4">
-            <Button
-              label="Cancel"
-              variant="outlined"
-              onClick={onClose}
-              tone={type === 'destructive' ? 'destructive' : undefined}
-            />
-            <Button
-              label={label ? label : 'Confirm'}
-              onClick={onConfirm ? onConfirm : onClose}
-              tone={type === 'destructive' ? 'destructive' : undefined}
-            />
-          </div>
-        )}
-        {type === 'acknowledgement' && (
-          <div className="flex gap-2 justify-end mt-4">
-            <Button
-              label={label ? label : 'OK'}
-              onClick={onConfirm ? onConfirm : onClose}
-            />
-          </div>
-        )}
         <div className="absolute top-2 right-2">
           <IconButton
             icon={<X />}
@@ -52,6 +59,10 @@ export default function Modal({
             label="close"
           />
         </div>
+
+        <h2 className="text-2xl mb-4">{title}</h2>
+        {children}
+        {renderActions()}
       </div>
     </div>
   );
