@@ -12,7 +12,7 @@ const addPlantValidationSchema = Yup.object({
   species: Yup.string(),
   wateringFrequency: Yup.number()
     .typeError('Must be a number')
-    .min(1, 'Must be at least 1 day'),
+    .min(0, 'Must be at least 0'),
   lastWatered: Yup.date()
     .typeError('Must be a valid date')
     .max(new Date(), 'Date cannot be in the future'),
