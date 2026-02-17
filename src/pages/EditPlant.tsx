@@ -67,6 +67,15 @@ export default function EditPlant() {
     fetchPlant();
   }, [id, showError]);
 
+  useEffect(() => {
+    return () => {
+      // Clean up preview URL when component unmounts or when a new file is selected
+      if (previewUrl) {
+        URL.revokeObjectURL(previewUrl);
+      }
+    };
+  }, [previewUrl]);
+
   const formik = useFormik({
     enableReinitialize: true,
     initialValues: {
