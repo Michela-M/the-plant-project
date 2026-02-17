@@ -6,7 +6,7 @@
 `test-plants` collection using its `plantId`.  
 It normalizes missing fields to ensure the UI always receives a predictable, typed object.  
 If the document does not exist, the service returns `null`.  
-If Firestore throws an error, the service logs it and rethrows so calling code can handle it appropriately.
+If Firestore throws an error, the error is propagated to the calling code for appropriate handling.
 
 ---
 
@@ -48,12 +48,16 @@ All fields are normalized to avoid `undefined` values.
 ```jsx
 import { getPlantDetails } from '../services/getPlantDetails';
 
-const plant = await getPlantDetails('abc123');
+try {
+  const plant = await getPlantDetails('abc123');
 
-if (plant) {
-  console.log('Plant name:', plant.name);
-} else {
-  console.log('Plant not found');
+  if (plant) {
+    console.log('Plant name:', plant.name);
+  } else {
+    console.log('Plant not found');
+  }
+} catch (error) {
+  console.error('Error fetching plant:', error);
 }
 ```
 
@@ -80,11 +84,12 @@ This prevents undefined values from leaking into the UI.
 ### Firestore timestamp fields
 
 Timestamp fields (`lastWatered`, `creationDate`) are converted to JavaScript `Date` objects using `.toDate()`.
-If the field is missing or not a timestamp, the value becomes `null`.
+If the field is missingpropagated to the caller so the calling code can:
 
-### Firestore errors
-
-Any Firestore error is logged and rethrown so the caller can:
+- show a toast or error message
+- trigger an error boundary
+- retry the request
+- handle the error appropriately is logged and rethrown so the caller can:
 
 - show a toast
 - trigger an error boundary

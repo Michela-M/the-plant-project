@@ -71,14 +71,12 @@ describe('getAllPlants', () => {
     expect(result).toEqual([]);
   });
 
-  it('returns an empty array when Firestore throws an error', async () => {
+  it('throws an error when Firestore fails', async () => {
     (collection as Mock).mockReturnValue({});
     (query as Mock).mockReturnValue({});
     (getDocs as Mock).mockRejectedValue(new Error('Firestore error'));
 
-    const result = await getAllPlants();
-
-    expect(result).toEqual([]);
+    await expect(getAllPlants()).rejects.toThrow('Firestore error');
   });
 
   it('normalizes missing fields to safe defaults', async () => {
