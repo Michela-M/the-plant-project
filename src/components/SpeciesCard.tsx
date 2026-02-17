@@ -31,7 +31,8 @@ export default function SpeciesCard({
         >
           <IconButton
             variant="ghost"
-            icon={<CirclePlus size={16} />}
+            icon={<CirclePlus />}
+            size="sm"
             label={
               commonName
                 ? `Add ${commonName} to collection`

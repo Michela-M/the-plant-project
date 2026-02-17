@@ -17,8 +17,8 @@ The component supports keyboard accessibility, Escape‑to‑close behavior, and
 
 ```jsx
 <ImagePreview
-  url="https://example.com/snake.jpg"
-  alt="A green snake curled on a branch"
-  description="A close-up shot of a snake in its natural habitat."
+  url="https://example.com/snakeplant.jpg"
+  alt="A snake plant in a white pot on a wooden table."
+  description="A snake plant in a white pot on a wooden table."
 />
 ```
