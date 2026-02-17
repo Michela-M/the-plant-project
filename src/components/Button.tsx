@@ -61,7 +61,7 @@ export default function Button({
       <span className={loading ? 'opacity-0' : 'opacity-100'}> {label} </span>
       {icon && (
         <span
-          className={`flex items-center ${size === 'sm' ? 'w-4 h-4' : 'w-5 h-5'}`}
+          className={`flex items-center justify-center ${size === 'sm' ? 'w-4 h-4' : 'w-5 h-5'} ${loading ? 'opacity-0' : 'opacity-100'}`}
         >
           {icon}
         </span>
@@ -76,12 +76,14 @@ export function IconButton({
   onClick,
   label,
   size = 'md',
+  loading = false,
 }: {
   icon: ReactNode;
   variant?: 'filled' | 'outlined' | 'ghost';
   onClick?: () => void;
   label?: string;
   size?: 'sm' | 'md';
+  loading?: boolean;
 }) {
   return (
     <button
@@ -90,9 +92,17 @@ export function IconButton({
       className={`${variantClasses['primary'][variant]} ${size === 'sm' ? 'p-1 rounded-sm border' : 'p-2 rounded-md border-2'}`}
       aria-label={label}
     >
-      {icon && (
+      {loading ? (
         <span
-          className={`flex items-center ${size === 'sm' ? 'w-5 h-5' : 'w-6 h-6'}`}
+          className={`flex items-center justify-center ${size === 'sm' ? 'w-5 h-5' : 'w-6 h-6'}`}
+        >
+          <InlineSpinner
+            color={variant === 'filled' ? 'stone-50' : 'green-800'}
+          />
+        </span>
+      ) : (
+        <span
+          className={`flex items-center justify-center ${size === 'sm' ? 'w-5 h-5' : 'w-6 h-6'}`}
         >
           {icon}
         </span>
