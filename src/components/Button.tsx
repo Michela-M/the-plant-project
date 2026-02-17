@@ -43,7 +43,7 @@ export default function Button({
     <button
       type={type}
       onClick={onClick}
-      className={`flex items-center justify-center ${variantClasses[tone][variant]} ${size === 'sm' ? 'text-sm px-2 py-1 rounded-sm border gap-1' : 'text-md px-3 py-2 rounded-md border-2 gap-2'}`}
+      className={`relative flex items-center justify-center ${variantClasses[tone][variant]} ${size === 'sm' ? 'text-sm px-2 py-1 rounded-sm border gap-1' : 'text-md px-3 py-2 rounded-md border-2 gap-2'}`}
     >
       {loading && (
         <span className="absolute">
