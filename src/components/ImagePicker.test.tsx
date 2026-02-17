@@ -4,7 +4,7 @@ import ImagePicker from './ImagePicker';
 import userEvent from '@testing-library/user-event';
 
 describe('ImagePicker', () => {
-  it('renders ', () => {
+  it('renders correctly', () => {
     render(<ImagePicker previewUrl={null} onSelect={() => {}} />);
 
     expect(screen.getByRole('img')).toBeInTheDocument();
@@ -14,7 +14,7 @@ describe('ImagePicker', () => {
   });
 
   it('displays the preview image when provided', () => {
-    const previewUrl = 'https://example.com/preview.jpg';
+    const previewUrl = 'blob:https://example.com/preview.jpg';
     render(<ImagePicker previewUrl={previewUrl} onSelect={() => {}} />);
 
     const img = screen.getByRole('img') as HTMLImageElement;

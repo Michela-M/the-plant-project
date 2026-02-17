@@ -10,7 +10,7 @@ const variantClasses = {
     ghost:
       'text-green-800 hover:bg-green-800/10 active:bg-green-800/20 border-transparent',
   },
-  error: {
+  destructive: {
     filled:
       'bg-red-800 text-stone-50 hover:bg-red-900 active:bg-red-950 border-red-800',
     outlined:
@@ -33,7 +33,7 @@ export default function Button({
   label: string;
   icon?: ReactNode;
   variant?: 'filled' | 'outlined' | 'ghost';
-  tone?: 'primary' | 'error';
+  tone?: 'primary' | 'destructive';
   onClick?: () => void;
   type?: 'button' | 'submit' | 'reset';
   size?: 'sm' | 'md';
@@ -43,7 +43,7 @@ export default function Button({
     <button
       type={type}
       onClick={onClick}
-      className={` flex items-center justify-center ${variantClasses[tone][variant]} ${size === 'sm' ? 'text-sm px-2 py-1 rounded-sm border gap-1' : 'text-md px-3 py-2 rounded-md border-2 gap-2'}`}
+      className={`flex items-center justify-center ${variantClasses[tone][variant]} ${size === 'sm' ? 'text-sm px-2 py-1 rounded-sm border gap-1' : 'text-md px-3 py-2 rounded-md border-2 gap-2'}`}
     >
       {loading && (
         <span className="absolute">

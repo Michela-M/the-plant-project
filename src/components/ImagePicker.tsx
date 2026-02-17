@@ -1,4 +1,4 @@
-import { useRef } from 'react';
+import { useEffect, useRef } from 'react';
 import Button from './Button';
 import { useState } from 'react';
 
@@ -12,16 +12,23 @@ export default function ImagePicker({
   const inputRef = useRef<HTMLInputElement | null>(null);
   const [loading, setLoading] = useState(false);
 
+  const safeUrl =
+    previewUrl && previewUrl.startsWith('blob:') ? previewUrl : null;
+
+  useEffect(() => {
+    console.log('ImagePicker previewUrl:', previewUrl);
+  }, [previewUrl]);
+
   return (
     <div className="flex flex-col gap-2">
       <div className="aspect-square overflow-hidden object-cover w-full">
         <img
           className="aspect-square object-cover w-full"
           src={
-            previewUrl ||
+            safeUrl ||
             'https://larchcottage.co.uk/wp-content/uploads/2024/05/placeholder.jpg'
           }
-          alt="Plant"
+          alt="Plant preview"
         />
       </div>
 

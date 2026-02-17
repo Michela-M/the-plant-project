@@ -11,7 +11,7 @@
 | `label`   | `string`                          | yes      | —           | Text displayed inside the button        |
 | `icon`    | `ReactNode`                       | no       | —           | Optional icon displayed after the label |
 | `variant` | `'filled' / 'outlined' / 'ghost'` | no       | `'filled'`  | Visual style of the button              |
-| `tone`    | `'primary' / 'error'`             | no       | `'primary'` | Color tone of the button                |
+| `tone`    | `'primary' / 'destructive'`       | no       | `'primary'` | Color tone of the button                |
 | `type`    | `'button' / 'submit' / 'reset'`   | no       | `'button'`  | Native button type                      |
 | `size`    | `'sm' / 'md'`                     | no       | `'md'`      | Button size                             |
 | `loading` | `boolean`                         | no       | `false`     | Shows spinner and disables interaction  |
@@ -30,7 +30,7 @@
 ```jsx
 <Button
   label="Delete"
-  tone="error"
+  tone="destructive"
   icon={<TrashIcon />}
   onClick={handleDelete}
 />

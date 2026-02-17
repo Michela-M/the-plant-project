@@ -39,8 +39,8 @@ describe('Button', () => {
     expect(button.className).toContain('text-green-800');
   });
 
-  it('applies error tone classes', () => {
-    render(<Button label="Error" tone="error" />);
+  it('applies destructive tone classes', () => {
+    render(<Button label="Destructive" tone="destructive" />);
 
     const button = screen.getByRole('button');
     expect(button.className).toContain('bg-red-800');
