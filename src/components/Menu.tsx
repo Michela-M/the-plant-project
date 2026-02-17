@@ -21,7 +21,7 @@ export function MenuItem({
 }) {
   return (
     <button
-      className={`w-full text-left px-3 py-2  overflow-hidden text-ellipsis whitespace-nowrap truncate ${disabled ? 'text-stone-400 cursor-not-allowed' : 'hover:bg-stone-100'} ${danger ? 'text-red-700' : ''}`}
+      className={`w-full text-left px-3 py-2 overflow-hidden text-ellipsis whitespace-nowrap truncate ${disabled ? 'text-stone-400 cursor-not-allowed' : 'hover:bg-stone-100'} ${danger ? 'text-red-700' : ''}`}
       onClick={onClick}
       aria-label={label}
       disabled={disabled}
