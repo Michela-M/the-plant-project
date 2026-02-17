@@ -27,12 +27,12 @@ export default function Modal({
               label="Cancel"
               variant="outlined"
               onClick={onClose}
-              tone={type === 'destructive' ? 'error' : undefined}
+              tone={type === 'destructive' ? 'destructive' : undefined}
             />
             <Button
               label={label ? label : 'Confirm'}
               onClick={onConfirm ? onConfirm : onClose}
-              tone={type === 'destructive' ? 'error' : undefined}
+              tone={type === 'destructive' ? 'destructive' : undefined}
             />
           </div>
         )}
