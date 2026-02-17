@@ -30,4 +30,27 @@ describe('uploadPlantImage', () => {
 
     expect(result).toBe('mocked-url');
   });
+
+  it('should throw an error for invalid image', async () => {
+    const file = new File(['dummy content'], 'example.txt', {
+      type: 'text/plain',
+    });
+    const id = '123';
+
+    await expect(uploadPlantImage(file, id)).rejects.toThrow(
+      'Invalid file type'
+    );
+  });
+
+  it('should throw an error for oversized image', async () => {
+    const largeContent = new Array(6 * 1024 * 1024).fill('a').join('');
+    const file = new File([largeContent], 'large.png', {
+      type: 'image/png',
+    });
+    const id = '123';
+
+    await expect(uploadPlantImage(file, id)).rejects.toThrow(
+      'File too large (max 5MB)'
+    );
+  });
 });

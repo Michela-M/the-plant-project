@@ -45,17 +45,16 @@ const imageUrl = file
 await savePlant(plantId, { ...values, imageUrl });
 ```
 
-## Edge Casess
+## Validation
 
-This service does not perform validation. The caller must ensure:
+This service performs the following validations and throws an error if any fail:
 
-- The file is not null or undefined
-- The file type is appropriate (PNG/JPEG)
-- The file size is acceptable
-- The user has permission to upload to this Storage path
-- The plantId is valid and not empty
+- **File type**: Must be an image (checked via MIME type starting with `image/`)
+- **File size**: Must not exceed 5MB
 
-Other considerations:
+The service throws an `Error` with a descriptive message if validation fails.
+
+## Edge Cases
 
 - Uploading a file with the same name will overwrite the previous one in the same folder
 - Network issues or Firebase Storage rules may cause upload failures
