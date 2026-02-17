@@ -1,12 +1,12 @@
 import { describe, it, expect } from 'vitest';
 import { render, screen } from '@testing-library/react';
 import PlantCard from './PlantCard';
-import { BrowserRouter } from 'react-router-dom';
+import { MemoryRouter } from 'react-router-dom';
 
 describe('PlantCard component', () => {
   it('renders plant information correctly', () => {
     render(
-      <BrowserRouter>
+      <MemoryRouter>
         <PlantCard
           plant={{
             id: 'plant-1',
@@ -15,7 +15,7 @@ describe('PlantCard component', () => {
             name: 'Sansevieria trifasciata',
           }}
         />
-      </BrowserRouter>
+      </MemoryRouter>
     );
 
     expect(screen.getByAltText('Snake Plant')).toHaveAttribute(
@@ -25,16 +25,17 @@ describe('PlantCard component', () => {
     expect(screen.getByText('Snake Plant')).toBeInTheDocument();
     expect(screen.getByText('Sansevieria trifasciata')).toBeInTheDocument();
   });
+
   it('handles missing image and common name gracefully', () => {
     render(
-      <BrowserRouter>
+      <MemoryRouter>
         <PlantCard
           plant={{
             id: 'plant-2',
             name: 'Sansevieria trifasciata',
           }}
         />
-      </BrowserRouter>
+      </MemoryRouter>
     );
 
     expect(screen.getByAltText('Plant Image')).toHaveAttribute(
@@ -42,5 +43,37 @@ describe('PlantCard component', () => {
       'https://larchcottage.co.uk/wp-content/uploads/2024/05/placeholder.jpg'
     );
     expect(screen.getByText('Sansevieria trifasciata')).toBeInTheDocument();
+  });
+
+  it('handles missing name gracefully', () => {
+    render(
+      <MemoryRouter>
+        <PlantCard
+          plant={{
+            id: 'plant-4',
+            name: '',
+            commonName: 'Snake Plant',
+          }}
+        />
+      </MemoryRouter>
+    );
+
+    expect(screen.getByText('Unnamed Plant')).toBeInTheDocument();
+  });
+
+  it('navigates to plant details on click', () => {
+    render(
+      <MemoryRouter>
+        <PlantCard
+          plant={{
+            id: 'plant-3',
+            name: 'Sansevieria trifasciata',
+          }}
+        />
+      </MemoryRouter>
+    );
+
+    const link = screen.getByRole('link');
+    expect(link).toHaveAttribute('href', '/plants/plant-3');
   });
 });
