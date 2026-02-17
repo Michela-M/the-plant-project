@@ -25,4 +25,13 @@ describe('deletePlant', () => {
     expect(doc).toHaveBeenCalledWith(db, 'test-plants', mockPlantId);
     expect(deleteDoc).toHaveBeenCalledWith(mockDocRef);
   });
+
+  it('should throw an error if deletion fails', async () => {
+    const mockPlantId = '123';
+    const mockError = new Error('Deletion failed');
+    (doc as Mock).mockReturnValue({});
+    (deleteDoc as Mock).mockRejectedValue(mockError);
+
+    await expect(deletePlant(mockPlantId)).rejects.toThrow('Deletion failed');
+  });
 });
