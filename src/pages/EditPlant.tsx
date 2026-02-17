@@ -108,7 +108,7 @@ export default function EditPlant() {
         });
 
         showSuccess('Plant saved successfully');
-        navigate('/collection');
+        navigate('/plants/' + id);
       } catch (error) {
         showError(
           'Error saving plant',
