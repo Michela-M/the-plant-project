@@ -1,7 +1,7 @@
 import { doc, updateDoc } from 'firebase/firestore';
 import { db } from '../firebase';
 
-export const savePlant = async (
+export const updatePlant = async (
   plantId: string,
   plantData: {
     name: string;

@@ -6,7 +6,7 @@
 It is used when creating or editing a plant to store its associated image.
 
 This service only handles uploading — it does not update Firestore.
-The returned URL should be saved separately using your savePlant service.
+The returned URL should be saved separately using the `updatePlant` service.
 
 ## Parameters
 
@@ -42,7 +42,7 @@ const imageUrl = file
   ? await uploadPlantImage(file, plantId)
   : existingImageUrl;
 
-await savePlant(plantId, { ...values, imageUrl });
+await updatePlant(plantId, { ...values, imageUrl });
 ```
 
 ## Validation

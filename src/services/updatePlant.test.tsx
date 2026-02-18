@@ -1,5 +1,5 @@
 import { describe, it, expect, vi } from 'vitest';
-import { savePlant } from './savePlant';
+import { updatePlant } from './updatePlant';
 import { doc, updateDoc } from 'firebase/firestore';
 import { db } from '../firebase';
 import type { Mock } from 'vitest';
@@ -14,7 +14,7 @@ vi.mock('../firebase', () => ({
   db: {},
 }));
 
-describe('savePlant', () => {
+describe('updatePlant', () => {
   it('should update plant data in Firestore', async () => {
     const plantId = '123';
     const plantData = {
@@ -30,7 +30,7 @@ describe('savePlant', () => {
     (doc as Mock).mockReturnValue(mockDocRef);
     (updateDoc as Mock).mockResolvedValue(undefined);
 
-    await savePlant(plantId, plantData);
+    await updatePlant(plantId, plantData);
 
     expect(doc).toHaveBeenCalledWith(db, 'test-plants', plantId);
     expect(updateDoc).toHaveBeenCalledWith(mockDocRef, {
@@ -57,7 +57,7 @@ describe('savePlant', () => {
     (doc as Mock).mockReturnValue({});
     (updateDoc as Mock).mockRejectedValue(new Error('Firestore error'));
 
-    await expect(savePlant(plantId, plantData)).rejects.toThrow(
+    await expect(updatePlant(plantId, plantData)).rejects.toThrow(
       'Firestore error'
     );
   });
@@ -76,7 +76,7 @@ describe('savePlant', () => {
     (doc as Mock).mockReturnValue({});
     (updateDoc as Mock).mockRejectedValue('Unknown error');
 
-    await expect(savePlant(plantId, plantData)).rejects.toThrow(
+    await expect(updatePlant(plantId, plantData)).rejects.toThrow(
       'Unknown error'
     );
   });
@@ -91,7 +91,7 @@ describe('savePlant', () => {
     (doc as Mock).mockReturnValue(mockDocRef);
     (updateDoc as Mock).mockResolvedValue(undefined);
 
-    await savePlant(plantId, plantData);
+    await updatePlant(plantId, plantData);
 
     expect(updateDoc).toHaveBeenCalledWith(mockDocRef, {
       name: plantData.name,

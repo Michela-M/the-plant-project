@@ -8,7 +8,7 @@ import Button from '../components/Button';
 import TextField from '../components/TextField';
 
 import { getPlantDetails } from '../services/getPlantDetails';
-import { savePlant } from '../services/savePlant';
+import { updatePlant } from '../services/updatePlant';
 import { uploadPlantImage } from '../services/uploadPlantImage';
 import ImagePicker from '../components/ImagePicker';
 
@@ -98,7 +98,7 @@ export default function EditPlant() {
           imageUrl = await uploadPlantImage(file, id);
         }
 
-        await savePlant(id, {
+        await updatePlant(id, {
           name: values.name,
           species: values.species,
           wateringFrequency: Number(values.wateringFrequency),

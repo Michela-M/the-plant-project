@@ -1,8 +1,8 @@
-# `savePlant` Service
+# `updatePlant` Service
 
 ## Description
 
-`savePlant` updates an existing plant document in Firestore with the provided fields.
+`updatePlant` updates an existing plant document in Firestore with the provided fields.
 It performs a partial update using `updateDoc`, meaning only the specified fields are changed while the rest of the document remains untouched.
 
 This service is typically used when editing a plant’s details such as its name, species, watering frequency, notes, last watered date, or image URL.
@@ -38,7 +38,7 @@ Callers should wrap it in a try/catch block to handle failures gracefully.
 Basic usage inside a form submit:
 
 ```jsx
-await savePlant(plantId, {
+await updatePlant(plantId, {
   name: values.name,
   species: values.species,
   wateringFrequency: Number(values.wateringFrequency),
@@ -51,7 +51,7 @@ With error handling:
 
 ```jsx
 try {
-  await savePlant(plantId, updatedData);
+  await updatePlant(plantId, updatedData);
   navigate('/collection');
 } catch (err) {
   console.error('Failed to save plant:', err);
