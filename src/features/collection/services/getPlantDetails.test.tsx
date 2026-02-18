@@ -8,7 +8,7 @@ vi.mock('firebase/firestore', () => ({
   getDoc: vi.fn(),
 }));
 
-vi.mock('../firebase', () => ({
+vi.mock('@services/firebase', () => ({
   db: {},
 }));
 

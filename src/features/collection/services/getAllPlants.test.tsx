@@ -12,7 +12,7 @@ vi.mock('firebase/firestore', () => ({
   query: vi.fn(),
 }));
 
-vi.mock('../firebase', () => ({
+vi.mock('@services/firebase', () => ({
   db: {},
 }));
 

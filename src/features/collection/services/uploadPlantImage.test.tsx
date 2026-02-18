@@ -10,7 +10,7 @@ vi.mock('firebase/storage', () => ({
   getDownloadURL: vi.fn(),
 }));
 
-vi.mock('../firebase', () => ({
+vi.mock('@services/firebase', () => ({
   storage: {},
 }));
 

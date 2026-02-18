@@ -9,7 +9,7 @@ vi.mock('firebase/firestore', () => ({
   deleteDoc: vi.fn(),
 }));
 
-vi.mock('../firebase', () => ({
+vi.mock('@services/firebase', () => ({
   db: {},
 }));
 
