@@ -90,7 +90,9 @@ export function IconButton({
   return (
     <button
       type="button"
-      onClick={onClick}
+      onClick={loading ? undefined : onClick}
+      disabled={loading}
+      aria-busy={loading}
       className={`${variantClasses['primary'][variant]} ${size === 'sm' ? 'p-1 rounded-sm border' : 'p-2 rounded-md border-2'}`}
       disabled={loading}
       aria-label={label}
