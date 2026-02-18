@@ -27,15 +27,17 @@ export default function ImagePicker({
     }
   };
 
+  const clearFocusListener = () => {
+    if (focusListenerRef.current) {
+      window.removeEventListener('focus', focusListenerRef.current);
+      focusListenerRef.current = null;
+    }
+  };
+
   const safeUrl = isSafeImageUrl(previewUrl);
 
   useEffect(() => {
-    return () => {
-      if (focusListenerRef.current) {
-        window.removeEventListener('focus', focusListenerRef.current);
-        focusListenerRef.current = null;
-      }
-    };
+    return clearFocusListener;
   }, []);
 
   return (
@@ -58,11 +60,8 @@ export default function ImagePicker({
         onClick={() => {
           setLoading(true);
           
-          // Remove any existing focus listener
-          if (focusListenerRef.current) {
-            window.removeEventListener('focus', focusListenerRef.current);
-            focusListenerRef.current = null;
-          }
+          // Clear any existing focus listener before adding a new one
+          clearFocusListener();
           
           // Add focus listener to detect when file picker closes
           const handleFocus = () => {
