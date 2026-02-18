@@ -41,7 +41,7 @@ export default function PlantDetailsHeader({
       <IconButton
         icon={<ChevronLeft />}
         variant="ghost"
-        onClick={() => navigate(-1)}
+        onClick={() => navigate('/collection')}
       />
       <div className="w-full">
         {plant?.commonName && (

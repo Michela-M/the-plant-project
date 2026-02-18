@@ -48,6 +48,7 @@ export default function ImagePicker({
         onClick={() => {
           setLoading(true);
           inputRef.current?.click();
+          setTimeout(() => setLoading(false), 1000);
         }}
         loading={loading}
       />
