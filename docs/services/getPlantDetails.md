@@ -84,13 +84,13 @@ This prevents undefined values from leaking into the UI.
 ### Firestore timestamp fields
 
 Timestamp fields (`lastWatered`, `creationDate`) are converted to JavaScript `Date` objects using `.toDate()`.
-If the field is missingpropagated to the caller so the calling code can:
+
+- If a timestamp field is **present and valid**, it is converted to a `Date`.
+- If a timestamp field is **missing or not a valid Firestore `Timestamp`**, it is normalized to `null` (as reflected in the `Plant` type) instead of causing an error.
+
+If Firestore itself fails (for example, due to permission issues, network errors, or an invalid request), the error is not swallowed by this service. It is propagated to the caller, who can then decide how to handle it, for example:
 
 - show a toast or error message
 - trigger an error boundary
 - retry the request
-- handle the error appropriately is logged and rethrown so the caller can:
-
-- show a toast
-- trigger an error boundary
-- retry the request
+- log the error for monitoring/analytics
