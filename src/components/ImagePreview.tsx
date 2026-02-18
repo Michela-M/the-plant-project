@@ -22,7 +22,7 @@ export default function ImagePreview({
 
   return (
     <div className="flex flex-col items-center">
-      <button onClick={() => setIsOpen(true)}>
+      <button onClick={() => setIsOpen(true)} type="button">
         <img
           src={url}
           alt={alt}
