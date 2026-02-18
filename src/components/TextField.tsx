@@ -67,7 +67,7 @@ export default function TextField({
   return (
     <div className="flex flex-col w-full">
       {label && (
-        <label htmlFor={name} className={labelClasses}>
+        <label htmlFor={name} className={labelClasses} aria-required={required}>
           {label}
           {required && <span className="text-red-700">*</span>}
         </label>
@@ -84,6 +84,7 @@ export default function TextField({
             onChange={onChange}
             onBlur={onBlur}
             aria-invalid={hasError}
+            aria-required={required}
             className={inputClasses}
           />
         ) : (
