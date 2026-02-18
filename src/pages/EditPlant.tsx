@@ -95,7 +95,7 @@ export default function EditPlant() {
 
         // Upload only if user selected a new file
         if (file) {
-          imageUrl = await uploadPlantImage(file, id);
+          imageUrl = await uploadPlantImage(file, id, 'currentUserId');
         }
 
         await updatePlant(id, {

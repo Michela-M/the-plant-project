@@ -14,6 +14,7 @@ The returned URL should be saved separately using the `updatePlant` service.
 | --------- | -------- | -------------------------------------------------------------------------- |
 | `file`    | `File`   | The image file selected by the user (PNG or JPEG).                         |
 | `plantId` | `string` | The ID of the plant, used to namespace the image path in Firebase Storage. |
+| `userId`  | `string` | The ID of the user, used to organize images by user in Firebase Storage.   |
 
 ## Return Value
 
@@ -27,8 +28,8 @@ This URL can be safely stored in Firestore and displayed in the UI.
 ```jsx
 import { uploadPlantImage } from '../services/uploadPlantImage';
 
-async function handleImageUpload(file: File, plantId: string) {
-  const imageUrl = await uploadPlantImage(file, plantId);
+async function handleImageUpload(file: File, plantId: string, userId: string) {
+  const imageUrl = await uploadPlantImage(file, plantId, userId);
 
   // Save the URL to Firestore or use it in your UI
   console.log("Uploaded image URL:", imageUrl);
@@ -39,7 +40,7 @@ Typical usage inside a form submit:
 
 ```jsx
 const imageUrl = file
-  ? await uploadPlantImage(file, plantId)
+  ? await uploadPlantImage(file, plantId, userId)
   : existingImageUrl;
 
 await updatePlant(plantId, { ...values, imageUrl });

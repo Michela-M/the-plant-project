@@ -20,13 +20,13 @@ describe('uploadPlantImage', () => {
       type: 'image/png',
     });
     const id = '123';
-
+    const userId = 'currentUserId';
     const mockRef = {};
     (ref as Mock).mockReturnValue(mockRef);
     (uploadBytes as Mock).mockResolvedValue({ ref: mockRef });
     (getDownloadURL as Mock).mockResolvedValue('mocked-url');
 
-    const result = await uploadPlantImage(file, id);
+    const result = await uploadPlantImage(file, id, userId);
 
     expect(result).toBe('mocked-url');
   });
@@ -36,8 +36,9 @@ describe('uploadPlantImage', () => {
       type: 'text/plain',
     });
     const id = '123';
+    const userId = 'currentUserId';
 
-    await expect(uploadPlantImage(file, id)).rejects.toThrow(
+    await expect(uploadPlantImage(file, id, userId)).rejects.toThrow(
       'Invalid file type'
     );
   });
@@ -48,8 +49,9 @@ describe('uploadPlantImage', () => {
       type: 'image/png',
     });
     const id = '123';
+    const userId = 'currentUserId';
 
-    await expect(uploadPlantImage(file, id)).rejects.toThrow(
+    await expect(uploadPlantImage(file, id, userId)).rejects.toThrow(
       'File too large (max 5MB)'
     );
   });
