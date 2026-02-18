@@ -1,5 +1,5 @@
 import SpeciesCard from '../components/SpeciesCard';
-import ButtonRadio from '../components/ButtonRadio';
+import ButtonRadio from '@components/ButtonRadio';
 import { LayoutGrid, LayoutList } from 'lucide-react';
 import { useState } from 'react';
 import SpeciesListItem from '../components/SpeciesListItem';

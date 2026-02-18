@@ -1,5 +1,5 @@
-import Tag from './Tag';
-import { IconButton } from './Button';
+import Tag from '@components/Tag';
+import { IconButton } from '@components/Button';
 import { CirclePlus } from 'lucide-react';
 
 export default function SpeciesListItem({

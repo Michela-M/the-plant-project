@@ -1,5 +1,5 @@
 import { CirclePlus } from 'lucide-react';
-import { IconButton } from './Button';
+import { IconButton } from '@components/Button';
 
 export default function SpeciesCard({
   imageUrl,

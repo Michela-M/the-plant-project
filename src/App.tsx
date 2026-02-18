@@ -1,5 +1,5 @@
 import Dashboard from './pages/Dashboard';
-import Encyclopedia from './pages/Encyclopedia';
+import Encyclopedia from './features/encyclopedia/pages/Encyclopedia';
 import MyCollection from './features/collection/pages/MyCollection';
 import Login from './pages/Login';
 import AddPlant from './features/collection/pages/AddPlant';
