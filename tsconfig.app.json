@@ -21,7 +21,9 @@
     "paths": {
       "@context/*": ["src/context/*"],
       "@components/*": ["src/components/*"],
-      "@services/*": ["src/services/*"]
+      "@services/*": ["src/services/*"],
+      "@features/*": ["src/features/*"],
+      "@utils/*": ["src/utils/*"]
     },
 
     /* Linting */
