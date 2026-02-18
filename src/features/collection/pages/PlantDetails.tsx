@@ -1,11 +1,11 @@
 import { useEffect, useState } from 'react';
 import { Link, useParams } from 'react-router-dom';
 import { getPlantDetails } from '../services/getPlantDetails';
-import PlantDetailsHeader from '../features/collection/components/PlantDetailsHeader';
-import ImagePreview from '../components/ImagePreview';
-import PlantDetailsSchedule from '../features/collection/components/PlantDetailsSchedule';
+import PlantDetailsHeader from '../components/PlantDetailsHeader';
+import ImagePreview from '@components/ImagePreview';
+import PlantDetailsSchedule from '../components/PlantDetailsSchedule';
 import { useToast } from '@context/toast/useToast';
-import Spinner from '../components/Spinner';
+import Spinner from '@components/Spinner';
 
 export default function PlantDetails() {
   const { id } = useParams();

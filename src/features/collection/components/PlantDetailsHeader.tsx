@@ -1,12 +1,12 @@
-import { IconButton } from '../../../components/Button';
+import { IconButton } from '@components/Button';
 import { ChevronLeft } from 'lucide-react';
-import Button from '../../../components/Button';
+import Button from '@components/Button';
 import { ChevronDown } from 'lucide-react';
 import { EllipsisVertical } from 'lucide-react';
 import { useState } from 'react';
-import Menu, { MenuItem } from '../../../components/Menu';
+import Menu, { MenuItem } from '@components/Menu';
 import { useNavigate } from 'react-router-dom';
-import Modal from '../../../components/Modal';
+import Modal from '@components/Modal';
 import deletePlant from '../../../services/deletePlant';
 import { useToast } from '@context/toast/useToast';
 

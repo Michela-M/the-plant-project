@@ -1,10 +1,10 @@
 import { useFormik } from 'formik';
 import { useNavigate } from 'react-router-dom';
 import * as Yup from 'yup';
-import Button from '../components/Button';
-import TextField from '../components/TextField';
+import Button from '@components/Button';
+import TextField from '@components/TextField';
 import { useToast } from '@context/toast/useToast';
-import { addPlant } from '../services/addPlant';
+import { addPlant } from '../../../services/addPlant';
 import { useState } from 'react';
 
 const addPlantValidationSchema = Yup.object({

@@ -1,14 +1,14 @@
 import Dashboard from './pages/Dashboard';
 import Encyclopedia from './pages/Encyclopedia';
-import MyCollection from './pages/MyCollection';
+import MyCollection from './features/collection/pages/MyCollection';
 import Login from './pages/Login';
-import AddPlant from './pages/AddPlant';
+import AddPlant from './features/collection/pages/AddPlant';
 import Navigation from './Navigation';
 import './App.css';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import SignUp from './pages/SignUp';
-import PlantDetails from './pages/PlantDetails';
-import EditPlant from './pages/EditPlant';
+import PlantDetails from './features/collection/pages/PlantDetails';
+import EditPlant from './features/collection/pages/EditPlant';
 import { ToastProvider } from '@context/toast/ToastContext';
 
 function App() {

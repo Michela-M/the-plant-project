@@ -2,18 +2,18 @@ import { useEffect, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { useFormik } from 'formik';
 import * as Yup from 'yup';
-import { imageValidation } from '../utils/imageValidation';
+import { imageValidation } from '../../../utils/imageValidation';
 
-import Button from '../components/Button';
-import TextField from '../components/TextField';
+import Button from '@components/Button';
+import TextField from '@components/TextField';
 
-import { getPlantDetails } from '../services/getPlantDetails';
-import { updatePlant } from '../services/updatePlant';
-import { uploadPlantImage } from '../services/uploadPlantImage';
-import ImagePicker from '../components/ImagePicker';
+import { getPlantDetails } from '../../../services/getPlantDetails';
+import { updatePlant } from '../../../services/updatePlant';
+import { uploadPlantImage } from '../../../services/uploadPlantImage';
+import ImagePicker from '@components/ImagePicker';
 
 import { useToast } from '@context/toast/useToast';
-import Spinner from '../components/Spinner';
+import Spinner from '@components/Spinner';
 
 const editPlantValidationSchema = Yup.object({
   name: Yup.string().required('Name is required'),
