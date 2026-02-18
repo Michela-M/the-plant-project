@@ -61,6 +61,7 @@ export default function ImagePicker({
           // Remove any existing focus listener
           if (focusListenerRef.current) {
             window.removeEventListener('focus', focusListenerRef.current);
+            focusListenerRef.current = null;
           }
           
           // Add focus listener to detect when file picker closes
