@@ -1,6 +1,6 @@
 import { ref, uploadBytes, getDownloadURL } from 'firebase/storage';
 import { storage } from '@services/firebase';
-import { imageValidation } from '../../../utils/imageValidation';
+import { imageValidation } from '@utils/imageValidation';
 
 export async function uploadPlantImage(
   file: File,

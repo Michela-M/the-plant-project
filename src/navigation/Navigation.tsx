@@ -1,6 +1,6 @@
 import { Link, useNavigate } from 'react-router-dom';
-import Button from '../components/Button';
-import { auth } from '../services/firebase';
+import Button from '@components/Button';
+import { auth } from '@services/firebase';
 import { onAuthStateChanged, signOut } from 'firebase/auth';
 import { useEffect, useState } from 'react';
 

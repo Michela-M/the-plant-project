@@ -1,4 +1,4 @@
-import formatRelativeDate from '../../../utils/formatRelativeDate';
+import formatRelativeDate from '@utils/formatRelativeDate';
 
 export default function PlantDetailsSchedule({
   plant,
