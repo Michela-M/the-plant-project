@@ -1,5 +1,5 @@
 import { doc, getDoc } from 'firebase/firestore';
-import { db } from '../firebase';
+import { db } from '@services/firebase';
 
 export const getPlantDetails = async (plantId: string) => {
   const docRef = doc(db, 'test-plants', plantId);

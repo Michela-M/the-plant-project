@@ -1,7 +1,7 @@
 import { describe, it, expect, vi } from 'vitest';
 import { updatePlant } from './updatePlant';
 import { doc, updateDoc } from 'firebase/firestore';
-import { db } from '../firebase';
+import { db } from '@services/firebase';
 import type { Mock } from 'vitest';
 
 // --- Mock Firestore ---

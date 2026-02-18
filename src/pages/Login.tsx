@@ -8,7 +8,7 @@ import { loginValidationSchema } from '../utils/validation';
 import PasswordToggleIcon from '../components/PasswordToggleIcon';
 import { signInWithEmailAndPassword } from 'firebase/auth';
 import { FirebaseError } from 'firebase/app';
-import { auth } from '../firebase';
+import { auth } from '../services/firebase';
 import { useToast } from '@context/toast/useToast';
 import { onAuthStateChanged } from 'firebase/auth';
 

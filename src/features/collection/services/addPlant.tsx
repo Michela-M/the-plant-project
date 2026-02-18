@@ -1,5 +1,5 @@
 import { addDoc, collection } from 'firebase/firestore';
-import { db } from '../firebase';
+import { db } from '@services/firebase';
 
 export const addPlant = async (plantData: {
   name: string;

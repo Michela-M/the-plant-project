@@ -1,7 +1,7 @@
 import { describe, it, expect, vi } from 'vitest';
 import deletePlant from './deletePlant';
 import { doc, deleteDoc } from 'firebase/firestore';
-import { db } from '../firebase';
+import { db } from '@services/firebase';
 import type { Mock } from 'vitest';
 
 vi.mock('firebase/firestore', () => ({

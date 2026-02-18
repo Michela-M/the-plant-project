@@ -20,7 +20,8 @@
     "baseUrl": ".",
     "paths": {
       "@context/*": ["src/context/*"],
-      "@components/*": ["src/components/*"]
+      "@components/*": ["src/components/*"],
+      "@services/*": ["src/services/*"]
     },
 
     /* Linting */

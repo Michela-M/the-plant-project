@@ -7,9 +7,9 @@ import { imageValidation } from '../../../utils/imageValidation';
 import Button from '@components/Button';
 import TextField from '@components/TextField';
 
-import { getPlantDetails } from '../../../services/getPlantDetails';
-import { updatePlant } from '../../../services/updatePlant';
-import { uploadPlantImage } from '../../../services/uploadPlantImage';
+import { getPlantDetails } from '../services/getPlantDetails';
+import { updatePlant } from '../services/updatePlant';
+import { uploadPlantImage } from '../services/uploadPlantImage';
 import ImagePicker from '@components/ImagePicker';
 
 import { useToast } from '@context/toast/useToast';

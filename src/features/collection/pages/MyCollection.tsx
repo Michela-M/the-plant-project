@@ -2,7 +2,7 @@ import Button from '@components/Button';
 import PlantCard from '../components/PlantCard';
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { getAllPlants } from '../../../services/getAllPlants';
+import { getAllPlants } from '../services/getAllPlants';
 import { useToast } from '@context/toast/useToast';
 import Spinner from '@components/Spinner';
 

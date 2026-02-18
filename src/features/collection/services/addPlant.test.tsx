@@ -2,7 +2,7 @@ import { describe, it, expect, vi, beforeEach } from 'vitest';
 import type { Mock } from 'vitest';
 import { addPlant } from './addPlant';
 import { addDoc, collection } from 'firebase/firestore';
-import { db } from '../firebase';
+import { db } from '@services/firebase';
 
 // --- Mock Firestore ---
 vi.mock('firebase/firestore', () => ({

@@ -3,7 +3,7 @@ import Button from '../components/Button';
 import { useFormik } from 'formik';
 import { createUserWithEmailAndPassword } from 'firebase/auth';
 import { FirebaseError } from 'firebase/app';
-import { auth } from '../firebase';
+import { auth } from '../services/firebase';
 import { useState } from 'react';
 import PasswordToggleIcon from '../components/PasswordToggleIcon';
 import Link from '../components/Link';

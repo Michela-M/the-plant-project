@@ -1,7 +1,7 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest';
 import { getAllPlants } from './getAllPlants';
 import { collection, getDocs, orderBy, query } from 'firebase/firestore';
-import { db } from '../firebase';
+import { db } from '@services/firebase';
 import type { Mock } from 'vitest';
 
 // --- Mock Firestore ---
