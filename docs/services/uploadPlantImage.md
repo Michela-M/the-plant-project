@@ -56,6 +56,6 @@ The service throws an `Error` with a descriptive message if validation fails.
 
 ## Edge Cases
 
-- Uploading a file with the same name will overwrite the previous one in the same folder
+- Each upload is stored under a unique UUID-based filename, so uploading a file with the same original name will not overwrite previous images but may leave unused/orphaned images in storage if old URLs are no longer referenced
 - Network issues or Firebase Storage rules may cause upload failures
 - Large files may take longer to upload or fail depending on connection quality
