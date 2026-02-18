@@ -94,6 +94,8 @@ export default function ImagePicker({
           const file = e.target.files?.[0];
           if (file) onSelect(file);
           setLoading(false);
+          // Clear the focus listener since the user selected a file
+          clearFocusListener();
         }}
       />
     </div>
