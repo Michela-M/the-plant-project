@@ -1,5 +1,5 @@
 import Button from '../components/Button';
-import PlantCard from '../features/collection/PlantCard';
+import PlantCard from '../features/collection/components/PlantCard';
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { getAllPlants } from '../services/getAllPlants';

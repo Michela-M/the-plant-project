@@ -1,9 +1,9 @@
 import { useEffect, useState } from 'react';
 import { Link, useParams } from 'react-router-dom';
 import { getPlantDetails } from '../services/getPlantDetails';
-import PlantDetailsHeader from '../features/collection/PlantDetailsHeader';
+import PlantDetailsHeader from '../features/collection/components/PlantDetailsHeader';
 import ImagePreview from '../components/ImagePreview';
-import PlantDetailsSchedule from '../features/collection/PlantDetailsSchedule';
+import PlantDetailsSchedule from '../features/collection/components/PlantDetailsSchedule';
 import { useToast } from '@context/toast/useToast';
 import Spinner from '../components/Spinner';
 
