@@ -1,14 +1,14 @@
-import Link from '../components/Link';
-import TextField from '../components/TextField';
-import Button from '../components/Button';
+import Link from '../../components/Link';
+import TextField from '../../components/TextField';
+import Button from '../../components/Button';
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useFormik } from 'formik';
-import { loginValidationSchema } from '../utils/validation';
-import PasswordToggleIcon from '../components/PasswordToggleIcon';
+import { loginValidationSchema } from '../../utils/validation';
+import PasswordToggleIcon from '../../components/PasswordToggleIcon';
 import { signInWithEmailAndPassword } from 'firebase/auth';
 import { FirebaseError } from 'firebase/app';
-import { auth } from '../services/firebase';
+import { auth } from '../../services/firebase';
 import { useToast } from '@context/toast/useToast';
 import { onAuthStateChanged } from 'firebase/auth';
 

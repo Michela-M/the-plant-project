@@ -1,15 +1,15 @@
-import TextField from '../components/TextField';
-import Button from '../components/Button';
+import TextField from '../../components/TextField';
+import Button from '../../components/Button';
 import { useFormik } from 'formik';
 import { createUserWithEmailAndPassword } from 'firebase/auth';
 import { FirebaseError } from 'firebase/app';
-import { auth } from '../services/firebase';
+import { auth } from '../../services/firebase';
 import { useState } from 'react';
-import PasswordToggleIcon from '../components/PasswordToggleIcon';
-import Link from '../components/Link';
+import PasswordToggleIcon from '../../components/PasswordToggleIcon';
+import Link from '../../components/Link';
 import { useNavigate } from 'react-router-dom';
 import { useToast } from '@context/toast/useToast';
-import { signupValidationSchema } from '../utils/validation';
+import { signupValidationSchema } from '../../utils/validation';
 import { onAuthStateChanged } from 'firebase/auth';
 
 export default function SignUp() {
