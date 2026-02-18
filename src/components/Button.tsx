@@ -44,6 +44,8 @@ export default function Button({
       type={type}
       onClick={onClick}
       className={`relative flex items-center justify-center ${variantClasses[tone][variant]} ${size === 'sm' ? 'text-sm px-2 py-1 rounded-sm border gap-1' : 'text-md px-3 py-2 rounded-md border-2 gap-2'}`}
+      disabled={loading}
+      aria-busy={loading}
     >
       {loading && (
         <span className="absolute">
@@ -90,7 +92,9 @@ export function IconButton({
       type="button"
       onClick={onClick}
       className={`${variantClasses['primary'][variant]} ${size === 'sm' ? 'p-1 rounded-sm border' : 'p-2 rounded-md border-2'}`}
+      disabled={loading}
       aria-label={label}
+      aria-busy={loading}
     >
       {loading ? (
         <span
