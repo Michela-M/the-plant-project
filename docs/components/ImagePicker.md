@@ -20,8 +20,8 @@ import ImagePicker from './ImagePicker';
 import { useState } from 'react';
 
 export default function EditPlantImage() {
-  const [file, setFile] = (useState < File) | (null > null);
-  const [preview, setPreview] = (useState < string) | (null > null);
+  const [file, setFile] = useState<File | null>(null);
+  const [preview, setPreview] = useState<string | null>(null);
 
   return (
     <ImagePicker
