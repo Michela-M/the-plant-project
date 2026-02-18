@@ -26,9 +26,9 @@ export default function Navigation() {
         <Link to="/" className="text-4xl font-bold p-4 align-middle">
           the plant project
         </Link>
-        <MenuItem label="Dashboard" link="/" />
         <MenuItem label="Encyclopedia" link="/encyclopedia" />
         <MenuItem label="My Collection" link="/collection" />
+        <MenuItem label="Dashboard" link="/dashboard" />
         {user ? (
           <Button
             label="Logout"

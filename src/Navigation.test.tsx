@@ -48,7 +48,10 @@ describe('Navigation', () => {
       <MemoryRouter initialEntries={['/']}>
         <Navigation />
         <Routes>
-          <Route path="/" element={<TestPage label="Dashboard Page" />} />
+          <Route
+            path="/dashboard"
+            element={<TestPage label="Dashboard Page" />}
+          />
           <Route
             path="/encyclopedia"
             element={<TestPage label="Encyclopedia Page" />}

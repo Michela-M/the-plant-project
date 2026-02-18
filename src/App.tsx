@@ -19,9 +19,10 @@ function App() {
           <Navigation />
 
           <Routes>
-            <Route path="/" element={<Dashboard />} />
+            <Route path="/" element={<Encyclopedia />} />
             <Route path="/encyclopedia" element={<Encyclopedia />} />
             <Route path="/collection" element={<MyCollection />} />
+            <Route path="/dashboard" element={<Dashboard />} />
             <Route path="/login" element={<Login />} />
             <Route path="/signup" element={<SignUp />} />
             <Route path="/add-plant" element={<AddPlant />} />
