@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { useParams } from 'react-router-dom';
+import { Link, useParams } from 'react-router-dom';
 import { getPlantDetails } from '../services/getPlantDetails';
 import PlantDetailsHeader from '../features/collection/PlantDetailsHeader';
 import ImagePreview from '../components/ImagePreview';
@@ -47,6 +47,20 @@ export default function PlantDetails() {
     return <Spinner />;
   }
 
+  if (!plantDetails) {
+    return (
+      <div className="w-2/3 mx-auto py-8">
+        <p className="text-center text-stone-500">Plant not found.</p>
+        <Link
+          to="/collection"
+          className="text-green-700 hover:underline block text-center mt-4"
+        >
+          Back to Collection
+        </Link>
+      </div>
+    );
+  }
+
   return (
     <div className="w-2/3 mx-auto py-8 flex flex-col gap-4">
       <PlantDetailsHeader
@@ -58,17 +72,11 @@ export default function PlantDetails() {
       />
       <div className="flex">
         <div className="w-5/8 h-64 flex flex-col gap-6">
-          {plantDetails ? (
-            <>
-              <p>{plantDetails.notes}</p>
-              <div>
-                <h2 className="text-2xl">History</h2>
-                <p className="text-stone-500">No notes yet.</p>
-              </div>
-            </>
-          ) : (
-            <p>Loading...</p>
-          )}
+          <p>{plantDetails?.notes}</p>
+          <div>
+            <h2 className="text-2xl">History</h2>
+            <p className="text-stone-500">No notes yet.</p>
+          </div>
         </div>
         <div className="w-3/8 flex flex-col gap-6">
           <ImagePreview
