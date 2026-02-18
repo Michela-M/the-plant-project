@@ -1,4 +1,4 @@
-import { useRef } from 'react';
+import { useRef, useEffect } from 'react';
 import Button from './Button';
 import { useState } from 'react';
 
@@ -11,6 +11,7 @@ export default function ImagePicker({
 }) {
   const inputRef = useRef<HTMLInputElement | null>(null);
   const [loading, setLoading] = useState(false);
+  const focusListenerRef = useRef<(() => void) | null>(null);
 
   const isSafeImageUrl = (url: string | null): string | null => {
     if (!url) return null;
@@ -27,6 +28,15 @@ export default function ImagePicker({
   };
 
   const safeUrl = isSafeImageUrl(previewUrl);
+
+  useEffect(() => {
+    return () => {
+      if (focusListenerRef.current) {
+        window.removeEventListener('focus', focusListenerRef.current);
+        focusListenerRef.current = null;
+      }
+    };
+  }, []);
 
   return (
     <div className="flex flex-col gap-2">
@@ -47,8 +57,23 @@ export default function ImagePicker({
         size="sm"
         onClick={() => {
           setLoading(true);
+          
+          // Remove any existing focus listener
+          if (focusListenerRef.current) {
+            window.removeEventListener('focus', focusListenerRef.current);
+          }
+          
+          // Add focus listener to detect when file picker closes
+          const handleFocus = () => {
+            setLoading(false);
+            window.removeEventListener('focus', handleFocus);
+            focusListenerRef.current = null;
+          };
+          
+          focusListenerRef.current = handleFocus;
+          window.addEventListener('focus', handleFocus, { once: true });
+          
           inputRef.current?.click();
-          setTimeout(() => setLoading(false), 1000);
         }}
         loading={loading}
       />
