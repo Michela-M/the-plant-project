@@ -4,7 +4,7 @@ import { auth } from './firebase';
 import { onAuthStateChanged, signOut } from 'firebase/auth';
 import { useEffect, useState } from 'react';
 
-export default function Header() {
+export default function Navigation() {
   const navigate = useNavigate();
   const [user, setUser] = useState<null | { email: string }>(null);
 

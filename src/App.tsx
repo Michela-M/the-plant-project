@@ -3,7 +3,7 @@ import Encyclopedia from './pages/Encyclopedia';
 import MyCollection from './pages/MyCollection';
 import Login from './pages/Login';
 import AddPlant from './pages/AddPlant';
-import Header from './Header';
+import Navigation from './Navigation';
 import './App.css';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import SignUp from './pages/SignUp';
@@ -16,7 +16,7 @@ function App() {
     <ToastProvider>
       <div className="bg-stone-100 min-h-screen">
         <BrowserRouter>
-          <Header />
+          <Navigation />
 
           <Routes>
             <Route path="/" element={<Dashboard />} />
