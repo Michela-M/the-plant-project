@@ -12,6 +12,7 @@ export default function ImagePicker({
   const inputRef = useRef<HTMLInputElement | null>(null);
   const [loading, setLoading] = useState(false);
   const focusListenerRef = useRef<(() => void) | null>(null);
+  const isMountedRef = useRef(true);
 
   const isSafeImageUrl = (url: string | null): string | null => {
     if (!url) return null;
@@ -37,7 +38,11 @@ export default function ImagePicker({
   const safeUrl = isSafeImageUrl(previewUrl);
 
   useEffect(() => {
-    return clearFocusListener;
+    isMountedRef.current = true;
+    return () => {
+      isMountedRef.current = false;
+      clearFocusListener();
+    };
   }, []);
 
   return (
@@ -65,8 +70,9 @@ export default function ImagePicker({
           
           // Add focus listener to detect when file picker closes
           const handleFocus = () => {
-            setLoading(false);
-            focusListenerRef.current = null;
+            if (isMountedRef.current) {
+              setLoading(false);
+            }
           };
           
           focusListenerRef.current = handleFocus;
