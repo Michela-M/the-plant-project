@@ -73,6 +73,7 @@ export default function ImagePicker({
             if (isMountedRef.current) {
               setLoading(false);
             }
+            focusListenerRef.current = null;
           };
           
           focusListenerRef.current = handleFocus;
