@@ -8,13 +8,13 @@ If Firestore throws an error, the service rethrows a clean `Error` instance so c
 
 ## Parameters
 
-| Name                | Type         | Required | Description                               |
-| ------------------- | ------------ | -------- | ----------------------------------------- |
-| `name`              | `string`     | Yes      | The plant’s name                          |
-| `species`           | `string`     | No       | Species name; defaults to an empty string |
-| `wateringFrequency` | `number`     | No       | Days between watering; defaults to 0      |
-| `lastWatered`       | `Date \	null` | No       | Last watering date; defaults to null      |
-| `notes`             | `string`     | No       | defaults to an empty string               |
+| Name                | Type           | Required | Description                               |
+| ------------------- | -------------- | -------- | ----------------------------------------- |
+| `name`              | `string`       | Yes      | The plant’s name                          |
+| `species`           | `string`       | No       | Species name; defaults to an empty string |
+| `wateringFrequency` | `number`       | No       | Days between watering; defaults to 0      |
+| `lastWatered`       | `Date \| null` | No       | Last watering date; defaults to null      |
+| `notes`             | `string`       | No       | defaults to an empty string               |
 
 ## Return Value
 
