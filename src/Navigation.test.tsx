@@ -1,7 +1,7 @@
 import { render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { MemoryRouter, Routes, Route } from 'react-router-dom';
-import Header from './Header';
+import Navigation from './Navigation';
 import { expect, describe, it, vi, beforeEach, type Mock } from 'vitest';
 import * as firebaseAuth from 'firebase/auth';
 import type { Auth, User } from 'firebase/auth';
@@ -25,7 +25,7 @@ beforeEach(() => {
   vi.resetAllMocks();
 });
 
-describe('Header', () => {
+describe('Navigation', () => {
   const mockedOnAuthStateChanged =
     firebaseAuth.onAuthStateChanged as unknown as Mock;
   const mockedSignOut = firebaseAuth.signOut as unknown as Mock;
@@ -46,9 +46,12 @@ describe('Header', () => {
 
     render(
       <MemoryRouter initialEntries={['/']}>
-        <Header />
+        <Navigation />
         <Routes>
-          <Route path="/" element={<TestPage label="Dashboard Page" />} />
+          <Route
+            path="/dashboard"
+            element={<TestPage label="Dashboard Page" />}
+          />
           <Route
             path="/encyclopedia"
             element={<TestPage label="Encyclopedia Page" />}
@@ -76,7 +79,7 @@ describe('Header', () => {
 
     render(
       <MemoryRouter>
-        <Header />
+        <Navigation />
       </MemoryRouter>
     );
 
@@ -92,7 +95,7 @@ describe('Header', () => {
 
     render(
       <MemoryRouter initialEntries={['/']}>
-        <Header />
+        <Navigation />
         <Routes>
           <Route path="/login" element={<TestPage label="Login Page" />} />
           <Route path="/signup" element={<TestPage label="Sign Up Page" />} />
@@ -113,7 +116,7 @@ describe('Header', () => {
 
     render(
       <MemoryRouter>
-        <Header />
+        <Navigation />
       </MemoryRouter>
     );
 
@@ -130,7 +133,7 @@ describe('Header', () => {
 
     render(
       <MemoryRouter initialEntries={['/']}>
-        <Header />
+        <Navigation />
         <Routes>
           <Route
             path="/encyclopedia"

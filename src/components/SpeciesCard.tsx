@@ -1,7 +1,7 @@
 import { CirclePlus } from 'lucide-react';
 import { IconButton } from './Button';
 
-export default function PlantCard({
+export default function SpeciesCard({
   imageUrl,
   family,
   commonName,
@@ -31,7 +31,8 @@ export default function PlantCard({
         >
           <IconButton
             variant="ghost"
-            icon={<CirclePlus size={16} />}
+            icon={<CirclePlus />}
+            size="sm"
             label={
               commonName
                 ? `Add ${commonName} to collection`

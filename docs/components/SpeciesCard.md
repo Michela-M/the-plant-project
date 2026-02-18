@@ -1,8 +1,8 @@
-# `PlantCard`
+# `SpeciesCard`
 
 ## Purpose
 
-The **PlantCard** component displays a plant’s core identifying information: image, family, and common name. It is a presentational component with no internal state.
+The **SpeciesCard** component displays a plant’s core identifying information: image, family, and common name. It is a presentational component with no internal state.
 
 ## Props
 
@@ -15,7 +15,7 @@ The **PlantCard** component displays a plant’s core identifying information: i
 ## Example Usage
 
 ```jsx
-<PlantCard
+<SpeciesCard
   imageUrl="https://example.com/monstera.jpg"
   family="Araceae"
   commonName="Monstera Deliciosa"

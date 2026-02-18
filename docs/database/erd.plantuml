@@ -1,0 +1,55 @@
+@startuml name ERD
+
+' ============================
+' ENTITIES
+' ============================
+
+skinparam class {
+  BackgroundColor<<planned>> #DDDDDD
+  BorderColor<<planned>> #999999
+}
+
+class User <<planned>> {
+  +id: string
+  //other relevant fields//
+}
+
+class Plant {
+  +id: string
+  +name: string
+  +species: string
+  +creationDate: Date
+  +lastWatered: Date?
+  +wateringFrequency: number?
+  +notes: string?
+}
+
+class Species <<planned>> {
+  +id: string
+  +commonName: string
+  +scientificName: string
+  +description: string?
+  //other relevant fields//
+}
+
+class History {
+  +id: string
+  +type: string
+  +date: Date
+  +notes: string?
+}
+
+' ============================
+' RELATIONSHIPS (CURRENT)
+' ============================
+
+User "1" --> "many" Plant : owns
+Plant "1" --> "many" History : has
+
+' ============================
+' FUTURE RELATIONSHIPS (PLANNED)
+' ============================
+
+Plant ..> Species : planned\n(not implemented)
+
+@enduml

@@ -4,21 +4,21 @@ import { useFormik } from 'formik';
 import { createUserWithEmailAndPassword } from 'firebase/auth';
 import { FirebaseError } from 'firebase/app';
 import { auth } from '../firebase';
-import Toast from '../components/Toast';
 import { useState } from 'react';
 import PasswordToggleIcon from '../components/PasswordToggleIcon';
 import Link from '../components/Link';
 import { useNavigate } from 'react-router-dom';
-import { useToast } from '../hooks/useToast';
+import { useToast } from '../context/useToast';
 import { signupValidationSchema } from '../utils/validation';
 import { onAuthStateChanged } from 'firebase/auth';
 
 export default function SignUp() {
   const navigate = useNavigate();
-  const { toast, showSuccessToast, showErrorToast, closeToast } = useToast();
+  const { showSuccess, showError } = useToast();
 
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
+  const [loading, setLoading] = useState(false);
 
   const formik = useFormik({
     initialValues: {
@@ -28,13 +28,14 @@ export default function SignUp() {
     },
     validationSchema: signupValidationSchema,
     onSubmit: async (values) => {
+      setLoading(true);
       try {
         await createUserWithEmailAndPassword(
           auth,
           values.email,
           values.password
         );
-        showSuccessToast('Registration successful');
+        showSuccess('Registration successful');
 
         const unsubscribe = onAuthStateChanged(auth, (user) => {
           if (user) {
@@ -46,22 +47,24 @@ export default function SignUp() {
         if (error instanceof FirebaseError) {
           switch (error.code) {
             case 'auth/email-already-exists':
-              showErrorToast('Email is already in use.');
+              showError('Email is already in use.');
               break;
             case 'auth/invalid-email':
-              showErrorToast('Invalid email address.');
+              showError('Invalid email address.');
               break;
             case 'auth/operation-not-allowed':
-              showErrorToast('Operation not allowed.');
+              showError('Operation not allowed.');
               break;
             default:
-              showErrorToast('Error registering user', error.message);
+              showError('Error registering user', error.message);
           }
         } else if (error instanceof Error) {
-          showErrorToast('Error registering user', error.message);
+          showError('Error registering user', error.message);
         } else {
-          showErrorToast('An unknown error occurred.');
+          showError('Error registering user', 'An unknown error occurred');
         }
+      } finally {
+        setLoading(false);
       }
     },
   });
@@ -125,19 +128,17 @@ export default function SignUp() {
                 : ''
             }
           />
-          <Button label="Sign Up" variant="filled" type="submit" />
+          <Button
+            label="Sign Up"
+            variant="filled"
+            type="submit"
+            loading={loading}
+          />
         </form>
         <p className="text-sm">
           Already have an account? <Link href="/login">Log in</Link>
         </p>
       </div>
-      <Toast
-        message={toast.message}
-        detail={toast.detail}
-        type={toast.type}
-        open={toast.open}
-        onClose={closeToast}
-      />
     </div>
   );
 }

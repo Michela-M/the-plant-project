@@ -1,7 +1,6 @@
 import Link from '../components/Link';
 import TextField from '../components/TextField';
 import Button from '../components/Button';
-import Toast from '../components/Toast';
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useFormik } from 'formik';
@@ -10,12 +9,13 @@ import PasswordToggleIcon from '../components/PasswordToggleIcon';
 import { signInWithEmailAndPassword } from 'firebase/auth';
 import { FirebaseError } from 'firebase/app';
 import { auth } from '../firebase';
-import { useToast } from '../hooks/useToast';
+import { useToast } from '../context/useToast';
 import { onAuthStateChanged } from 'firebase/auth';
 
 export default function Login() {
   const navigate = useNavigate();
-  const { toast, showSuccessToast, showErrorToast, closeToast } = useToast();
+  const { showSuccess, showError } = useToast();
+  const [loading, setLoading] = useState(false);
 
   const [showPassword, setShowPassword] = useState(false);
 
@@ -26,9 +26,10 @@ export default function Login() {
     },
     validationSchema: loginValidationSchema,
     onSubmit: async (values) => {
+      setLoading(true);
       try {
         await signInWithEmailAndPassword(auth, values.email, values.password);
-        showSuccessToast('Login successful');
+        showSuccess('Login successful');
 
         const unsubscribe = onAuthStateChanged(auth, (user) => {
           if (user) {
@@ -40,19 +41,21 @@ export default function Login() {
         if (error instanceof FirebaseError) {
           switch (error.code) {
             case 'auth/invalid-email':
-              showErrorToast('Invalid email address.');
+              showError('Invalid email address.');
               break;
             case 'auth/invalid-credential':
-              showErrorToast('Invalid credentials.');
+              showError('Invalid credentials.');
               break;
             default:
-              showErrorToast('Login failed', error.message);
+              showError('Login failed', error.message);
           }
         } else if (error instanceof Error) {
-          showErrorToast('Login failed', error.message);
+          showError('Login failed', error.message);
         } else {
-          showErrorToast('Login failed', 'An unknown error occurred');
+          showError('Login failed', 'An unknown error occurred');
         }
+      } finally {
+        setLoading(false);
       }
     },
   });
@@ -96,19 +99,17 @@ export default function Login() {
               />
             }
           />
-          <Button label="Log In" variant="filled" type="submit" />
+          <Button
+            label="Log In"
+            variant="filled"
+            type="submit"
+            loading={loading}
+          />
         </form>
         <p className="text-sm">
           Don't have an account? <Link href="/signup">Sign up</Link>
         </p>
       </div>
-      <Toast
-        message={toast.message}
-        detail={toast.detail}
-        type={toast.type}
-        open={toast.open}
-        onClose={closeToast}
-      />
     </div>
   );
 }
