@@ -8,7 +8,7 @@ import { useState } from 'react';
 import PasswordToggleIcon from '../components/PasswordToggleIcon';
 import Link from '../components/Link';
 import { useNavigate } from 'react-router-dom';
-import { useToast } from '../context/useToast';
+import { useToast } from '@context/toast/useToast';
 import { signupValidationSchema } from '../utils/validation';
 import { onAuthStateChanged } from 'firebase/auth';
 

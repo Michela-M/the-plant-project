@@ -9,7 +9,7 @@ import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import SignUp from './pages/SignUp';
 import PlantDetails from './pages/PlantDetails';
 import EditPlant from './pages/EditPlant';
-import { ToastProvider } from './context/ToastContext';
+import { ToastProvider } from '@context/toast/ToastContext';
 
 function App() {
   return (

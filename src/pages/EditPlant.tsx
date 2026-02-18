@@ -12,7 +12,7 @@ import { updatePlant } from '../services/updatePlant';
 import { uploadPlantImage } from '../services/uploadPlantImage';
 import ImagePicker from '../components/ImagePicker';
 
-import { useToast } from '../context/useToast';
+import { useToast } from '@context/toast/useToast';
 import Spinner from '../components/Spinner';
 
 const editPlantValidationSchema = Yup.object({

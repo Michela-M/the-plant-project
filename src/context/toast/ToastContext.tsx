@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import Toast from '../components/Toast';
+import Toast from '../../components/Toast';
 import { ToastContext } from './useToast';
 
 type ToastType = 'error' | 'info' | 'success' | 'warning';

@@ -4,7 +4,7 @@ import { getPlantDetails } from '../services/getPlantDetails';
 import PlantDetailsHeader from '../features/collection/PlantDetailsHeader';
 import ImagePreview from '../components/ImagePreview';
 import PlantDetailsSchedule from '../features/collection/PlantDetailsSchedule';
-import { useToast } from '../context/useToast';
+import { useToast } from '@context/toast/useToast';
 import Spinner from '../components/Spinner';
 
 export default function PlantDetails() {

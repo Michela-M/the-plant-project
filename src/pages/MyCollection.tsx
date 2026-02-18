@@ -3,7 +3,7 @@ import PlantCard from '../features/collection/PlantCard';
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { getAllPlants } from '../services/getAllPlants';
-import { useToast } from '../context/useToast';
+import { useToast } from '@context/toast/useToast';
 import Spinner from '../components/Spinner';
 
 export default function MyCollection() {
