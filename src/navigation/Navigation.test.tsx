@@ -1,7 +1,7 @@
 import { render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { MemoryRouter, Routes, Route } from 'react-router-dom';
-import Navigation from './Navigation';
+import Navigation from '../Navigation';
 import { expect, describe, it, vi, beforeEach, type Mock } from 'vitest';
 import * as firebaseAuth from 'firebase/auth';
 import type { Auth, User } from 'firebase/auth';

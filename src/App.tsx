@@ -3,7 +3,7 @@ import Encyclopedia from './features/encyclopedia/pages/Encyclopedia';
 import MyCollection from './features/collection/pages/MyCollection';
 import Login from './features/auth/Login';
 import AddPlant from './features/collection/pages/AddPlant';
-import Navigation from './Navigation';
+import Navigation from './navigation/Navigation';
 import './App.css';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import SignUp from './features/auth/SignUp';
