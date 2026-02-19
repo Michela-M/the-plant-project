@@ -1,16 +1,13 @@
 import TextField from '@components/TextField';
 import Button from '@components/Button';
 import { useFormik } from 'formik';
-import { createUserWithEmailAndPassword } from 'firebase/auth';
-import { FirebaseError } from 'firebase/app';
-import { auth } from '@services/firebase';
+import { registerUser } from '../services/registerUser';
 import { useState } from 'react';
 import PasswordToggleIcon from '@components/PasswordToggleIcon';
 import Link from '@components/Link';
 import { useNavigate } from 'react-router-dom';
 import { useToast } from '@context/toast/useToast';
 import { signupValidationSchema } from '@utils/validation';
-import { onAuthStateChanged } from 'firebase/auth';
 
 export default function SignUp() {
   const navigate = useNavigate();
@@ -30,39 +27,16 @@ export default function SignUp() {
     onSubmit: async (values) => {
       setLoading(true);
       try {
-        await createUserWithEmailAndPassword(
-          auth,
-          values.email,
-          values.password
-        );
+        await registerUser(values.email, values.password);
+
         showSuccess('Registration successful');
 
-        const unsubscribe = onAuthStateChanged(auth, (user) => {
-          if (user) {
-            unsubscribe();
-            navigate('/collection');
-          }
-        });
+        navigate('/collection');
       } catch (error) {
-        if (error instanceof FirebaseError) {
-          switch (error.code) {
-            case 'auth/email-already-exists':
-              showError('Email is already in use.');
-              break;
-            case 'auth/invalid-email':
-              showError('Invalid email address.');
-              break;
-            case 'auth/operation-not-allowed':
-              showError('Operation not allowed.');
-              break;
-            default:
-              showError('Error registering user', error.message);
-          }
-        } else if (error instanceof Error) {
-          showError('Error registering user', error.message);
-        } else {
-          showError('Error registering user', 'An unknown error occurred');
-        }
+        showError(
+          'Error registering user',
+          error instanceof Error ? error.message : ''
+        );
       } finally {
         setLoading(false);
       }
