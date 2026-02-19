@@ -8,10 +8,12 @@ import Link from '@components/Link';
 import { useNavigate } from 'react-router-dom';
 import { useToast } from '@context/toast/useToast';
 import { signupValidationSchema } from '@utils/validation';
+import { useAuth } from '@context/auth/useAuth';
 
 export default function SignUp() {
   const navigate = useNavigate();
   const { showSuccess, showError } = useToast();
+  const { setUser } = useAuth();
 
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
@@ -27,7 +29,8 @@ export default function SignUp() {
     onSubmit: async (values) => {
       setLoading(true);
       try {
-        await registerUser(values.email, values.password);
+        const { user } = await registerUser(values.email, values.password);
+        setUser({ id: user.uid, email: user.email || '' });
 
         showSuccess('Registration successful');
 

@@ -11,11 +11,13 @@ import { FirebaseError } from 'firebase/app';
 import { auth } from '@services/firebase';
 import { useToast } from '@context/toast/useToast';
 import { onAuthStateChanged } from 'firebase/auth';
+import { useAuth } from '@context/auth/useAuth';
 
 export default function Login() {
   const navigate = useNavigate();
   const { showSuccess, showError } = useToast();
   const [loading, setLoading] = useState(false);
+  const { setUser } = useAuth();
 
   const [showPassword, setShowPassword] = useState(false);
 
@@ -33,6 +35,7 @@ export default function Login() {
 
         const unsubscribe = onAuthStateChanged(auth, (user) => {
           if (user) {
+            setUser({ id: user.uid, email: user.email || '' });
             unsubscribe();
             navigate('/collection');
           }

@@ -9,6 +9,7 @@ import { useNavigate } from 'react-router-dom';
 import Modal from '@components/Modal';
 import deletePlant from '../services/deletePlant';
 import { useToast } from '@context/toast/useToast';
+import { useAuth } from '@context/auth/useAuth';
 
 export default function PlantDetailsHeader({
   plant,
@@ -16,6 +17,7 @@ export default function PlantDetailsHeader({
   plant: { id: string; name: string; commonName?: string };
 }) {
   const navigate = useNavigate();
+  const { user } = useAuth();
 
   const [showAddMenu, setShowAddMenu] = useState(false);
   const [showOptionsMenu, setShowOptionsMenu] = useState(false);
@@ -24,7 +26,7 @@ export default function PlantDetailsHeader({
 
   const handleDelete = async () => {
     try {
-      await deletePlant(plant.id);
+      await deletePlant(plant.id, user?.id || '');
       setShowDeleteConfirm(false);
       navigate('/collection');
       showSuccess('Plant deleted successfully');

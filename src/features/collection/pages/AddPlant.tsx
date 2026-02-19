@@ -6,6 +6,7 @@ import TextField from '@components/TextField';
 import { useToast } from '@context/toast/useToast';
 import { addPlant } from '../services/addPlant';
 import { useState } from 'react';
+import { useAuth } from '@context/auth/useAuth';
 
 const addPlantValidationSchema = Yup.object({
   name: Yup.string().required('Name is required'),
@@ -23,6 +24,7 @@ export default function AddPlant() {
   const navigate = useNavigate();
   const { showSuccess, showError } = useToast();
   const [loading, setLoading] = useState(false);
+  const { user } = useAuth();
 
   const formik = useFormik({
     initialValues: {
@@ -42,6 +44,7 @@ export default function AddPlant() {
           wateringFrequency: Number(values.wateringFrequency) || 0,
           lastWatered: values.lastWatered ? new Date(values.lastWatered) : null,
           notes: values.notes,
+          userId: user?.id || '',
         });
         formik.resetForm();
         showSuccess('Plant added successfully');

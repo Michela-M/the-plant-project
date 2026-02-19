@@ -14,6 +14,7 @@ import ImagePicker from '@components/ImagePicker';
 
 import { useToast } from '@context/toast/useToast';
 import Spinner from '@components/Spinner';
+import { useAuth } from '@context/auth/useAuth';
 
 const editPlantValidationSchema = Yup.object({
   name: Yup.string().required('Name is required'),
@@ -39,6 +40,7 @@ export default function EditPlant() {
   const navigate = useNavigate();
   const { id } = useParams();
   const { showError, showSuccess } = useToast();
+  const { user } = useAuth();
 
   const [plantDetails, setPlantDetails] = useState<PlantDetails | null>(null);
   const [file, setFile] = useState<File | null>(null);
@@ -52,7 +54,7 @@ export default function EditPlant() {
       if (!id) return;
 
       try {
-        const details = await getPlantDetails(id);
+        const details = await getPlantDetails(id, user?.id || '');
         setPlantDetails(details);
       } catch (error) {
         showError(
@@ -65,7 +67,7 @@ export default function EditPlant() {
     }
 
     fetchPlant();
-  }, [id, showError]);
+  }, [id, showError, user]);
 
   useEffect(() => {
     return () => {
@@ -95,17 +97,21 @@ export default function EditPlant() {
 
         // Upload only if user selected a new file
         if (file) {
-          imageUrl = await uploadPlantImage(file, id, 'currentUserId');
+          imageUrl = await uploadPlantImage(file, id, user?.id || '');
         }
 
-        await updatePlant(id, {
-          name: values.name,
-          species: values.species,
-          wateringFrequency: Number(values.wateringFrequency),
-          lastWatered: plantDetails?.lastWatered || null,
-          notes: values.notes,
-          imageUrl,
-        });
+        await updatePlant(
+          id,
+          {
+            name: values.name,
+            species: values.species,
+            wateringFrequency: Number(values.wateringFrequency),
+            lastWatered: plantDetails?.lastWatered || null,
+            notes: values.notes,
+            imageUrl,
+          },
+          user?.id || ''
+        );
 
         showSuccess('Plant saved successfully');
         navigate('/plants/' + id);
