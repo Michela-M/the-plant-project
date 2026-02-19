@@ -1,8 +1,7 @@
-import { describe, it, expect, vi, beforeEach } from 'vitest';
-import { getAllPlants } from './getAllPlants';
+import { beforeEach, describe, expect, it, vi, type Mock } from 'vitest';
 import { collection, getDocs, orderBy, query } from 'firebase/firestore';
 import { db } from '@services/firebase';
-import type { Mock } from 'vitest';
+import { getAllPlants } from './getAllPlants';
 
 // --- Mock Firestore ---
 vi.mock('firebase/firestore', () => ({
@@ -30,20 +29,20 @@ describe('getAllPlants', () => {
 
     const mockDocs = [
       {
-        id: '1',
         data: () => ({
+          imageUrl: 'https://example.com/aloe.jpg',
           name: 'Aloe',
           species: 'Aloe Vera',
-          imageUrl: 'https://example.com/aloe.jpg',
         }),
+        id: '1',
       },
     ];
 
     (getDocs as Mock).mockResolvedValue({ docs: mockDocs });
 
-    const result = await getAllPlants();
+    const result = await getAllPlants('test-user');
 
-    expect(collection).toHaveBeenCalledWith(db, 'test-plants');
+    expect(collection).toHaveBeenCalledWith(db, 'users/test-user/plants');
     expect(orderBy).toHaveBeenCalledWith('creationDate', 'desc');
     expect(query).toHaveBeenCalledWith(
       mockCollectionRef,
@@ -66,7 +65,7 @@ describe('getAllPlants', () => {
     (query as Mock).mockReturnValue({});
     (getDocs as Mock).mockResolvedValue({ docs: [] });
 
-    const result = await getAllPlants();
+    const result = await getAllPlants('test-user');
 
     expect(result).toEqual([]);
   });
@@ -76,7 +75,7 @@ describe('getAllPlants', () => {
     (query as Mock).mockReturnValue({});
     (getDocs as Mock).mockRejectedValue(new Error('Firestore error'));
 
-    await expect(getAllPlants()).rejects.toThrow('Firestore error');
+    await expect(getAllPlants('test-user')).rejects.toThrow('Firestore error');
   });
 
   it('normalizes missing fields to safe defaults', async () => {
@@ -87,15 +86,15 @@ describe('getAllPlants', () => {
       {
         id: '123',
         data: () => ({
-          // name missing
-          // species missing
+          // Name missing
+          // Species missing
         }),
       },
     ];
 
     (getDocs as Mock).mockResolvedValue({ docs: mockDocs });
 
-    const result = await getAllPlants();
+    const result = await getAllPlants('test-user');
 
     expect(result).toEqual([
       {

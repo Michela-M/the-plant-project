@@ -30,9 +30,9 @@ describe('updatePlant', () => {
     (doc as Mock).mockReturnValue(mockDocRef);
     (updateDoc as Mock).mockResolvedValue(undefined);
 
-    await updatePlant(plantId, plantData);
+    await updatePlant(plantId, plantData, 'test-user');
 
-    expect(doc).toHaveBeenCalledWith(db, 'test-plants', plantId);
+    expect(doc).toHaveBeenCalledWith(db, 'users/test-user/plants', plantId);
     expect(updateDoc).toHaveBeenCalledWith(mockDocRef, {
       name: plantData.name,
       species: plantData.species,
@@ -57,7 +57,7 @@ describe('updatePlant', () => {
     (doc as Mock).mockReturnValue({});
     (updateDoc as Mock).mockRejectedValue(new Error('Firestore error'));
 
-    await expect(updatePlant(plantId, plantData)).rejects.toThrow(
+    await expect(updatePlant(plantId, plantData, 'test-user')).rejects.toThrow(
       'Firestore error'
     );
   });
@@ -76,7 +76,7 @@ describe('updatePlant', () => {
     (doc as Mock).mockReturnValue({});
     (updateDoc as Mock).mockRejectedValue('Unknown error');
 
-    await expect(updatePlant(plantId, plantData)).rejects.toThrow(
+    await expect(updatePlant(plantId, plantData, 'test-user')).rejects.toThrow(
       'Unknown error'
     );
   });
@@ -91,7 +91,7 @@ describe('updatePlant', () => {
     (doc as Mock).mockReturnValue(mockDocRef);
     (updateDoc as Mock).mockResolvedValue(undefined);
 
-    await updatePlant(plantId, plantData);
+    await updatePlant(plantId, plantData, 'test-user');
 
     expect(updateDoc).toHaveBeenCalledWith(mockDocRef, {
       name: plantData.name,

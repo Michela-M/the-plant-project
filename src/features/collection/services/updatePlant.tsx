@@ -10,10 +10,11 @@ export const updatePlant = async (
     lastWatered?: Date | null;
     notes?: string;
     imageUrl?: string;
-  }
+  },
+  userId: string
 ) => {
   try {
-    const plantRef = doc(db, 'test-plants', plantId);
+    const plantRef = doc(db, `users/${userId}/plants`, plantId);
     await updateDoc(plantRef, {
       name: plantData.name,
       species: plantData.species || '',

@@ -2,14 +2,16 @@
 
 ## Description
 
-`deletePlant` deletes a single plant document from the Firestore `test-plants` collection.
+`deletePlant` deletes a single plant document from the signed-in user’s Firestore path:
+`users/{userId}/plants/{plantId}`.
 It returns the promise from Firestore so callers can await completion or handle errors.
 
 ## Parameters
 
-| Name      | Type     | Required | Description                                       |
-| --------- | -------- | -------- | ------------------------------------------------- |
-| `plantId` | `string` | Yes      | The Firestore document ID of the plant to delete. |
+| Name      | Type     | Required | Description                                     |
+| --------- | -------- | -------- | ----------------------------------------------- |
+| `plantId` | `string` | Yes      | Firestore document ID of the plant to delete    |
+| `userId`  | `string` | Yes      | User ID used to resolve `users/{userId}/plants` |
 
 ## Return Value
 
@@ -22,14 +24,14 @@ It returns the promise from Firestore so callers can await completion or handle 
 ```tsx
 import deletePlant from '../services/deletePlant';
 
-await deletePlant('abc123');
+await deletePlant('abc123', 'user-123');
 ```
 
 ## Edge Cases
 
 ### Document does not exist
 
-Firestore will resolve or reject based on rules; callers should handle errors.
+`deleteDoc` does not throw if the document is already missing; callers can still treat completion as success.
 
 ### Firestore errors
 

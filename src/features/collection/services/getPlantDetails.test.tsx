@@ -36,7 +36,7 @@ describe('getPlantDetails', () => {
     (doc as Mock).mockReturnValue('mockDocRef');
     (getDoc as Mock).mockResolvedValue(mockDocSnap);
 
-    const result = await getPlantDetails('1');
+    const result = await getPlantDetails('1', 'test-user');
 
     expect(result).toEqual({
       id: '1',
@@ -59,7 +59,7 @@ describe('getPlantDetails', () => {
     (doc as Mock).mockReturnValue('mockDocRef');
     (getDoc as Mock).mockResolvedValue(mockDocSnap);
 
-    const result = await getPlantDetails('2');
+    const result = await getPlantDetails('2', 'test-user');
 
     expect(result).toBeNull();
   });
@@ -68,6 +68,8 @@ describe('getPlantDetails', () => {
     (doc as Mock).mockReturnValue('mockDocRef');
     (getDoc as Mock).mockRejectedValue(new Error('Firestore error'));
 
-    await expect(getPlantDetails('3')).rejects.toThrow('Firestore error');
+    await expect(getPlantDetails('3', 'test-user')).rejects.toThrow(
+      'Firestore error'
+    );
   });
 });

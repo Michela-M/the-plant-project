@@ -1,9 +1,9 @@
 import { collection, getDocs, orderBy, query } from 'firebase/firestore';
 import { db } from '@services/firebase';
 
-export const getAllPlants = async () => {
+export const getAllPlants = async (userId: string) => {
   const q = query(
-    collection(db, 'test-plants'),
+    collection(db, `users/${userId}/plants`),
     orderBy('creationDate', 'desc')
   );
 
@@ -14,9 +14,9 @@ export const getAllPlants = async () => {
 
     return {
       id: doc.id,
+      imageUrl: data.imageUrl ?? null,
       name: data.name ?? 'Unnamed Plant',
       species: data.species ?? '',
-      imageUrl: data.imageUrl ?? null,
     };
   });
 };
