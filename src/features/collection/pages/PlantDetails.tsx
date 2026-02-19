@@ -43,7 +43,7 @@ export default function PlantDetails() {
     };
 
     fetchPlantDetails();
-  }, [id, showError]);
+  }, [id, showError, user?.id]);
 
   if (loading) {
     return <Spinner />;
