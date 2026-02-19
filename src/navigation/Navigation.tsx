@@ -1,24 +1,10 @@
 import { Link, useNavigate } from 'react-router-dom';
 import Button from '@components/Button';
-import { auth } from '@services/firebase';
-import { onAuthStateChanged, signOut } from 'firebase/auth';
-import { useEffect, useState } from 'react';
+import { useAuth } from '@context/auth/useAuth';
 
 export default function Navigation() {
   const navigate = useNavigate();
-  const [user, setUser] = useState<null | { email: string }>(null);
-
-  useEffect(() => {
-    const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
-      if (currentUser) {
-        setUser({ email: currentUser.email || '' });
-      } else {
-        setUser(null);
-      }
-    });
-
-    return () => unsubscribe();
-  }, []);
+  const { user, logout } = useAuth();
 
   return (
     <>
@@ -33,10 +19,8 @@ export default function Navigation() {
           <Button
             label="Logout"
             onClick={async () => {
-              await signOut(auth);
               try {
-                await signOut(auth);
-                navigate('/encyclopedia');
+                await logout();
               } catch (error) {
                 console.error('Failed to log out:', error);
                 window.alert('Logout failed. Please try again.');
