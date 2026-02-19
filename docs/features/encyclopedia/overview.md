@@ -2,7 +2,7 @@
 
 ## Description
 
-The encyclopedia feature presents plant species in a browseable UI with two presentation modes: grid cards and list items.
+The encyclopedia feature presents plant species in a browsable UI with two presentation modes: grid cards and list items.
 It is currently a front-end display feature with static sample data and reusable species components.
 
 ## Scope
