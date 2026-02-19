@@ -9,9 +9,10 @@ skinparam class {
   BorderColor<<planned>> #999999
 }
 
-class User <<planned>> {
+class User {
   +id: string
-  //other relevant fields//
+  +email: string
+  +createdAt: Date
 }
 
 class Plant {
