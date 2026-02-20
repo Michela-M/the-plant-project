@@ -14,8 +14,8 @@ vi.mock('@services/firebase', () => ({
 
 describe('deletePlant', () => {
   it('should delete a plant document from Firestore', async () => {
-    const mockPlantId = '123',
-     mockDocRef = {};
+    const mockPlantId = '123';
+    const mockDocRef = {};
     (doc as Mock).mockReturnValue(mockDocRef);
     (deleteDoc as Mock).mockResolvedValue(undefined);
 
@@ -26,8 +26,8 @@ describe('deletePlant', () => {
   });
 
   it('should throw an error if deletion fails', async () => {
-    const mockPlantId = '123',
-     mockError = new Error('Deletion failed');
+    const mockPlantId = '123';
+    const mockError = new Error('Deletion failed');
     (doc as Mock).mockReturnValue({});
     (deleteDoc as Mock).mockRejectedValue(mockError);
 
