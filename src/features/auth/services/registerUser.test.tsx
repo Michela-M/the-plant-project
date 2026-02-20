@@ -8,7 +8,9 @@ vi.mock('firebase/auth', () => ({
 }));
 
 vi.mock('firebase/firestore', () => ({
-  doc: vi.fn(() => ({ path: 'mock/doc/path' })),
+  doc: vi.fn((_db, collection: string, id: string) => ({
+    path: `${collection}/${id}`,
+  })),
   setDoc: vi.fn(),
 }));
 
@@ -43,7 +45,13 @@ describe('registerUser', () => {
       'test@example.com',
       'password123'
     );
-    expect(setDoc).toHaveBeenCalled();
+    expect(setDoc).toHaveBeenCalledWith(
+      expect.objectContaining({ path: 'users/123' }),
+      expect.objectContaining({
+        email: 'test@example.com',
+        createdAt: expect.any(Date),
+      })
+    );
   });
 
   it('throws mapped error for email already in use', async () => {
