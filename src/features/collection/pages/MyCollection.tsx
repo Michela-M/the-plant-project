@@ -5,6 +5,7 @@ import { useNavigate } from 'react-router-dom';
 import { getAllPlants } from '../services/getAllPlants';
 import { useToast } from '@context/toast/useToast';
 import Spinner from '@components/Spinner';
+import { useAuth } from '@context/auth/useAuth';
 
 export default function MyCollection() {
   const [plants, setPlants] = useState<
@@ -18,12 +19,13 @@ export default function MyCollection() {
   const { showError } = useToast();
   const navigate = useNavigate();
   const [loading, setLoading] = useState(true);
+  const { user } = useAuth();
 
   useEffect(() => {
     const fetchPlants = async () => {
       setLoading(true);
       try {
-        const plantsData = await getAllPlants();
+        const plantsData = await getAllPlants(user?.id || '');
         setPlants(plantsData);
       } catch (error) {
         showError(
@@ -35,7 +37,7 @@ export default function MyCollection() {
       }
     };
     fetchPlants();
-  }, [showError]);
+  }, [showError, user]);
 
   if (loading) {
     return <Spinner />;

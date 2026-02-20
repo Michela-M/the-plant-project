@@ -4,6 +4,7 @@
 
 The collection feature lets users manage their personal plants with create, read, update, and delete workflows backed by Firestore.
 It also supports plant image uploads to Firebase Storage and provides toast-based feedback for success and error states.
+All collection data is scoped to the signed-in user.
 
 ## Scope
 
@@ -38,7 +39,7 @@ This feature currently includes:
 
 1. User fills in the add form (`name`, `species`, `wateringFrequency`, `lastWatered`, `notes`).
 2. Formik + Yup validates input.
-3. `addPlant` creates a Firestore document in `test-plants`.
+3. `addPlant` creates a Firestore document at `users/{userId}/plants`.
 4. On success, the form resets, a success toast appears, and user returns to `/collection`.
 
 ### View Plant Details
@@ -82,7 +83,7 @@ This feature currently includes:
 
 ## Data Model (Current Usage)
 
-Collection: `test-plants`
+Collection path: `users/{userId}/plants`
 
 Fields currently used by UI/services:
 
@@ -110,10 +111,12 @@ Fields currently used by UI/services:
 
 ## Current Limitations
 
-- No route-level auth guards; collection routes are not protected yet.
-- Plant records are currently stored in a shared `test-plants` collection (not user-scoped in Firestore queries).
 - Delete flow does not currently remove any previously uploaded image from Storage.
 - History tracking is placeholder-only in details view.
+
+## Access Control
+
+- Collection routes are protected with `ProtectedRoute` and redirect unauthenticated users to `/login`.
 
 ## Related Files
 

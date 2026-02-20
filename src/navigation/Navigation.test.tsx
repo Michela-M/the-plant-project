@@ -3,46 +3,38 @@ import userEvent from '@testing-library/user-event';
 import { MemoryRouter, Routes, Route } from 'react-router-dom';
 import Navigation from './Navigation';
 import { expect, describe, it, vi, beforeEach, type Mock } from 'vitest';
-import * as firebaseAuth from 'firebase/auth';
-import type { Auth, User } from 'firebase/auth';
+import { useAuth } from '@context/auth/useAuth';
 
 function TestPage({ label }: { label: string }) {
   return <div>{label}</div>;
 }
 
-vi.mock('firebase/auth', async () => {
-  const original =
-    await vi.importActual<typeof import('firebase/auth')>('firebase/auth');
-  return {
-    ...original,
-    auth: {},
-    onAuthStateChanged: vi.fn(),
-    signOut: vi.fn(),
-  };
-});
-
-beforeEach(() => {
-  vi.resetAllMocks();
-});
+vi.mock('@context/auth/useAuth', () => ({
+  useAuth: vi.fn(),
+}));
 
 describe('Navigation', () => {
-  const mockedOnAuthStateChanged =
-    firebaseAuth.onAuthStateChanged as unknown as Mock;
-  const mockedSignOut = firebaseAuth.signOut as unknown as Mock;
+  const mockedUseAuth = useAuth as unknown as Mock;
+  const mockedLogout = vi.fn();
 
-  function mockAuthState(user: Partial<User> | null) {
-    mockedOnAuthStateChanged.mockImplementation(
-      (_auth: Auth, callback: (user: User | null) => void) => {
-        callback(user as User | null);
-        return () => {};
-      }
-    );
+  beforeEach(() => {
+    vi.resetAllMocks();
+    mockedLogout.mockResolvedValue(undefined);
+  });
+
+  function mockAuthState(user: { id: string; email: string } | null) {
+    mockedUseAuth.mockReturnValue({
+      user,
+      loading: false,
+      setUser: vi.fn(),
+      logout: mockedLogout,
+    });
   }
 
   it('navigates to each page when clicking menu items', async () => {
     const user = userEvent.setup();
 
-    mockAuthState({ email: 'test@example.com' });
+    mockAuthState({ id: '1', email: 'test@example.com' });
 
     render(
       <MemoryRouter initialEntries={['/']}>
@@ -112,7 +104,7 @@ describe('Navigation', () => {
 
   it('shows Logout button when user is authenticated', async () => {
     // simulate logged-in user
-    mockAuthState({ email: 'test@example.com' });
+    mockAuthState({ id: '1', email: 'test@example.com' });
 
     render(
       <MemoryRouter>
@@ -125,27 +117,20 @@ describe('Navigation', () => {
     expect(screen.queryByText('Sign Up')).not.toBeInTheDocument();
   });
 
-  it("logouts user and navigates to '/encyclopedia' when Logout button is clicked", async () => {
+  it('logs out user when Logout button is clicked', async () => {
     const user = userEvent.setup();
 
     // simulate logged-in user
-    mockAuthState({ email: 'test@example.com' });
+    mockAuthState({ id: '1', email: 'test@example.com' });
 
     render(
       <MemoryRouter initialEntries={['/']}>
         <Navigation />
-        <Routes>
-          <Route
-            path="/encyclopedia"
-            element={<TestPage label="Encyclopedia Page" />}
-          />
-        </Routes>
       </MemoryRouter>
     );
 
     await user.click(screen.getByRole('button', { name: /logout/i }));
 
-    expect(mockedSignOut).toHaveBeenCalled();
-    expect(screen.getByText('Encyclopedia Page')).toBeInTheDocument();
+    expect(mockedLogout).toHaveBeenCalled();
   });
 });

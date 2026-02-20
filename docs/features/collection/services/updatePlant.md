@@ -6,14 +6,15 @@
 It performs a partial update using `updateDoc`, meaning only the specified fields are changed while the rest of the document remains untouched.
 
 This service is typically used when editing a plant’s details such as its name, species, watering frequency, notes, last watered date, or image URL.
-It assumes that all validation and preprocessing (e.g., converting strings to numbers, ensuring required fields exist) has already been handled by the UI or form layer.
+The document path is user-scoped: `users/{userId}/plants/{plantId}`.
 
 ## Parameters
 
-| Name        | Type     | Description                                                                                        |
-| ----------- | -------- | -------------------------------------------------------------------------------------------------- |
-| `plantId`   | `string` | The Firestore document ID of the plant to update.                                                  |
-| `plantData` | `object` | An object containing the fields to update. Only `name` is required; all other fields are optional. |
+| Name        | Type     | Description                                               |
+| ----------- | -------- | --------------------------------------------------------- |
+| `plantId`   | `string` | Firestore document ID of the plant to update              |
+| `plantData` | `object` | Fields to update (`name` required, others optional)       |
+| `userId`    | `string` | User ID used to resolve `users/{userId}/plants/{plantId}` |
 
 ### `plantData` fields
 
@@ -28,30 +29,32 @@ It assumes that all validation and preprocessing (e.g., converting strings to nu
 
 ## Return Value
 
-The function returns a Promise that resolves to void.
-
-If the update fails, the function throws an error.
-Callers should wrap it in a try/catch block to handle failures gracefully.
+- `Promise<void>` on success
+- Throws if Firestore fails
 
 ## Usage
 
 Basic usage inside a form submit:
 
-```jsx
-await updatePlant(plantId, {
-  name: values.name,
-  species: values.species,
-  wateringFrequency: Number(values.wateringFrequency),
-  notes: values.notes,
-  imageUrl: uploadedImageUrl,
-});
+```tsx
+await updatePlant(
+  plantId,
+  {
+    name: values.name,
+    species: values.species,
+    wateringFrequency: Number(values.wateringFrequency),
+    notes: values.notes,
+    imageUrl: uploadedImageUrl,
+  },
+  userId
+);
 ```
 
 With error handling:
 
-```jsx
+```tsx
 try {
-  await updatePlant(plantId, updatedData);
+  await updatePlant(plantId, updatedData, userId);
   navigate('/collection');
 } catch (err) {
   console.error('Failed to save plant:', err);
@@ -61,11 +64,14 @@ try {
 ## Edge Cases
 
 - **Missing plantId**  
-   If plantId is undefined or empty, Firestore will attempt to update an invalid path.
+  If plantId is undefined or empty, Firestore will attempt to update an invalid path.
   Always ensure plantId is defined before calling.
 
+- **Missing userId**  
+  An invalid/missing user ID creates an invalid document path and causes failure.
+
 - **Overwriting fields with defaults**  
-  Because the service uses fallbacks ('', 0, null), passing undefined may unintentionally overwrite existing values.
+  Because the service uses fallbacks (`''`, `0`, `null`), passing `undefined` may unintentionally overwrite existing values.
 
 - **Missing required fields**  
   Only name is required by your UI logic.
@@ -75,7 +81,7 @@ try {
   Firestore accepts JavaScript Date objects, but invalid dates will cause an error.
 
 - **Image URL handling**  
-  If imageUrl is omitted, it defaults to an empty string, overwriting the existing image.
+  If `imageUrl` is omitted, it defaults to an empty string, overwriting the existing image.
   The caller must explicitly pass the previous image URL if no new image was uploaded.
 
 - **Permission errors**  

@@ -1,59 +1,45 @@
-import Link from '@components/Link';
 import TextField from '@components/TextField';
 import Button from '@components/Button';
-import { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
 import { useFormik } from 'formik';
-import { loginValidationSchema } from '@utils/validation';
+import { registerUser } from '../services/registerUser';
+import { useState } from 'react';
 import PasswordToggleIcon from '@components/PasswordToggleIcon';
-import { signInWithEmailAndPassword } from 'firebase/auth';
-import { FirebaseError } from 'firebase/app';
-import { auth } from '@services/firebase';
+import Link from '@components/Link';
+import { useNavigate } from 'react-router-dom';
 import { useToast } from '@context/toast/useToast';
-import { onAuthStateChanged } from 'firebase/auth';
+import { signupValidationSchema } from '@utils/validation';
+import { useAuth } from '@context/auth/useAuth';
 
-export default function Login() {
+export default function SignUp() {
   const navigate = useNavigate();
   const { showSuccess, showError } = useToast();
-  const [loading, setLoading] = useState(false);
+  const { setUser } = useAuth();
 
   const [showPassword, setShowPassword] = useState(false);
+  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
+  const [loading, setLoading] = useState(false);
 
   const formik = useFormik({
     initialValues: {
       email: '',
       password: '',
+      confirmPassword: '',
     },
-    validationSchema: loginValidationSchema,
+    validationSchema: signupValidationSchema,
     onSubmit: async (values) => {
       setLoading(true);
       try {
-        await signInWithEmailAndPassword(auth, values.email, values.password);
-        showSuccess('Login successful');
+        const { user } = await registerUser(values.email, values.password);
+        setUser({ id: user.uid, email: user.email || '' });
 
-        const unsubscribe = onAuthStateChanged(auth, (user) => {
-          if (user) {
-            unsubscribe();
-            navigate('/collection');
-          }
-        });
+        showSuccess('Registration successful');
+
+        navigate('/collection');
       } catch (error) {
-        if (error instanceof FirebaseError) {
-          switch (error.code) {
-            case 'auth/invalid-email':
-              showError('Invalid email address.');
-              break;
-            case 'auth/invalid-credential':
-              showError('Invalid credentials.');
-              break;
-            default:
-              showError('Login failed', error.message);
-          }
-        } else if (error instanceof Error) {
-          showError('Login failed', error.message);
-        } else {
-          showError('Login failed', 'An unknown error occurred');
-        }
+        showError(
+          'Error registering user',
+          error instanceof Error ? error.message : ''
+        );
       } finally {
         setLoading(false);
       }
@@ -63,7 +49,7 @@ export default function Login() {
   return (
     <div className="flex justify-center items-center">
       <div className="flex flex-col gap-2 py-8 px-4 shadow-md rounded-md w-1/3 bg-stone-50">
-        <p className="text-3xl text-green-900 font-bold">Log in</p>
+        <p className="text-3xl text-green-900 font-bold">Sign up</p>
         <form className="flex flex-col gap-4 " onSubmit={formik.handleSubmit}>
           <TextField
             name="email"
@@ -99,15 +85,35 @@ export default function Login() {
               />
             }
           />
+          <TextField
+            name="confirmPassword"
+            label="Confirm Password"
+            placeholder="Confirm your password"
+            type={showConfirmPassword ? 'text' : 'password'}
+            icon={
+              <PasswordToggleIcon
+                visible={showConfirmPassword}
+                onToggle={() => setShowConfirmPassword(!showConfirmPassword)}
+              />
+            }
+            value={formik.values.confirmPassword}
+            onChange={formik.handleChange}
+            onBlur={formik.handleBlur}
+            error={
+              formik.touched.confirmPassword && formik.errors.confirmPassword
+                ? formik.errors.confirmPassword
+                : ''
+            }
+          />
           <Button
-            label="Log In"
+            label="Sign Up"
             variant="filled"
             type="submit"
             loading={loading}
           />
         </form>
         <p className="text-sm">
-          Don't have an account? <Link href="/signup">Sign up</Link>
+          Already have an account? <Link href="/login">Log in</Link>
         </p>
       </div>
     </div>

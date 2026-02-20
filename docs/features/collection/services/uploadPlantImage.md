@@ -8,13 +8,17 @@ It is used when creating or editing a plant to store its associated image.
 This service only handles uploading — it does not update Firestore.
 The returned URL should be saved separately using the `updatePlant` service.
 
+Current storage path format:
+
+- `users/{userId}/plants/{plantId}/{uuid}.{extension}`
+
 ## Parameters
 
-| Name      |  Type    | Description                                                                |
-| --------- | -------- | -------------------------------------------------------------------------- |
-| `file`    | `File`   | The image file selected by the user (PNG or JPEG).                         |
-| `plantId` | `string` | The ID of the plant, used to namespace the image path in Firebase Storage. |
-| `userId`  | `string` | The ID of the user, used to organize images by user in Firebase Storage.   |
+| Name      | Type     | Description                               |
+| --------- | -------- | ----------------------------------------- |
+| `file`    | `File`   | The image file selected by the user       |
+| `plantId` | `string` | Plant ID used to namespace the image path |
+| `userId`  | `string` | User ID used to namespace storage by user |
 
 ## Return Value
 
@@ -25,20 +29,20 @@ This URL can be safely stored in Firestore and displayed in the UI.
 
 ## Usage
 
-```jsx
+```tsx
 import { uploadPlantImage } from '../services/uploadPlantImage';
 
 async function handleImageUpload(file: File, plantId: string, userId: string) {
   const imageUrl = await uploadPlantImage(file, plantId, userId);
 
   // Save the URL to Firestore or use it in your UI
-  console.log("Uploaded image URL:", imageUrl);
+  console.log('Uploaded image URL:', imageUrl);
 }
 ```
 
 Typical usage inside a form submit:
 
-```jsx
+```tsx
 const imageUrl = file
   ? await uploadPlantImage(file, plantId, userId)
   : existingImageUrl;
@@ -48,15 +52,13 @@ await updatePlant(plantId, { ...values, imageUrl });
 
 ## Validation
 
-This service performs the following validations and throws an error if any fail:
+Validation is delegated to `imageValidation(file)`.
 
-- **File type**: Must be an image (checked via MIME type starting with `image/`)
-- **File size**: Must not exceed 5MB
-
-The service throws an `Error` with a descriptive message if validation fails.
+- If validation fails, the service throws `Error(validationMessage)`.
+- If validation passes, the file is uploaded and a download URL is returned.
 
 ## Edge Cases
 
-- Each upload is stored under a unique UUID-based filename, so uploading a file with the same original name will not overwrite previous images but may leave unused/orphaned images in storage if old URLs are no longer referenced
+- Each upload uses a UUID filename, so repeated uploads will not overwrite previous files
 - Network issues or Firebase Storage rules may cause upload failures
 - Large files may take longer to upload or fail depending on connection quality

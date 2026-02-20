@@ -27,16 +27,15 @@ History is stored as a subcollection and documented separately.
 - **Plant → History** (one‑to‑many)  
   A plant can have multiple history events (watering, fertilizing, repotting, etc.).
 
+- **Plant → User** (many‑to‑one)  
+  Each plant belongs to a single user, but a user can have many plants.
+
 ## Firestore Storage
 
-- Current:
-  `plants/{plantId}`
+`/users/{userId}/plants/{plantId}`
 
-- Planned:
-  `/users/{userId}/plants/{plantId}`
-
-- History subcollection:
-  `/users/{userId}/plants/{plantId}/history/{eventId}`
+History subcollection:
+`/users/{userId}/plants/{plantId}/history/{eventId}`
 
 ## Constraints and Rules
 

@@ -16,7 +16,7 @@ Included in this folder:
 
 - **[Plant](./models/plant.md)**
 - **Species** — encyclopedia entries
-- **User** — owner of plants
+- **[User](./models/user.md)** — owner of plants
 - **History** — plant care events (watering, fertilizing, etc.)
 
 # Firestore Structure

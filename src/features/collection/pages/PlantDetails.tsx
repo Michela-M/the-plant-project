@@ -6,9 +6,11 @@ import ImagePreview from '@components/ImagePreview';
 import PlantDetailsSchedule from '../components/PlantDetailsSchedule';
 import { useToast } from '@context/toast/useToast';
 import Spinner from '@components/Spinner';
+import { useAuth } from '@context/auth/useAuth';
 
 export default function PlantDetails() {
   const { id } = useParams();
+  const { user } = useAuth();
   const { showError } = useToast();
   const [plantDetails, setPlantDetails] = useState<{
     id: string;
@@ -28,7 +30,7 @@ export default function PlantDetails() {
       if (!id) return;
       setLoading(true);
       try {
-        const details = await getPlantDetails(id);
+        const details = await getPlantDetails(id, user?.id || '');
         setPlantDetails(details);
       } catch (error) {
         showError(
@@ -41,7 +43,7 @@ export default function PlantDetails() {
     };
 
     fetchPlantDetails();
-  }, [id, showError]);
+  }, [id, showError, user?.id]);
 
   if (loading) {
     return <Spinner />;

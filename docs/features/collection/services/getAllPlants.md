@@ -2,26 +2,28 @@
 
 ## Description
 
-`getAllPlants` retrieves all plant documents from the Firestore `test-plants` collection.
+`getAllPlants` retrieves all plant documents for a specific user from Firestore at `users/{userId}/plants`.
 It sorts the results by `creationDate` (newest first) and normalizes missing fields to safe defaults.
 
 If Firestore throws an error (network issue, permission error, etc.), the error is propagated to the caller, allowing the UI to handle and display appropriate error messages.
 
 ## Parameters
 
-This service does not accept any parameters.
+| Name     | Type     | Required | Description                              |
+| -------- | -------- | -------- | ---------------------------------------- |
+| `userId` | `string` | Yes      | User ID used to query that user’s plants |
 
 ## Return Value
 
-| Type             | Description                                  |
-| ---------------- | -------------------------------------------- |
-| Promise<Plant[]> | Returns an array of normalized plant objects |
-| Promise<[]>      | Returns an empty array if no documents exist |
-| Throws           | Throws an error if Firestore operation fails |
+| Type               | Description                                  |
+| ------------------ | -------------------------------------------- |
+| `Promise<Plant[]>` | Returns an array of normalized plant objects |
+| `Promise<[]>`      | Returns an empty array if no documents exist |
+| Throws             | Throws an error if Firestore operation fails |
 
 Each returned plant object has the shape:
 
-```jsx
+```tsx
 {
   id: string;
   name: string;
@@ -32,11 +34,11 @@ Each returned plant object has the shape:
 
 ## Usage
 
-```jsx
+```tsx
 import { getAllPlants } from '../services/getAllPlants';
 
 try {
-  const plants = await getAllPlants();
+  const plants = await getAllPlants('user-123');
 
   if (plants.length > 0) {
     console.log('Loaded plants:', plants);

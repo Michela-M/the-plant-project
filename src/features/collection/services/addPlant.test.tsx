@@ -1,7 +1,6 @@
-import { describe, it, expect, vi, beforeEach } from 'vitest';
-import type { Mock } from 'vitest';
-import { addPlant } from './addPlant';
 import { addDoc, collection } from 'firebase/firestore';
+import { type Mock, beforeEach, describe, expect, it, vi } from 'vitest';
+import { addPlant } from './addPlant';
 import { db } from '@services/firebase';
 
 // --- Mock Firestore ---
@@ -25,24 +24,25 @@ describe('addPlant', () => {
     (addDoc as Mock).mockResolvedValue({ id: '123' });
 
     const input = {
-      name: 'Aloe Vera',
-      species: 'Aloe',
-      wateringFrequency: 7,
       lastWatered: new Date('2024-01-01'),
+      name: 'Aloe Vera',
       notes: 'Needs sunlight',
+      species: 'Aloe',
+      userId: 'test-user',
+      wateringFrequency: 7,
     };
 
     await addPlant(input);
 
-    expect(collection).toHaveBeenCalledWith(db, 'test-plants');
+    expect(collection).toHaveBeenCalledWith(db, 'users/test-user/plants');
 
     expect(addDoc).toHaveBeenCalledWith(mockCollectionRef, {
+      creationDate: expect.any(Date),
+      lastWatered: new Date('2024-01-01'),
       name: 'Aloe Vera',
+      notes: 'Needs sunlight',
       species: 'Aloe',
       wateringFrequency: 7,
-      lastWatered: new Date('2024-01-01'),
-      notes: 'Needs sunlight',
-      creationDate: expect.any(Date),
     });
   });
 
@@ -51,15 +51,15 @@ describe('addPlant', () => {
     (collection as Mock).mockReturnValue(mockCollectionRef);
     (addDoc as Mock).mockResolvedValue({ id: '123' });
 
-    await addPlant({ name: 'Fern' });
+    await addPlant({ name: 'Fern', userId: 'test-user' });
 
     expect(addDoc).toHaveBeenCalledWith(mockCollectionRef, {
+      creationDate: expect.any(Date),
+      lastWatered: null,
       name: 'Fern',
+      notes: '',
       species: '',
       wateringFrequency: 0,
-      lastWatered: null,
-      notes: '',
-      creationDate: expect.any(Date),
     });
   });
 
@@ -67,15 +67,17 @@ describe('addPlant', () => {
     (collection as Mock).mockReturnValue({});
     (addDoc as Mock).mockRejectedValue(new Error('Firestore failed'));
 
-    await expect(addPlant({ name: 'Cactus' })).rejects.toThrow(
-      'Firestore failed'
-    );
+    await expect(
+      addPlant({ name: 'Cactus', userId: 'test-user' })
+    ).rejects.toThrow('Firestore failed');
   });
 
   it('wraps non-Error exceptions into a new Error', async () => {
     (collection as Mock).mockReturnValue({});
     (addDoc as Mock).mockRejectedValue('weird error');
 
-    await expect(addPlant({ name: 'Cactus' })).rejects.toThrow('Unknown error');
+    await expect(
+      addPlant({ name: 'Cactus', userId: 'test-user' })
+    ).rejects.toThrow('Unknown error');
   });
 });

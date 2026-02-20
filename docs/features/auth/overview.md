@@ -13,6 +13,7 @@ This feature currently includes:
 - Login with email and password
 - Password visibility toggles on auth forms
 - Auth-aware navigation actions (Login/Sign Up vs Logout)
+- Route protection for private pages via `ProtectedRoute`
 - Success and error feedback via toast notifications
 
 ## Routes
@@ -77,14 +78,15 @@ Unknown errors fall back to a generic message with optional details.
 
 ## Current Limitations
 
-- Route-level protection is not implemented yet, so private pages can still be accessed by URL.
 - Social login providers are not implemented.
 - Password reset and email verification flows are not implemented.
 
 ## Related Files
 
-- `src/features/auth/Login.tsx`
-- `src/features/auth/SignUp.tsx`
+- `src/features/auth/pages/Login.tsx`
+- `src/features/auth/pages/SignUp.tsx`
+- `src/features/auth/components/ProtectedRoute.tsx`
+- `src/context/auth/AuthContext.tsx`
 - `src/navigation/Navigation.tsx`
 - `src/utils/validation.ts`
 - `src/services/firebase.ts`
