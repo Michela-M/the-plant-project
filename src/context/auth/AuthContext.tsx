@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import { AuthContext } from './useAuth';
 import { auth } from '@services/firebase';
-import { onAuthStateChanged } from 'firebase/auth';
+import { onAuthStateChanged, signOut } from 'firebase/auth';
 
 type User = {
   email: string;
@@ -31,7 +31,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   }, []);
 
   const logout = async () => {
-    await auth.signOut();
+    await signOut(auth);
     setUser(null);
   };
 
