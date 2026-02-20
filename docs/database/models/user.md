@@ -9,9 +9,10 @@ Each user document stores account-level profile metadata and acts as the parent 
 
 | Field     | Type   | Optional | Description                                           |
 | --------- | ------ | -------- | ----------------------------------------------------- |
-| id        | string | no       | Firebase Auth UID (used as the Firestore document ID) |
 | email     | string | no       | User email address saved at sign-up                   |
 | createdAt | Date   | no       | Timestamp set when the user account is registered     |
+
+**Document ID:** The Firestore document ID is the Firebase Auth UID.
 
 ## Relationships
 
