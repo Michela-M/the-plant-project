@@ -22,3 +22,13 @@ import { Leaf } from 'lucide-react';
 
 <IconTile Icon={Leaf} color="green" label="Plant category" />;
 ```
+
+## Using local SVG files
+
+When using a local `.svg`, import it as a React component with `?react`, and ensure paths use `fill="currentColor"` (or `stroke="currentColor"`) so `iconColor` can control it.
+
+```jsx
+import FertilizerIcon from '../assets/icons/fertilizer.svg?react';
+
+<IconTile Icon={FertilizerIcon} color="pink" label="Fertilizer" />;
+```
