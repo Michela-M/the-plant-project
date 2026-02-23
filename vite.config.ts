@@ -27,6 +27,7 @@ export default defineConfig({
       '@services': `${__dirname}/src/services`,
       '@features': `${__dirname}/src/features`,
       '@utils': `${__dirname}/src/utils`,
+      '@assets': `${__dirname}/src/assets`,
     },
   },
 });
