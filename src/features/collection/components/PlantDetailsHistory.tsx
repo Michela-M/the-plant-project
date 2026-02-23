@@ -58,7 +58,7 @@ export default function PlantDetailsHistory({ plantId }: { plantId: string }) {
     if (plantId) {
       fetchCareHistory();
     }
-  }, [plantId, user?.id]);
+  }, [plantId, showError, user?.id]);
 
   const groupedCareHistory = useMemo(() => {
     return careHistory.reduce<
