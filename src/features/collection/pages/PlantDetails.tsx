@@ -7,6 +7,7 @@ import PlantDetailsSchedule from '../components/PlantDetailsSchedule';
 import { useToast } from '@context/toast/useToast';
 import Spinner from '@components/Spinner';
 import { useAuth } from '@context/auth/useAuth';
+import PlantDetailsHistory from '../components/PlantDetailsHistory';
 
 export default function PlantDetails() {
   const { id } = useParams();
@@ -76,8 +77,7 @@ export default function PlantDetails() {
         <div className="w-5/8 h-64 flex flex-col gap-6">
           <p>{plantDetails?.notes}</p>
           <div>
-            <h2 className="text-2xl">History</h2>
-            <p className="text-stone-500">No notes yet.</p>
+            <PlantDetailsHistory plantId={plantDetails?.id || ''} />
           </div>
         </div>
         <div className="w-3/8 flex flex-col gap-6">

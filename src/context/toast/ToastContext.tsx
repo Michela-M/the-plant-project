@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useCallback, useMemo, useState } from 'react';
 import Toast from '@components/Toast';
 import { ToastContext } from './useToast';
 
@@ -12,26 +12,35 @@ export function ToastProvider({ children }: { children: React.ReactNode }) {
     open: false,
   });
 
-  const showToast = (
-    message: string,
-    detail = '',
-    type: ToastType = 'info'
-  ) => {
-    setToast({ message, detail, type, open: true });
-  };
+  const showToast = useCallback(
+    (message: string, detail = '', type: ToastType = 'info') => {
+      setToast({ message, detail, type, open: true });
+    },
+    []
+  );
 
-  const showSuccess = (message: string, detail?: string) =>
-    showToast(message, detail, 'success');
+  const showSuccess = useCallback(
+    (message: string, detail?: string) => showToast(message, detail, 'success'),
+    [showToast]
+  );
 
-  const showError = (message: string, detail?: string) =>
-    showToast(message, detail, 'error');
+  const showError = useCallback(
+    (message: string, detail?: string) => showToast(message, detail, 'error'),
+    [showToast]
+  );
 
-  const closeToast = () => setToast((prev) => ({ ...prev, open: false }));
+  const closeToast = useCallback(
+    () => setToast((prev) => ({ ...prev, open: false })),
+    []
+  );
+
+  const value = useMemo(
+    () => ({ showToast, showSuccess, showError, closeToast, toast }),
+    [showToast, showSuccess, showError, closeToast, toast]
+  );
 
   return (
-    <ToastContext.Provider
-      value={{ showToast, showSuccess, showError, closeToast, toast }}
-    >
+    <ToastContext.Provider value={value}>
       {children}
       <Toast
         message={toast.message}
