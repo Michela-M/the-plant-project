@@ -13,6 +13,8 @@ This feature currently includes:
 - Collection list view with loading and empty states
 - Add plant form
 - Plant details view
+- Care-entry creation from plant details (modal form)
+- Care history timeline grouped by date
 - Edit plant form (including image upload)
 - Plant deletion from plant details header actions
 - Firestore-backed data persistence for plant records
@@ -46,8 +48,17 @@ This feature currently includes:
 
 1. `PlantDetails` reads route param `id`.
 2. `getPlantDetails` loads the corresponding document.
-3. Page renders details header, notes/history section, image preview, and watering schedule.
-4. If not found, a fallback message with a link back to `/collection` is shown.
+3. `PlantDetailsHistory` loads care entries with `getCareHistory`, orders by newest first, and groups entries by date.
+4. Page renders details header, notes/history section, image preview, and watering schedule.
+5. If not found, a fallback message with a link back to `/collection` is shown.
+
+### Add Care Entry
+
+1. User opens `New` → `Care` from plant details header actions.
+2. A transactional modal collects `date`, `careType`, optional `otherCareType`, and optional `notes`.
+3. Formik + Yup validates the inputs (`careType` required, no future date, `otherCareType` required when care type is `other`).
+4. `addCareEntry` writes the event to `users/{userId}/plants/{plantId}/careEntries`.
+5. On success, modal closes and success feedback is shown via toast.
 
 ### Edit Plant
 
@@ -81,6 +92,12 @@ This feature currently includes:
 - Image files are validated via `imageValidation` before upload.
 - Invalid files show an inline error and prevent upload.
 
+### Add Care Entry
+
+- `careType` is required.
+- `date` must be a valid date and cannot be in the future.
+- `otherCareType` is required and must be at least 3 characters when `careType` is `other`.
+
 ## Data Model (Current Usage)
 
 Collection path: `users/{userId}/plants`
@@ -94,6 +111,15 @@ Fields currently used by UI/services:
 - `notes: string`
 - `creationDate: Date`
 - `imageUrl: string | null`
+
+Care history path: `users/{userId}/plants/{plantId}/careEntries`
+
+Fields currently used by UI/services:
+
+- `careType: string`
+- `date: Date`
+- `notes: string`
+- `otherCareType: string`
 
 ## Dependencies
 
@@ -112,7 +138,6 @@ Fields currently used by UI/services:
 ## Current Limitations
 
 - Delete flow does not currently remove any previously uploaded image from Storage.
-- History tracking is placeholder-only in details view.
 
 ## Access Control
 
@@ -124,9 +149,13 @@ Fields currently used by UI/services:
 - `src/features/collection/pages/AddPlant.tsx`
 - `src/features/collection/pages/PlantDetails.tsx`
 - `src/features/collection/pages/EditPlant.tsx`
+- `src/features/collection/components/PlantDetailsHeader.tsx`
+- `src/features/collection/components/PlantDetailsHistory.tsx`
 - `src/features/collection/services/getAllPlants.tsx`
 - `src/features/collection/services/getPlantDetails.tsx`
 - `src/features/collection/services/addPlant.tsx`
 - `src/features/collection/services/updatePlant.tsx`
 - `src/features/collection/services/deletePlant.tsx`
 - `src/features/collection/services/uploadPlantImage.tsx`
+- `src/features/collection/services/addCareEntry.tsx`
+- `src/features/collection/services/getCareHistory.tsx`
