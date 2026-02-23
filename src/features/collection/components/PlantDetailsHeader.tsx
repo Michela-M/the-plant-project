@@ -217,6 +217,7 @@ function CareModal({
         });
         setShowCareModal(false);
         showSuccess('Care entry added successfully');
+        window.location.reload();
       } catch (error) {
         showError(
           'Error adding care entry',
