@@ -28,11 +28,13 @@ export function RadioButton({
   checked,
   onChange,
   disabled,
+  name = 'radio-group',
 }: {
   label: string;
   value: string;
   checked: boolean;
   onChange: (value: string) => void;
+  name?: string;
   disabled?: boolean;
 }) {
   return (
@@ -41,7 +43,7 @@ export function RadioButton({
         <input
           type="radio"
           id={value}
-          name={value}
+          name={name}
           checked={checked}
           onChange={() => onChange(value)}
           disabled={disabled}
