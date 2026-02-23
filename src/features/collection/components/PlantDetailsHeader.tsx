@@ -242,6 +242,7 @@ function CareModal({
           value={formik.values.date}
           onChange={formik.handleChange}
           onBlur={formik.handleBlur}
+          error={formik.touched.date ? formik.errors.date : undefined}
         />
         <RadioGroup label="Care type" layout="horizontal">
           <RadioButton

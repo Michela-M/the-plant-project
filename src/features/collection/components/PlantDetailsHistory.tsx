@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState, type JSX } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { getCareHistory } from '../services/getCareHistory';
 import { useAuth } from '@context/auth/useAuth';
 import { useToast } from '@context/toast/useToast';
@@ -9,14 +9,26 @@ import fertilizerIcon from '@assets/icons/fertilizer.svg?react';
 import repotIcon from '@assets/icons/plant-pot.svg?react';
 import seedlings from '@assets/icons/seedlings.svg?react';
 
-const careTypeIcons: Record<string, JSX.Element> = {
-  water: <IconTile Icon={wateringCan} label="Watering can icon" color="blue" />,
-  fertilize: (
-    <IconTile Icon={fertilizerIcon} label="Fertilizer icon" color="yellow" />
-  ),
-  repot: <IconTile Icon={repotIcon} label="Repot icon" color="orange" />,
-  other: <IconTile Icon={seedlings} label="Other care icon" color="pink" />,
-};
+function getCareTypeIcon(careType: string) {
+  switch (careType) {
+    case 'water':
+      return (
+        <IconTile Icon={wateringCan} label="Watering can icon" color="blue" />
+      );
+    case 'fertilize':
+      return (
+        <IconTile
+          Icon={fertilizerIcon}
+          label="Fertilizer icon"
+          color="yellow"
+        />
+      );
+    case 'repot':
+      return <IconTile Icon={repotIcon} label="Repot icon" color="orange" />;
+    default:
+      return <IconTile Icon={seedlings} label="Other care icon" color="pink" />;
+  }
+}
 
 const careLabels: Record<string, string> = {
   water: 'Plant watered',
@@ -117,7 +129,7 @@ function CareEntry({
 }) {
   return (
     <div className="flex flex-row px-3 gap-3 items-center">
-      {careTypeIcons[entry.careType] || careTypeIcons['other']}
+      {getCareTypeIcon(entry.careType)}
       <div className="flex flex-col">
         <p className="text-lg font-bold">
           {careLabels[entry.careType] || careLabels['other']}

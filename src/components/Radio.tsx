@@ -8,8 +8,11 @@ export default function RadioGroup({
   layout?: 'vertical' | 'horizontal';
 }) {
   return (
-    <div aria-label={label ? `${label} radio group` : 'Radio group'}>
-      {label}
+    <div
+      aria-label={label ? `${label} radio group` : 'Radio group'}
+      role="radiogroup"
+    >
+      <label className="block mb-1 font-medium">{label}</label>
       <div
         className={layout === 'horizontal' ? 'flex flex-row' : 'flex flex-col'}
       >

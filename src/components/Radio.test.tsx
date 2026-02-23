@@ -111,8 +111,9 @@ describe('Radio', () => {
     );
 
     const radioGroup = screen.getByLabelText('Test Group radio group');
-    const layoutContainer = radioGroup.firstElementChild;
+    const layoutContainer = radioGroup.children.item(1);
 
+    expect(layoutContainer).not.toBeNull();
     expect(layoutContainer).toHaveClass('flex', 'flex-row');
   });
 
@@ -129,8 +130,9 @@ describe('Radio', () => {
     );
 
     const radioGroup = screen.getByLabelText('Test Group radio group');
-    const layoutContainer = radioGroup.firstElementChild;
+    const layoutContainer = radioGroup.children.item(1);
 
+    expect(layoutContainer).not.toBeNull();
     expect(layoutContainer).toHaveClass('flex', 'flex-col');
   });
 });
