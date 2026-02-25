@@ -1,17 +1,21 @@
 import { render, screen } from '@testing-library/react';
 import SpeciesListItem from './SpeciesListItem';
 import { describe, it, expect } from 'vitest';
+import { MemoryRouter } from 'react-router-dom';
 
 describe('SpeciesListItem', () => {
   it('renders all fields correctly', () => {
     render(
-      <SpeciesListItem
-        family="Asparagaceae"
-        commonName="Snake Plant"
-        description="A very resilient plant."
-        tags={['low-maintenance', 'air-purifying']}
-        imageUrl="https://example.com/snake.jpg"
-      />
+      <MemoryRouter>
+        <SpeciesListItem
+          family="Asparagaceae"
+          commonName="Snake Plant"
+          description="A very resilient plant."
+          tags={['low-maintenance', 'air-purifying']}
+          imageUrl="https://example.com/snake.jpg"
+          id="1"
+        />
+      </MemoryRouter>
     );
 
     expect(screen.getByText('Asparagaceae')).toBeInTheDocument();
@@ -27,13 +31,16 @@ describe('SpeciesListItem', () => {
 
   it('uses fallbacks when props are missing', () => {
     render(
-      <SpeciesListItem
-        family=""
-        commonName=""
-        description="A plant with missing data."
-        tags={[]}
-        imageUrl=""
-      />
+      <MemoryRouter>
+        <SpeciesListItem
+          family=""
+          commonName=""
+          description="A plant with missing data."
+          tags={[]}
+          imageUrl=""
+          id="1"
+        />
+      </MemoryRouter>
     );
 
     expect(screen.getByText('Unknown Family')).toBeInTheDocument();
@@ -50,13 +57,16 @@ describe('SpeciesListItem', () => {
 
   it('icon button is hidden by default', () => {
     render(
-      <SpeciesListItem
-        family="Asparagaceae"
-        commonName="Snake Plant"
-        description="A very resilient plant."
-        tags={['low-maintenance', 'air-purifying']}
-        imageUrl="https://example.com/snake.jpg"
-      />
+      <MemoryRouter>
+        <SpeciesListItem
+          family="Asparagaceae"
+          commonName="Snake Plant"
+          description="A very resilient plant."
+          tags={['low-maintenance', 'air-purifying']}
+          imageUrl="https://example.com/snake.jpg"
+          id="1"
+        />
+      </MemoryRouter>
     );
 
     const button = screen.getByTestId('icon-container');
@@ -68,13 +78,16 @@ describe('SpeciesListItem', () => {
     const tags = ['drought-tolerant', 'indestructible', 'air-purifying'];
 
     render(
-      <SpeciesListItem
-        family="Asparagaceae"
-        commonName="Snake Plant"
-        description="A plant."
-        tags={tags}
-        imageUrl="https://example.com/snake.jpg"
-      />
+      <MemoryRouter>
+        <SpeciesListItem
+          family="Asparagaceae"
+          commonName="Snake Plant"
+          description="A plant."
+          tags={tags}
+          imageUrl="https://example.com/snake.jpg"
+          id="1"
+        />
+      </MemoryRouter>
     );
 
     tags.forEach((tag) => {

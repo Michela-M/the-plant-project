@@ -1,15 +1,19 @@
 import { render, screen } from '@testing-library/react';
 import SpeciesCard from './SpeciesCard';
 import { describe, it, expect } from 'vitest';
+import { MemoryRouter } from 'react-router-dom';
 
 describe('SpeciesCard component', () => {
   it('renders image, family, and common name', () => {
     render(
-      <SpeciesCard
-        imageUrl="https://example.com/plant.jpg"
-        family="Asparagaceae"
-        commonName="Snake Plant"
-      />
+      <MemoryRouter>
+        <SpeciesCard
+          imageUrl="https://example.com/plant.jpg"
+          family="Asparagaceae"
+          commonName="Snake Plant"
+          id="1"
+        />
+      </MemoryRouter>
     );
 
     expect(screen.getByAltText('Snake Plant')).toHaveAttribute(
@@ -21,7 +25,11 @@ describe('SpeciesCard component', () => {
   });
 
   it('icon button is hidden by default', () => {
-    render(<SpeciesCard family="Asparagaceae" commonName="Snake Plant" />);
+    render(
+      <MemoryRouter>
+        <SpeciesCard family="Asparagaceae" commonName="Snake Plant" id="1" />
+      </MemoryRouter>
+    );
 
     const button = screen.getByTestId('icon-container');
 
@@ -29,7 +37,11 @@ describe('SpeciesCard component', () => {
   });
 
   it('handles missing props gracefully', () => {
-    render(<SpeciesCard />);
+    render(
+      <MemoryRouter>
+        <SpeciesCard id="1" />
+      </MemoryRouter>
+    );
 
     expect(screen.getByAltText('Plant Image')).toHaveAttribute(
       'src',
