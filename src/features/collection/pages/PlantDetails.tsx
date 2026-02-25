@@ -73,8 +73,8 @@ export default function PlantDetails() {
           commonName: plantDetails?.species || '',
         }}
       />
-      <div className="flex">
-        <div className="w-5/8 h-64 flex flex-col gap-6">
+      <div className="flex gap-6">
+        <div className="w-5/8 flex flex-col gap-6">
           <p>{plantDetails?.notes}</p>
           <div>
             <PlantDetailsHistory plantId={plantDetails?.id || ''} />
