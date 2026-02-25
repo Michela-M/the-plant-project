@@ -26,7 +26,7 @@ export default function ImagePreview({
         <img
           src={url}
           alt={alt}
-          className="object-cover rounded-md cursor-zoom-in"
+          className="object-cover rounded-md cursor-zoom-in aspect-square w-full overflow-hidden"
         />
       </button>
       {description && (

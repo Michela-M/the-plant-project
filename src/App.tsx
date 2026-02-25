@@ -14,6 +14,7 @@ import PlantDetails from '@features/collection/pages/PlantDetails';
 import ProtectedRoute from '@features/auth/components/ProtectedRoute';
 import SignUp from '@features/auth/pages/SignUp';
 import { ToastProvider } from '@context/toast/ToastContext';
+import SpeciesDetails from '@features/encyclopedia/pages/SpeciesDetails';
 
 function App() {
   return (
@@ -26,6 +27,7 @@ function App() {
             <Routes>
               <Route path="/" element={<Encyclopedia />} />
               <Route path="/encyclopedia" element={<Encyclopedia />} />
+              <Route path="/species/:id" element={<SpeciesDetails />} />
               <Route
                 path="/collection"
                 element={

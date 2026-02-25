@@ -2,8 +2,8 @@
 
 ## Description
 
-The encyclopedia feature presents plant species in a browsable UI with two presentation modes: grid cards and list items.
-It is currently a front-end display feature with static sample data and reusable species components.
+The encyclopedia feature provides browse and detail experiences for plant species.
+It includes a list/grid browsing page and a dedicated species details page, both backed by Firestore services.
 
 ## Scope
 
@@ -11,16 +11,19 @@ This feature currently includes:
 
 - Encyclopedia landing page and route
 - View mode toggle between grid and list layouts
-- Species card presentation for compact browsing
-- Species list item presentation for richer, descriptive browsing
-- “Add to collection” action affordance on species items
+- Firestore-driven species loading for browse view
+- Species details route and page (`/species/:id`)
+- Details page layout with header, main care content, and sidebar
+- Characteristic badges and similar-species preview cards
+- “Add to collection” UI affordances on browse cards/items
 
 ## Routes
 
-| Route           | Component      | Purpose                              |
-| --------------- | -------------- | ------------------------------------ |
-| `/`             | `Encyclopedia` | Default app landing page             |
-| `/encyclopedia` | `Encyclopedia` | Explicit encyclopedia browsing route |
+| Route           | Component        | Purpose                              |
+| --------------- | ---------------- | ------------------------------------ |
+| `/`             | `Encyclopedia`   | Default app landing page             |
+| `/encyclopedia` | `Encyclopedia`   | Explicit encyclopedia browsing route |
+| `/species/:id`  | `SpeciesDetails` | Full details page for one species    |
 
 ## Main Flow
 
@@ -28,7 +31,8 @@ This feature currently includes:
 
 1. User opens the encyclopedia page.
 2. Default mode is grid view.
-3. Species are rendered as visual cards with image, family, and common name.
+3. Page calls `getAllSpecies()` to load species from Firestore.
+4. Species render as cards or list items based on selected view mode.
 
 ### Toggle View Mode
 
@@ -36,7 +40,17 @@ This feature currently includes:
 2. Selecting grid icon displays `SpeciesCard` items.
 3. Selecting list icon displays `SpeciesListItem` items.
 
-### Add Affordance
+### Open Species Details
+
+1. User clicks a species card or list item.
+2. App navigates to `/species/:id`.
+3. Details page calls `getSpeciesDetails(id)`.
+4. Page renders:
+   - `SpeciesDetailsHeader`
+   - `SpeciesDetailsMainContent`
+   - `SpeciesDetailsSidebar`
+
+### Add Affordance (Browse Views)
 
 1. Hovering a species item reveals a plus icon button.
 2. The button label is accessibility-friendly (e.g., “Add Snake Plant to collection”).
@@ -44,39 +58,60 @@ This feature currently includes:
 
 ## Display Behavior
 
-- Missing `imageUrl` falls back to a placeholder image.
-- Missing `family` falls back to `Unknown Family`.
-- Missing `commonName` falls back to `Unknown`.
-- List items support tags and a truncated description (`line-clamp-2`).
+- Browse page shows `Spinner` while species are loading.
+- Browse page shows `No species found. Please check back later.` when the list is empty.
+- Species cards/list rows link to `/species/:id`.
+- Browse item fallbacks:
+  - Missing image falls back to placeholder URL.
+  - Missing family shows `Unknown Family`.
+  - Missing common name shows `Unknown`.
+- Details page behavior:
+  - Shows `Spinner` while loading details.
+  - Shows `Species not found.` and a back link when no record is returned.
+  - Sidebar similar-species section renders up to 3 items.
 
 ## Data Source (Current State)
 
-- Species content is hardcoded directly in the page component.
-- No API, Firestore query, or external encyclopedia data service is currently used.
-- Repeated sample entries are used as placeholder content for layout development.
+- Data is loaded from Firestore (`species` collection).
+- Browse page uses `getAllSpecies()` with `orderBy('commonName', 'asc')`.
+- Details page and similar-species cards use `getSpeciesDetails(speciesId)`.
+- Missing field values are normalized to safe defaults in service mapping.
 
 ## Dependencies
 
-- `lucide-react` for grid/list and add icons
+- `firebase/firestore` for species queries
+- `lucide-react` for grid/list, add, and characteristic icons
 - `ButtonRadio` for layout mode switching
 - `Tag` component for species tags in list mode
 - `IconButton` for add affordance actions
+- `react-router-dom` for browse/details navigation
+- Toast context for async error feedback
 
 ## Error Handling
 
-- No asynchronous data loading is performed, so there are currently no loading or fetch error states.
-- Fallback values handle incomplete species props in UI rendering.
+- Browse fetch errors call `showError('Error loading species', details)`.
+- Species-details fetch errors call `showError('Error loading species details', details)`.
+- Similar-species fetch errors call `showError(message)`.
+- Fallback values still protect UI rendering when data fields are missing.
 
 ## Current Limitations
 
-- Encyclopedia is static and not connected to a dynamic species dataset.
-- Search, filtering, sorting, and pagination are not implemented.
-- “Add to collection” buttons do not perform any write action yet.
-- No species detail page route is implemented.
+- Search, filtering, pagination, and advanced sorting are not implemented.
+- “Add to collection” actions in encyclopedia browse components are UI-only.
+- Species details page buttons (`Add to Collection`, `Quick Add`) are currently placeholder actions.
+- Similar-species cards trigger individual detail fetches (no batching/caching layer).
 
 ## Related Files
 
 - `src/features/encyclopedia/pages/Encyclopedia.tsx`
+- `src/features/encyclopedia/pages/SpeciesDetails.tsx`
 - `src/features/encyclopedia/components/SpeciesCard.tsx`
 - `src/features/encyclopedia/components/SpeciesListItem.tsx`
+- `src/features/encyclopedia/components/SpeciesDetailsHeader.tsx`
+- `src/features/encyclopedia/components/SpeciesDetailsMainContent.tsx`
+- `src/features/encyclopedia/components/SpeciesDetailsSidebar.tsx`
+- `src/features/encyclopedia/components/CharacteristicBadge.tsx`
+- `src/features/encyclopedia/components/SimilarSpecies.tsx`
+- `src/features/encyclopedia/services/getAllSpecies.tsx`
+- `src/features/encyclopedia/services/getSpeciesDetails.tsx`
 - `src/App.tsx`
