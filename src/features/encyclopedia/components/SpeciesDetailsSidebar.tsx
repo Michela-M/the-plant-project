@@ -23,7 +23,6 @@ export default function SpeciesDetailsSidebar({
       </div>
       <div>
         <h3 className="text-xl">Characteristics</h3>
-
         {CharacteristicBadge({
           label: 'difficulty',
           value: speciesDetails.characteristics.difficulty,

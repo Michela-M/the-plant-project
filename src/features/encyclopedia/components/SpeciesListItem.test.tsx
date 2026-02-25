@@ -94,4 +94,26 @@ describe('SpeciesListItem', () => {
       expect(screen.getByText(tag)).toBeInTheDocument();
     });
   });
+
+  it('does not nest icon button inside species link', () => {
+    render(
+      <MemoryRouter>
+        <SpeciesListItem
+          family="Asparagaceae"
+          commonName="Snake Plant"
+          description="A plant."
+          tags={['air-purifying']}
+          imageUrl="https://example.com/snake.jpg"
+          id="1"
+        />
+      </MemoryRouter>
+    );
+
+    const link = screen.getByRole('link', { name: /snake plant/i });
+    const addButton = screen.getByRole('button', {
+      name: /add snake plant to collection/i,
+    });
+
+    expect(link).not.toContainElement(addButton);
+  });
 });

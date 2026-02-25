@@ -67,7 +67,7 @@ export default function CharacteristicBadge({
   const colorClass = config.color;
   const text = config.text ?? '';
 
-  let IconComponent;
+  let IconComponent = PlantFlask;
   switch (label) {
     case 'difficulty':
       IconComponent = Gauge;

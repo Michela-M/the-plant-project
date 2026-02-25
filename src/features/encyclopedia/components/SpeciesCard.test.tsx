@@ -36,6 +36,23 @@ describe('SpeciesCard component', () => {
     expect(button).toHaveClass('opacity-0');
   });
 
+  it('does not nest icon button inside species link', () => {
+    render(
+      <MemoryRouter>
+        <SpeciesCard family="Asparagaceae" commonName="Snake Plant" id="1" />
+      </MemoryRouter>
+    );
+
+    const links = screen.getAllByRole('link');
+    const addButton = screen.getByRole('button', {
+      name: /add snake plant to collection/i,
+    });
+
+    links.forEach((link) => {
+      expect(link).not.toContainElement(addButton);
+    });
+  });
+
   it('handles missing props gracefully', () => {
     render(
       <MemoryRouter>

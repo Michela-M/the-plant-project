@@ -1,9 +1,17 @@
 import { doc, getDoc } from 'firebase/firestore';
 import { db } from '@services/firebase';
 import type {
+  SpeciesCareSection,
   SpeciesCharacteristics,
   SpeciesDetailsData,
 } from '../types/speciesDetails';
+
+const normalizeCareSection = (
+  section: Partial<SpeciesCareSection> | undefined
+): SpeciesCareSection => ({
+  text: section?.text ?? '',
+  images: section?.images ?? [],
+});
 
 export const getSpeciesDetails = async (
   speciesId: string
@@ -35,14 +43,14 @@ export const getSpeciesDetails = async (
     type: data.type ?? [],
     characteristics,
 
-    watering: data.watering ?? { text: '', images: [] },
-    light: data.light ?? { text: '', images: [] },
-    humidity: data.humidity ?? { text: '', images: [] },
-    temperature: data.temperature ?? { text: '', images: [] },
-    soilAndRepotting: data.soilAndRepotting ?? { text: '', images: [] },
-    fertilizing: data.fertilizing ?? { text: '', images: [] },
-    pestsAndProblems: data.pestsAndProblems ?? { text: '', images: [] },
-    propagation: data.propagation ?? { text: '', images: [] },
+    watering: normalizeCareSection(data.watering),
+    light: normalizeCareSection(data.light),
+    humidity: normalizeCareSection(data.humidity),
+    temperature: normalizeCareSection(data.temperature),
+    soilAndRepotting: normalizeCareSection(data.soilAndRepotting),
+    fertilizing: normalizeCareSection(data.fertilizing),
+    pestsAndProblems: normalizeCareSection(data.pestsAndProblems),
+    propagation: normalizeCareSection(data.propagation),
 
     image: data.image ?? '',
     tags: data.tags ?? [],

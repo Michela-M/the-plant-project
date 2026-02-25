@@ -99,6 +99,68 @@ describe('getSpeciesDetails', () => {
     expect(result).toBeNull();
   });
 
+  it('should normalize care sections per-field when section objects are partial', async () => {
+    const mockDocSnap = {
+      id: '4',
+      exists: () => true,
+      data: () => ({
+        commonName: 'ZZ Plant',
+        scientificName: 'Zamioculcas zamiifolia',
+        family: 'Araceae',
+        description: 'A low-maintenance tropical perennial.',
+        otherNames: [],
+        type: [],
+        characteristics: {
+          difficulty: 1,
+          toxicity: 1,
+          maintenance: 1,
+          light: 2,
+          pruning: 1,
+          propagation: 2,
+        },
+        watering: { text: 'Water sparingly' },
+        light: {
+          images: [
+            {
+              url: 'https://example.com/light.jpg',
+              description: 'Window light',
+            },
+          ],
+        },
+        humidity: {},
+        temperature: { text: null, images: null },
+        soilAndRepotting: undefined,
+        fertilizing: { text: 'Feed monthly', images: [] },
+        pestsAndProblems: { text: 'Rare pests' },
+        propagation: { images: [] },
+        image: '',
+        tags: [],
+        similarSpecies: [],
+      }),
+    };
+
+    (doc as Mock).mockReturnValue('mockDocRef');
+    (getDoc as Mock).mockResolvedValue(mockDocSnap);
+
+    const result = await getSpeciesDetails('4');
+
+    expect(result?.watering).toEqual({ text: 'Water sparingly', images: [] });
+    expect(result?.light).toEqual({
+      text: '',
+      images: [
+        { url: 'https://example.com/light.jpg', description: 'Window light' },
+      ],
+    });
+    expect(result?.humidity).toEqual({ text: '', images: [] });
+    expect(result?.temperature).toEqual({ text: '', images: [] });
+    expect(result?.soilAndRepotting).toEqual({ text: '', images: [] });
+    expect(result?.pestsAndProblems).toEqual({
+      text: 'Rare pests',
+      images: [],
+    });
+    expect(result?.propagation).toEqual({ text: '', images: [] });
+  });
+
   it('should throw an error if there is an issue fetching the document', async () => {
     (doc as Mock).mockReturnValue('mockDocRef');
     (getDoc as Mock).mockRejectedValue(new Error('Firestore error'));

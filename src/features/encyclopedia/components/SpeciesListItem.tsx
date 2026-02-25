@@ -18,9 +18,11 @@ export default function SpeciesListItem({
   imageUrl: string;
   id: string;
 }) {
+  const speciesPath = `/species/${id}`;
+
   return (
-    <Link to={`/species/${id}`}>
-      <div className="flex flex-row gap-2 group">
+    <div className="flex flex-row gap-2 group">
+      <Link to={speciesPath} className="flex flex-row gap-2 grow">
         <img
           className="aspect-square overflow-hidden object-cover w-1/4 h-full"
           src={
@@ -35,20 +37,6 @@ export default function SpeciesListItem({
               <p className="text-stone-600">{family || 'Unknown Family'}</p>
               <p className="text-lg">{commonName || 'Unknown'}</p>
             </div>
-            <div
-              className="opacity-0 group-hover:opacity-100"
-              data-testid="icon-container"
-            >
-              <IconButton
-                variant="ghost"
-                icon={<CirclePlus />}
-                label={
-                  commonName
-                    ? `Add ${commonName} to collection`
-                    : 'Add plant to collection'
-                }
-              />
-            </div>
           </div>
           {description && <p className="line-clamp-2">{description}</p>}
           <div className="flex flex-wrap gap-2 mt-1">
@@ -57,7 +45,21 @@ export default function SpeciesListItem({
             ))}
           </div>
         </div>
+      </Link>
+      <div
+        className="opacity-0 group-hover:opacity-100"
+        data-testid="icon-container"
+      >
+        <IconButton
+          variant="ghost"
+          icon={<CirclePlus />}
+          label={
+            commonName
+              ? `Add ${commonName} to collection`
+              : 'Add plant to collection'
+          }
+        />
       </div>
-    </Link>
+    </div>
   );
 }

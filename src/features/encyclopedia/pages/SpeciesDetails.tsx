@@ -18,7 +18,10 @@ export default function SpeciesDetails() {
 
   useEffect(() => {
     const fetchSpeciesDetails = async () => {
-      if (!id) return;
+      if (!id) {
+        setLoading(false);
+        return;
+      }
       setLoading(true);
       try {
         const details = await getSpeciesDetails(id);

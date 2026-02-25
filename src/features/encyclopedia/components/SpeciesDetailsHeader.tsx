@@ -21,13 +21,13 @@ export default function SpeciesDetailsHeader({
         onClick={() => navigate('/encyclopedia')}
         label="Back to Encyclopedia"
       />
-      <div className="w-full">
+      <div className="flex-1 min-w-0">
         <h3 className="text-xl text-gray-500">{family}</h3>
         <h1 className="text-3xl">
           {commonName} ({scientificName})
         </h1>
       </div>
-      <div className="flex gap-2 w-full justify-end">
+      <div className="flex gap-2 justify-end shrink-0">
         <Button label="Add to Collection" onClick={() => {}} />
         <Button label="Quick Add" onClick={() => {}} variant="outlined" />
       </div>

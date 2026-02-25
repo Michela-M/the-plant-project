@@ -23,7 +23,7 @@ export default function Encyclopedia() {
       image: string;
     }[]
   >([]);
-  const [loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState(true);
   const { showError } = useToast();
 
   useEffect(() => {
