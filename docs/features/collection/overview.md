@@ -39,7 +39,7 @@ This feature currently includes:
 
 ### Add Plant
 
-1. User fills in the add form (`name`, `species`, `wateringFrequency`, `lastWatered`, `notes`).
+1. User fills in the add form (`name`, `species`, `wateringFrequency`, `lastWateredDate`, `notes`).
 2. Formik + Yup validates input.
 3. `addPlant` creates a Firestore document at `users/{userId}/plants`.
 4. On success, the form resets, a success toast appears, and user returns to `/collection`.
@@ -80,7 +80,7 @@ This feature currently includes:
 
 - `name` is required.
 - `wateringFrequency` must be a number >= 0.
-- `lastWatered` must be a valid date and cannot be in the future.
+- `lastWateredDate` must be a valid date and cannot be in the future.
 
 ### Edit Plant
 
@@ -107,7 +107,7 @@ Fields currently used by UI/services:
 - `name: string`
 - `species: string`
 - `wateringFrequency: number`
-- `lastWatered: Date | null`
+- `lastWateredDate: Date | null`
 - `notes: string`
 - `creationDate: Date`
 - `imageUrl: string | null`

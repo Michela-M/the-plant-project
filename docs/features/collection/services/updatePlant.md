@@ -23,7 +23,7 @@ The document path is user-scoped: `users/{userId}/plants/{plantId}`.
 | `name`              | `string`            | The plant’s name. Required.                            |
 | `species`           | `string` (optional) | The plant’s species. Defaults to an empty string.      |
 | `wateringFrequency` | `number` (optional) | Days between watering. Defaults to `0`.                |
-| `lastWatered`       | `Date` \| `null`    | The last time the plant was watered.                   |
+| `lastWateredDate`   | `Date` \| `null`    | The last time the plant was watered.                   |
 | `notes`             | `string` (optional) | Additional notes. Defaults to an empty string.         |
 | `imageUrl`          | `string` (optional) | URL of the plant’s image. Defaults to an empty string. |
 

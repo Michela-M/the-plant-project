@@ -14,7 +14,7 @@ const addPlantValidationSchema = Yup.object({
   wateringFrequency: Yup.number()
     .typeError('Must be a number')
     .min(0, 'Must be at least 0'),
-  lastWatered: Yup.date()
+  lastWateredDate: Yup.date()
     .typeError('Must be a valid date')
     .max(new Date(), 'Date cannot be in the future'),
   notes: Yup.string(),
@@ -31,7 +31,7 @@ export default function AddPlant() {
       name: '',
       species: '',
       wateringFrequency: '',
-      lastWatered: '',
+      lastWateredDate: '',
       notes: '',
     },
     validationSchema: addPlantValidationSchema,
@@ -42,7 +42,9 @@ export default function AddPlant() {
           name: values.name,
           species: values.species,
           wateringFrequency: Number(values.wateringFrequency) || 0,
-          lastWatered: values.lastWatered ? new Date(values.lastWatered) : null,
+          lastWateredDate: values.lastWateredDate
+            ? new Date(values.lastWateredDate)
+            : null,
           notes: values.notes,
           userId: user?.id || '',
         });
@@ -102,13 +104,13 @@ export default function AddPlant() {
         />
         <TextField
           label="Last Watered"
-          value={formik.values.lastWatered}
+          value={formik.values.lastWateredDate}
           onChange={formik.handleChange}
           onBlur={formik.handleBlur}
-          name="lastWatered"
+          name="lastWateredDate"
           error={
-            formik.touched.lastWatered && formik.errors.lastWatered
-              ? formik.errors.lastWatered
+            formik.touched.lastWateredDate && formik.errors.lastWateredDate
+              ? formik.errors.lastWateredDate
               : ''
           }
           type="date"

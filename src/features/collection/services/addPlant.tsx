@@ -2,7 +2,7 @@ import { addDoc, collection } from 'firebase/firestore';
 import { db } from '@services/firebase';
 
 export const addPlant = async (plantData: {
-  lastWatered?: Date | null;
+  lastWateredDate?: Date | null;
   name: string;
   notes?: string;
   species?: string;
@@ -12,7 +12,7 @@ export const addPlant = async (plantData: {
   try {
     await addDoc(collection(db, `users/${plantData.userId}/plants`), {
       creationDate: new Date(),
-      lastWatered: plantData.lastWatered || null,
+      lastWateredDate: plantData.lastWateredDate || null,
       name: plantData.name,
       notes: plantData.notes || '',
       species: plantData.species || '',

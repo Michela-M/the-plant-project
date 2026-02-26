@@ -24,7 +24,7 @@ describe('addPlant', () => {
     (addDoc as Mock).mockResolvedValue({ id: '123' });
 
     const input = {
-      lastWatered: new Date('2024-01-01'),
+      lastWateredDate: new Date('2024-01-01'),
       name: 'Aloe Vera',
       notes: 'Needs sunlight',
       species: 'Aloe',
@@ -38,7 +38,7 @@ describe('addPlant', () => {
 
     expect(addDoc).toHaveBeenCalledWith(mockCollectionRef, {
       creationDate: expect.any(Date),
-      lastWatered: new Date('2024-01-01'),
+      lastWateredDate: new Date('2024-01-01'),
       name: 'Aloe Vera',
       notes: 'Needs sunlight',
       species: 'Aloe',
@@ -55,7 +55,7 @@ describe('addPlant', () => {
 
     expect(addDoc).toHaveBeenCalledWith(mockCollectionRef, {
       creationDate: expect.any(Date),
-      lastWatered: null,
+      lastWateredDate: null,
       name: 'Fern',
       notes: '',
       species: '',

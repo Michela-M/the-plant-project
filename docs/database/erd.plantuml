@@ -20,7 +20,7 @@ class Plant {
   +name: string
   +species: string
   +creationDate: Date
-  +lastWatered: Date?
+  +lastWateredDate: Date?
   +wateringFrequency: number?
   +notes: string?
 }

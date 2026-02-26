@@ -16,7 +16,7 @@ This service only writes the document and does not return the created document I
 | `plantData.species`           | `string`       | No       | Defaults to `""`                   |
 | `plantData.notes`             | `string`       | No       | Defaults to `""`                   |
 | `plantData.wateringFrequency` | `number`       | No       | Defaults to `0`                    |
-| `plantData.lastWatered`       | `Date \| null` | No       | Defaults to `null`                 |
+| `plantData.lastWateredDate`   | `Date \| null` | No       | Defaults to `null`                 |
 
 ## Return Value
 
@@ -37,7 +37,7 @@ await addPlant({
   name: 'Aloe Vera',
   species: 'Aloe',
   wateringFrequency: 7,
-  lastWatered: new Date(),
+  lastWateredDate: new Date(),
   notes: 'Prefers bright light',
 });
 ```
@@ -51,7 +51,7 @@ All optional fields are safely normalized:
 - `species` → `""`
 - `notes` → `""`
 - `wateringFrequency` → `0`
-- `lastWatered` → `null`
+- `lastWateredDate` → `null`
 
 ### Invalid or unexpected Firestore errors
 

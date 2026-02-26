@@ -21,7 +21,7 @@ describe('updatePlant', () => {
       name: 'Fern',
       species: 'Pteridophyta',
       wateringFrequency: 7,
-      lastWatered: new Date('2024-01-01'),
+      lastWateredDate: new Date('2024-01-01'),
       notes: 'Needs indirect light',
       imageUrl: 'http://example.com/fern.jpg',
     };
@@ -37,7 +37,7 @@ describe('updatePlant', () => {
       name: plantData.name,
       species: plantData.species,
       wateringFrequency: plantData.wateringFrequency,
-      lastWatered: plantData.lastWatered,
+      lastWateredDate: plantData.lastWateredDate,
       notes: plantData.notes,
       imageUrl: plantData.imageUrl,
     });
@@ -49,7 +49,7 @@ describe('updatePlant', () => {
       name: 'Fern',
       species: 'Pteridophyta',
       wateringFrequency: 7,
-      lastWatered: new Date('2024-01-01'),
+      lastWateredDate: new Date('2024-01-01'),
       notes: 'Needs indirect light',
       imageUrl: 'http://example.com/fern.jpg',
     };
@@ -68,7 +68,7 @@ describe('updatePlant', () => {
       name: 'Fern',
       species: 'Pteridophyta',
       wateringFrequency: 7,
-      lastWatered: new Date('2024-01-01'),
+      lastWateredDate: new Date('2024-01-01'),
       notes: 'Needs indirect light',
       imageUrl: 'http://example.com/fern.jpg',
     };
@@ -97,7 +97,7 @@ describe('updatePlant', () => {
       name: plantData.name,
       species: '',
       wateringFrequency: 0,
-      lastWatered: null,
+      lastWateredDate: null,
       notes: '',
       imageUrl: '',
     });

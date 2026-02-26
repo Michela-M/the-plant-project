@@ -13,7 +13,7 @@ Stores user‑specific information such as the plant’s nickname, species, wate
 | name              | string | no       | Name or nickname given by the user                    |
 | species           | string | yes      | User‑entered species name (not linked to Species yet) |
 | creationDate      | Date   | no       | Timestamp when the plant was created                  |
-| lastWatered       | Date   | yes      | Timestamp of the most recent watering                 |
+| lastWateredDate   | Date   | yes      | Timestamp of the most recent watering                 |
 | wateringFrequency | number | yes      | Days between watering events                          |
 | notes             | string | yes      | Free‑form notes added by the user                     |
 
@@ -42,7 +42,7 @@ History subcollection:
 - `name` must be a non‑empty string
 - `creationDate` must always be set
 - `wateringFrequency` must be a positive number if provided
-- `lastWatered` may be null if the plant has never been watered
+- `lastWateredDate` may be null if the plant has never been watered
 - `notes` is optional and unstructured
 - `species` is an optional string
 
@@ -54,7 +54,7 @@ History subcollection:
   "name": "Monstera",
   "species": "Monstera Deliciosa",
   "creationDate": "2026-01-12T10:30:00Z",
-  "lastWatered": "2026-01-20T09:00:00Z",
+  "lastWateredDate": "2026-01-20T09:00:00Z",
   "wateringFrequency": 7,
   "notes": "Repotted in june 2025"
 }

@@ -15,12 +15,12 @@ The **PlantDetailsSchedule** component displays watering-related information for
 | Field               | Type           | Required | Description                               |
 | ------------------- | -------------- | -------- | ----------------------------------------- |
 | `wateringFrequency` | `number`       | no       | Interval in days between watering events. |
-| `lastWatered`       | `Date \| null` | no       | Date of the last watering event.          |
+| `lastWateredDate`   | `Date \| null` | no       | Date of the last watering event.          |
 
 ## Behavior Notes
 
-- If both `lastWatered` and a valid `wateringFrequency` are missing, an empty state message is shown.
-- `Last watered` appears only when `lastWatered` exists.
+- If both `lastWateredDate` and a valid `wateringFrequency` are missing, an empty state message is shown.
+- `Last watered` appears only when `lastWateredDate` exists.
 - `Next watering` appears only when both values exist:
   - future date → relative date from `formatRelativeDate`
   - past/now date → `Due now`
@@ -31,7 +31,7 @@ The **PlantDetailsSchedule** component displays watering-related information for
 ```jsx
 <PlantDetailsSchedule
   plant={{
-    lastWatered: new Date('2026-02-14'),
+    lastWateredDate: new Date('2026-02-14'),
     wateringFrequency: 7,
   }}
 />

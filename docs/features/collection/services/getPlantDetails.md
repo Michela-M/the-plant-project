@@ -30,7 +30,7 @@ The returned `Plant` object has the following shape:
   name: string;
   species: string;
   wateringFrequency: number;
-  lastWatered: Date | null;
+  lastWateredDate: Date | null;
   notes: string;
   creationDate: Date | null;
   imageUrl: string | null;
@@ -70,7 +70,7 @@ All optional fields are normalized:
 - `name` → `""`
 - `species` → `""`
 - `wateringFrequency` → `0`
-- `lastWatered` → `null`
+- `lastWateredDate` → `null`
 - `notes` → `""`
 - `creationDate` → `null`
 - `imageUrl` → `null`
@@ -79,7 +79,7 @@ This prevents undefined values from leaking into the UI.
 
 ### Firestore timestamp fields
 
-Timestamp fields (`lastWatered`, `creationDate`) are converted to JavaScript `Date` objects using `.toDate()`.
+Timestamp fields (`lastWateredDate`, `creationDate`) are converted to JavaScript `Date` objects using `.toDate()`.
 
 - If a timestamp field is **present and valid**, it is converted to a `Date`.
 - If a timestamp field is **missing or not a valid Firestore `Timestamp`**, it is normalized to `null` instead of causing an error.

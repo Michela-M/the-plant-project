@@ -18,7 +18,7 @@ export default function PlantDetails() {
     name: string;
     species: string;
     wateringFrequency: number;
-    lastWatered: Date;
+    lastWateredDate: Date;
     notes: string;
     creationDate: Date;
     imageUrl: string | null;
@@ -91,7 +91,7 @@ export default function PlantDetails() {
           <PlantDetailsSchedule
             plant={{
               wateringFrequency: plantDetails?.wateringFrequency,
-              lastWatered: plantDetails?.lastWatered,
+              lastWateredDate: plantDetails?.lastWateredDate,
             }}
           />
         </div>

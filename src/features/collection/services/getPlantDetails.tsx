@@ -12,7 +12,7 @@ export const getPlantDetails = async (plantId: string, userId: string) => {
       name: data.name ?? '',
       species: data.species ?? '',
       wateringFrequency: data.wateringFrequency ?? 0,
-      lastWatered: data.lastWatered?.toDate?.() ?? null,
+      lastWateredDate: data.lastWateredDate?.toDate?.() ?? null,
       notes: data.notes ?? '',
       creationDate: data.creationDate?.toDate?.() ?? null,
       imageUrl: data.imageUrl ?? null,
