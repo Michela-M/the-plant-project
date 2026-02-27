@@ -30,10 +30,8 @@ type PlantDetails = {
   name: string;
   species: string;
   wateringFrequency: number;
-  lastWateredDate: Date | null;
   notes: string;
   creationDate: Date | null;
-  secondLastWateredDate: Date | null;
   imageUrl: string | null;
 };
 
@@ -107,8 +105,6 @@ export default function EditPlant() {
             name: values.name,
             species: values.species,
             wateringFrequency: Number(values.wateringFrequency),
-            lastWateredDate: plantDetails?.lastWateredDate || null,
-            secondLastWateredDate: plantDetails?.secondLastWateredDate || null,
             notes: values.notes,
             imageUrl,
           },
