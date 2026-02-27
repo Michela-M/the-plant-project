@@ -1,13 +1,19 @@
 /**
- * Calculates the number of whole days between two dates.
+ * Calculates the number of days between two dates based on elapsed time.
  *
- * Uses the absolute time difference, so argument order does not matter.
- * Any partial day is rounded up to the next whole day.
+ * Uses the absolute elapsed time difference in milliseconds,
+ * so argument order does not matter.
+ * Any non-zero partial day rounds up to the next whole day via `Math.ceil`.
+ *
+ * Examples:
+ * - 0 ms difference => 0 days
+ * - 2.4 hours difference => 1 day
+ * - 24 hours difference => 1 day
  *
  * @param params - Function parameters.
  * @param params.firstDate - One date in the comparison.
  * @param params.secondDate - The other date in the comparison.
- * @returns The day difference as a positive integer.
+ * @returns The elapsed day difference as a non-negative integer.
  */
 export function calculateWateringFrequency({
   firstDate,

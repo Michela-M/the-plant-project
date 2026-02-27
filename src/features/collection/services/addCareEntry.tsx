@@ -28,7 +28,7 @@ export const addCareEntry = async (careData: {
       }
     );
 
-    if (careData.careType.toLowerCase() !== 'water') {
+    if (careData.careType !== 'water') {
       return;
     }
 

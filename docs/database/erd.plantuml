@@ -26,6 +26,7 @@ class Plant {
   +wateringFrequency: number?
   +inferredWateringFrequency: number?
   +nextWateringDate: Date?
+  +trackWatering: boolean
   +imageUrl: string?
   +notes: string?
 }

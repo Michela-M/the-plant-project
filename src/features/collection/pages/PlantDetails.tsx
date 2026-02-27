@@ -18,9 +18,9 @@ export default function PlantDetails() {
     name: string;
     species: string;
     wateringFrequency: number;
-    lastWateredDate: Date;
+    lastWateredDate: Date | null;
     notes: string;
-    creationDate: Date;
+    creationDate: Date | null;
     imageUrl: string | null;
   } | null>(null);
 

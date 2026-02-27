@@ -53,7 +53,6 @@ describe('addPlant', () => {
         secondLastWateredDate: null,
         nextWateringDate: null,
         trackWatering: false,
-        userId: plantData.userId,
       })
     );
   });
@@ -76,7 +75,6 @@ describe('addPlant', () => {
         secondLastWateredDate: null,
         nextWateringDate: null,
         trackWatering: false,
-        userId: plantData.userId,
       })
     );
   });
@@ -173,7 +171,6 @@ describe('addPlant', () => {
         secondLastWateredDate: null,
         nextWateringDate: new Date('2024-01-06'),
         trackWatering: true,
-        userId: plantData.userId,
       })
     );
   });
@@ -209,7 +206,6 @@ describe('addPlant', () => {
         secondLastWateredDate: null,
         nextWateringDate: null,
         trackWatering: false,
-        userId: plantData.userId,
       })
     );
   });

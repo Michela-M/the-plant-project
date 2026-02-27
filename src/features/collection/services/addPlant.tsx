@@ -17,7 +17,6 @@ export const addPlant = async (plantData: {
       notes = '',
       wateringFrequency = 0,
       lastWateredDate = null,
-      userId,
     } = plantData;
 
     const creationDate = new Date();
@@ -46,7 +45,6 @@ export const addPlant = async (plantData: {
       secondLastWateredDate,
       nextWateringDate,
       trackWatering,
-      userId,
     };
 
     const batch = writeBatch(db);

@@ -13,7 +13,7 @@ It always writes these fields to the care entry:
 - `notes` (defaults to `""`)
 - `otherCareType` (defaults to `""`)
 
-If `careType` is exactly `"water"` (case-insensitive), the service also updates watering metadata on the parent plant document (`users/{userId}/plants/{plantId}`):
+If `careType` is exactly `"water"`, the service also updates watering metadata on the parent plant document (`users/{userId}/plants/{plantId}`):
 
 - updates `lastWateredDate` / `secondLastWateredDate` based on date ordering
 - recalculates `inferredWateringFrequency` when both watering dates are available

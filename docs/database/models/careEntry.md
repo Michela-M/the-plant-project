@@ -34,11 +34,11 @@ Care entries are stored as a subcollection under a plant and are used for plant 
 - `date` must be a valid JavaScript `Date`.
 - `notes` defaults to `""` when omitted.
 - `otherCareType` defaults to `""` when omitted.
-- Care entries with `careType` exactly equal to `"water"` (case-insensitive) are treated as watering events by service logic and can trigger plant watering metadata recalculation.
+- Care entries with `careType` exactly equal to `"water"` are treated as watering events by service logic and can trigger plant watering metadata recalculation.
 
 ## Side Effects (Water Entries)
 
-When a care entry is recorded as water-related (`careType` is exactly `"water"`, case-insensitive), the service may update these parent Plant fields:
+When a care entry is recorded as water-related (`careType` is exactly `"water"`), the service may update these parent Plant fields:
 
 - `lastWateredDate`
 - `secondLastWateredDate`

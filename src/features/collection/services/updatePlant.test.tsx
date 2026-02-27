@@ -50,9 +50,12 @@ describe('updatePlant', () => {
     expect(updateDoc).toHaveBeenCalledWith(
       plantRef,
       expect.objectContaining({
+        name: 'Monstera',
+        species: 'Monstera deliciosa',
+        notes: 'Updated notes',
+        imageUrl: '',
         wateringFrequency: 7,
         inferredWateringFrequency: 7,
-        lastWateredDate,
         nextWateringDate: new Date('2024-01-08'),
       })
     );
@@ -87,10 +90,12 @@ describe('updatePlant', () => {
     expect(updateDoc).toHaveBeenCalledWith(
       plantRef,
       expect.objectContaining({
+        name: 'Pothos',
+        species: '',
+        notes: '',
+        imageUrl: '',
         wateringFrequency: 0,
         inferredWateringFrequency: 9,
-        lastWateredDate,
-        secondLastWateredDate,
         nextWateringDate: new Date('2024-01-19'),
       })
     );
@@ -157,9 +162,12 @@ describe('updatePlant', () => {
     expect(updateDoc).toHaveBeenCalledWith(
       plantRef,
       expect.objectContaining({
+        name: 'Snake Plant',
+        species: '',
+        notes: '',
+        imageUrl: '',
+        wateringFrequency: 0,
         inferredWateringFrequency: 7,
-        lastWateredDate: storedLast,
-        secondLastWateredDate: storedSecondLast,
         nextWateringDate: new Date('2024-01-08'),
       })
     );

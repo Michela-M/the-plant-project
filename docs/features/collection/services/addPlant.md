@@ -33,7 +33,6 @@ with:
 | Name                          | Type           | Required | Description                                       |
 | ----------------------------- | -------------- | -------- | ------------------------------------------------- |
 | `plantData.name`              | `string`       | Yes      | Plant name                                        |
-| `plantData.userId`            | `string`       | Yes      | User ID associated with the plant                 |
 | `plantData.species`           | `string`       | No       | Plant species. Defaults to `""`                   |
 | `plantData.notes`             | `string`       | No       | Freeform notes. Defaults to `""`                  |
 | `plantData.wateringFrequency` | `number`       | No       | Planned watering interval (days). Defaults to `0` |
@@ -53,7 +52,6 @@ with:
 - `secondLastWateredDate: null`
 - `nextWateringDate: Date | null`
 - `trackWatering: boolean`
-- `userId: string`
 
 The promise rejects if plant creation, optional care-entry creation, or watering-date calculation fails.
 
@@ -64,7 +62,6 @@ import { addPlant } from '../services/addPlant';
 
 const plant = await addPlant({
   name: 'Aloe Vera',
-  userId: 'user-123',
   species: 'Aloe barbadensis miller',
   notes: 'Keep in bright indirect light',
   wateringFrequency: 7,
@@ -80,7 +77,6 @@ With basic error handling:
 try {
   await addPlant({
     name: values.name,
-    userId,
     species: values.species,
     notes: values.notes,
     wateringFrequency: values.wateringFrequency,

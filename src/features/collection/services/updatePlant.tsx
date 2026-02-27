@@ -66,8 +66,6 @@ export const updatePlant = async (
       species: plantData.species || '',
       wateringFrequency,
       inferredWateringFrequency,
-      lastWateredDate,
-      secondLastWateredDate,
       notes: plantData.notes || '',
       imageUrl: plantData.imageUrl || '',
       nextWateringDate,

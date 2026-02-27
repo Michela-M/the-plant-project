@@ -42,6 +42,16 @@ describe('wateringUtils - calculateWateringFrequency', () => {
     });
     expect(result).toBe(7);
   });
+
+  it('should round any non-zero partial day up to one full day', () => {
+    const firstDate = new Date('2024-06-01T00:00:00.000Z');
+    const secondDate = new Date('2024-06-01T02:24:00.000Z');
+    const result = calculateWateringFrequency({
+      firstDate,
+      secondDate,
+    });
+    expect(result).toBe(1);
+  });
 });
 
 describe('wateringUtils - calculateNextWateringDate', () => {
