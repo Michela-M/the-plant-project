@@ -2,90 +2,126 @@
 
 ## Description
 
-`addPlant` creates a new plant document in the signed-in user’s collection at `users/{userId}/plants`.
-It normalizes optional fields, writes watering-tracking metadata, and always sets a `creationDate` timestamp.
+`addPlant` creates a new plant document in the user-scoped Firestore collection:
 
-If `lastWateredDate` is provided, the service also creates an initial `careEntries` record (`careType: "water"`) for the new plant.
+`users/{userId}/plants`
 
-This service only writes the document and does not return the created document ID.
+It accepts required identity fields plus optional plant metadata, applies defaults for omitted values, computes watering-related fields when possible, writes the plant document, and returns the constructed plant object.
+
+Default behavior:
+
+- `species` and `notes` default to `""`
+- `wateringFrequency` defaults to `0`
+- `lastWateredDate` defaults to `null`
+- `inferredWateringFrequency` is derived from `wateringFrequency` (`0` when not provided)
+- `secondLastWateredDate` is initialized as `null`
+
+If both `wateringFrequency` and `lastWateredDate` are truthy, the service calculates `nextWateringDate` and sets `trackWatering` to `true`. Otherwise, `nextWateringDate` is `null` and `trackWatering` is `false`.
+
+If `lastWateredDate` is provided, the service also creates an initial care entry in:
+
+`users/{userId}/plants/{plantId}/careEntries`
+
+with:
+
+- `careType: "water"`
+- `date: lastWateredDate`
+- `notes: ""`
 
 ## Parameters
 
-| Name                          | Type           | Required | Description                        |
-| ----------------------------- | -------------- | -------- | ---------------------------------- |
-| `plantData.name`              | `string`       | Yes      | Plant name                         |
-| `plantData.userId`            | `string`       | Yes      | User ID used in the Firestore path |
-| `plantData.species`           | `string`       | No       | Defaults to `""`                   |
-| `plantData.notes`             | `string`       | No       | Defaults to `""`                   |
-| `plantData.wateringFrequency` | `number`       | No       | Defaults to `0`                    |
-| `plantData.lastWateredDate`   | `Date \| null` | No       | Defaults to `null`                 |
-
-### Derived fields written to Firestore
-
-In addition to input fields, `addPlant` writes:
-
-- `nextWateringDate`: `Date | null` (calculated only when both `lastWateredDate` and `wateringFrequency > 0` are present)
-- `trackWatering`: `boolean` (`true` only when `nextWateringDate` can be calculated)
-- `secondLastWateredDate`: always `null` on creation
-- `inferredWateringFrequency`: always `null` on creation
+| Name                          | Type           | Required | Description                                       |
+| ----------------------------- | -------------- | -------- | ------------------------------------------------- |
+| `plantData.name`              | `string`       | Yes      | Plant name                                        |
+| `plantData.userId`            | `string`       | Yes      | User ID associated with the plant                 |
+| `plantData.species`           | `string`       | No       | Plant species. Defaults to `""`                   |
+| `plantData.notes`             | `string`       | No       | Freeform notes. Defaults to `""`                  |
+| `plantData.wateringFrequency` | `number`       | No       | Planned watering interval (days). Defaults to `0` |
+| `plantData.lastWateredDate`   | `Date \| null` | No       | Most recent watering date. Defaults to `null`     |
 
 ## Return Value
 
-The function returns:
+`Promise<PlantDoc>` where `PlantDoc` includes:
 
-- `Promise<void>` — resolves when the document is successfully written
-- Throws if Firestore fails
+- `creationDate: Date`
+- `name: string`
+- `species: string`
+- `notes: string`
+- `wateringFrequency: number`
+- `lastWateredDate: Date | null`
+- `inferredWateringFrequency: number`
+- `secondLastWateredDate: null`
+- `nextWateringDate: Date | null`
+- `trackWatering: boolean`
+- `userId: string`
 
-No value is returned because the created document ID is not surfaced by this service.
-
-## Side Effects
-
-When `lastWateredDate` is provided:
-
-- A care entry is created at `users/{userId}/plants/{newPlantId}/careEntries`
-- Payload: `{ careType: 'water', date: lastWateredDate, notes: '' }`
+The promise rejects if plant creation, optional care-entry creation, or watering-date calculation fails.
 
 ## Usage
 
 ```tsx
 import { addPlant } from '../services/addPlant';
 
-await addPlant({
-  userId: 'user-123',
+const plant = await addPlant({
   name: 'Aloe Vera',
-  species: 'Aloe',
+  userId: 'user-123',
+  species: 'Aloe barbadensis miller',
+  notes: 'Keep in bright indirect light',
   wateringFrequency: 7,
-  lastWateredDate: new Date(),
-  notes: 'Prefers bright light',
+  lastWateredDate: new Date('2026-02-20'),
 });
+
+console.log(plant.nextWateringDate);
+```
+
+With basic error handling:
+
+```tsx
+try {
+  await addPlant({
+    name: values.name,
+    userId,
+    species: values.species,
+    notes: values.notes,
+    wateringFrequency: values.wateringFrequency,
+    lastWateredDate: values.lastWateredDate,
+  });
+} catch (error) {
+  console.error('Failed to add plant:', error);
+}
 ```
 
 ## Edge Cases
 
 ### Missing optional fields
 
-All optional fields are safely normalized:
+If `species`, `notes`, `wateringFrequency`, or `lastWateredDate` are omitted, defaults are applied so the created document has a consistent shape.
 
-- `species` → `""`
-- `notes` → `""`
-- `wateringFrequency` → `0`
-- `lastWateredDate` → `null`
+### `wateringFrequency` provided without `lastWateredDate`
 
-Derived values are also normalized:
+`inferredWateringFrequency` is set from `wateringFrequency`, but `nextWateringDate` remains `null` and `trackWatering` remains `false`.
 
-- `nextWateringDate` → `null` when not enough data to calculate
-- `trackWatering` → `false` when not enough data to calculate
-- `secondLastWateredDate` → `null`
-- `inferredWateringFrequency` → `null`
+### `lastWateredDate` provided without `wateringFrequency`
 
-### `lastWateredDate` without frequency
+`lastWateredDate` is stored, but no next watering date is calculated and watering tracking is not enabled.
+An initial `water` care entry is still created.
 
-If `lastWateredDate` exists but `wateringFrequency` is missing or `0`, the initial care entry is still created, but `nextWateringDate` remains `null` and `trackWatering` is `false`.
+### Both watering inputs provided
 
-### Invalid or unexpected Firestore errors
+When both values are truthy, `nextWateringDate` is calculated using `calculateNextWateringDate` and `trackWatering` is enabled.
 
-If Firestore throws a non‑Error value (e.g., a string), the service wraps it in a new `Error('Unknown error')`.
+### Invalid `lastWateredDate`
 
-### Network or permission failures
+If `lastWateredDate` is not a valid `Date` object while watering calculation is attempted, date calculation can throw and the service rejects.
 
-Any Firestore failure is rethrown so the UI can show a toast or fallback state.
+### Firestore/network/permission errors
+
+Errors from `addDoc` are rethrown so callers can handle user feedback, retries, or telemetry.
+
+### Partial write risk
+
+When `lastWateredDate` is provided, the function performs two writes (plant, then care entry). If the second write fails, the plant may already exist while the care entry does not.
+
+### Unknown thrown values
+
+If a non-`Error` value is thrown internally, it is converted to `new Error('Unknown error')`.
