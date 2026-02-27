@@ -7,7 +7,10 @@
 
 It writes the care event type, date, optional notes, and optional custom care label (`otherCareType`).
 Optional string fields are normalized to an empty string when omitted.
-This service performs only the write operation and does not return the new document ID.
+
+For water-related care types (strings starting with `"water"`, case-insensitive), the service also updates plant-level watering metadata on `users/{userId}/plants/{plantId}`.
+
+This service does not return the new care entry document ID.
 
 ## Parameters
 
@@ -28,6 +31,21 @@ The function returns:
 - Throws if Firestore fails
 
 No value is returned because the created care entry document ID is not surfaced by this service.
+
+## Water-entry Side Effects
+
+When `careType` starts with `"water"`:
+
+1. The service fetches the plant document.
+2. It compares the new care `date` with existing `lastWateredDate` and `secondLastWateredDate`.
+3. It updates watering metadata when appropriate:
+
+- `lastWateredDate`
+- `secondLastWateredDate`
+- `inferredWateringFrequency`
+- `nextWateringDate`
+
+If the plant document does not exist, the function returns after creating the care entry.
 
 ## Usage
 
@@ -71,6 +89,23 @@ If `notes` is omitted, the service stores `""` to keep the Firestore field shape
 
 If `otherCareType` is omitted, the service stores `""`.
 This allows the UI to read a consistent string field without undefined checks.
+
+### Non-water care types
+
+For care types that do not begin with `"water"`, only the care entry is created.
+No plant-level watering metadata is changed.
+
+### Water care with older dates
+
+If the new water date is:
+
+- newer than current `lastWateredDate`, it becomes the new `lastWateredDate`
+- between current `lastWateredDate` and `secondLastWateredDate`, it may become the new `secondLastWateredDate`
+- older than both, plant watering metadata is left unchanged
+
+### Inferred watering frequency
+
+When enough date history exists, `inferredWateringFrequency` is recalculated using the two most recent watering dates and used to derive `nextWateringDate`.
 
 ### Invalid or missing IDs
 
