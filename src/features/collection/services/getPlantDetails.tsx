@@ -16,6 +16,10 @@ export const getPlantDetails = async (plantId: string, userId: string) => {
       notes: data.notes ?? '',
       creationDate: data.creationDate?.toDate?.() ?? null,
       imageUrl: data.imageUrl ?? null,
+      nextWateringDate: data.nextWateringDate?.toDate?.() ?? null,
+      trackWatering: data.trackWatering ?? false,
+      secondLastWateredDate: data.secondLastWateredDate?.toDate?.() ?? null,
+      inferredWateringFrequency: data.inferredWateringFrequency ?? null,
     };
   } else {
     return null;

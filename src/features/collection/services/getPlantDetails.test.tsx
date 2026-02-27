@@ -29,6 +29,10 @@ describe('getPlantDetails', () => {
         notes: 'Sunlight',
         creationDate: { toDate: () => new Date('2024-02-01') },
         imageUrl: 'https://example.com/aloe.jpg',
+        nextWateringDate: { toDate: () => new Date('2024-01-08') },
+        trackWatering: true,
+        secondLastWateredDate: { toDate: () => new Date('2023-12-25') },
+        inferredWateringFrequency: 7,
       }),
     };
 
@@ -47,6 +51,40 @@ describe('getPlantDetails', () => {
       notes: 'Sunlight',
       creationDate: new Date('2024-02-01'),
       imageUrl: 'https://example.com/aloe.jpg',
+      nextWateringDate: new Date('2024-01-08'),
+      trackWatering: true,
+      secondLastWateredDate: new Date('2023-12-25'),
+      inferredWateringFrequency: 7,
+    });
+  });
+
+  it('should apply fallback values when optional fields are missing', async () => {
+    const mockDocSnap = {
+      id: '3',
+      exists: () => true,
+      data: () => ({
+        name: 'Fern',
+      }),
+    };
+
+    (doc as Mock).mockReturnValue('mockDocRef');
+    (getDoc as Mock).mockResolvedValue(mockDocSnap);
+
+    const result = await getPlantDetails('3', 'test-user');
+
+    expect(result).toEqual({
+      id: '3',
+      name: 'Fern',
+      species: '',
+      wateringFrequency: 0,
+      lastWateredDate: null,
+      notes: '',
+      creationDate: null,
+      imageUrl: null,
+      nextWateringDate: null,
+      trackWatering: false,
+      secondLastWateredDate: null,
+      inferredWateringFrequency: null,
     });
   });
 
