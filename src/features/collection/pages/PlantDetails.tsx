@@ -19,13 +19,9 @@ export default function PlantDetails() {
     species: string;
     wateringFrequency: number;
     lastWateredDate: Date;
-    nextWateringDate: Date | null;
-    trackWatering: boolean;
     notes: string;
     creationDate: Date;
     imageUrl: string | null;
-    secondLastWateredDate: Date | null;
-    inferredWateringFrequency: number | null;
   } | null>(null);
 
   const [loading, setLoading] = useState(true);
@@ -98,26 +94,6 @@ export default function PlantDetails() {
               lastWateredDate: plantDetails?.lastWateredDate,
             }}
           />
-          <p>Watering frequency: {plantDetails?.wateringFrequency} days</p>
-          <p>
-            Last watered:{' '}
-            {plantDetails?.lastWateredDate?.toLocaleDateString() ?? 'N/A'}
-          </p>
-          <p>
-            Next watering:
-            {plantDetails?.nextWateringDate
-              ? plantDetails.nextWateringDate.toLocaleDateString()
-              : ' N/A'}
-          </p>
-          <p>Track watering: {plantDetails?.trackWatering ? 'Yes' : 'No'}</p>
-          <p>
-            Second last watered date:{' '}
-            {plantDetails?.secondLastWateredDate?.toLocaleDateString() ?? 'N/A'}
-          </p>
-          <p>
-            Inferred watering frequency:{' '}
-            {plantDetails?.inferredWateringFrequency ?? 'N/A'}
-          </p>
         </div>
       </div>
     </div>

@@ -55,7 +55,7 @@ export default function PlantDetailsSchedule({
         )}
 
         {/* 5. Average interval (only if frequency exists) */}
-        {plant.wateringFrequency && plant.wateringFrequency > 0 && (
+        {(plant.wateringFrequency ?? 0) > 0 && (
           <div className="flex justify-between">
             <p>Watering frequency:</p>
             <p>{plant.wateringFrequency} days</p>
