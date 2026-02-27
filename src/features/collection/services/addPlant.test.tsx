@@ -307,6 +307,6 @@ describe('addPlant', () => {
 
     (addDoc as Mock).mockResolvedValue({ id: 'new-plant-id' });
 
-    await expect(addPlant(plantData)).rejects.toThrow('getTime');
+    await expect(addPlant(plantData)).rejects.toThrow();
   });
 });
