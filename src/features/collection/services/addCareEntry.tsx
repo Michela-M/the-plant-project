@@ -4,6 +4,7 @@ import {
   calculateNextWateringDate,
   calculateWateringFrequency,
 } from '../utils/wateringUtils';
+import { firebaseTimestampToDate } from '../utils/firebaseDate';
 
 export const addCareEntry = async (careData: {
   careType: string;
@@ -27,88 +28,71 @@ export const addCareEntry = async (careData: {
       }
     );
 
-    const isWaterCareType = careData.careType
-      .trim()
-      .toLowerCase()
-      .startsWith('water');
+    if (careData.careType.toLowerCase() !== 'water') {
+      return;
+    }
 
-    if (isWaterCareType) {
-      const plantRef = doc(
-        db,
-        `users/${careData.userId}/plants`,
-        careData.plantId
-      );
-      const plantSnapshot = await getDoc(plantRef);
+    const plantRef = doc(
+      db,
+      `users/${careData.userId}/plants/${careData.plantId}`
+    );
+    const plantSnapshot = await getDoc(plantRef);
 
-      if (!plantSnapshot.exists()) {
-        return;
-      }
+    if (!plantSnapshot.exists()) {
+      return;
+    }
 
-      const plantData = plantSnapshot.data();
-      const currentLastWateredDate =
-        plantData.lastWateredDate?.toDate?.() ?? null;
-      const currentSecondLastWateredDate =
-        plantData.secondLastWateredDate?.toDate?.() ?? null;
+    const plantData = plantSnapshot.data() as {
+      inferredWateringFrequency?: number;
+      lastWateredDate?: unknown;
+      secondLastWateredDate?: unknown;
+      wateringFrequency?: number;
+    };
 
-      const isNewerThanLastWateredDate =
-        !currentLastWateredDate || careData.date > currentLastWateredDate;
+    let lastWateredDate = firebaseTimestampToDate(plantData.lastWateredDate);
+    let secondLastWateredDate = firebaseTimestampToDate(
+      plantData.secondLastWateredDate
+    );
 
-      const isBetweenLastAndSecondWateredDates =
-        !!currentLastWateredDate &&
-        careData.date < currentLastWateredDate &&
-        (!currentSecondLastWateredDate ||
-          careData.date > currentSecondLastWateredDate);
+    if (lastWateredDate === null || careData.date > lastWateredDate) {
+      secondLastWateredDate = lastWateredDate;
+      lastWateredDate = careData.date;
+    } else if (
+      secondLastWateredDate === null ||
+      careData.date > secondLastWateredDate
+    ) {
+      secondLastWateredDate = careData.date;
+    }
 
-      if (isNewerThanLastWateredDate) {
-        const inferredWateringFrequency = currentLastWateredDate
-          ? calculateWateringFrequency({
-              firstDate: currentLastWateredDate,
-              secondDate: careData.date,
-            })
-          : null;
-
-        const nextWateringDate =
-          inferredWateringFrequency && inferredWateringFrequency > 0
-            ? calculateNextWateringDate({
-                lastWateredDate: careData.date,
-                wateringFrequency: inferredWateringFrequency,
-              })
-            : null;
-
-        await updateDoc(plantRef, {
-          lastWateredDate: careData.date,
-          secondLastWateredDate: currentLastWateredDate,
-          inferredWateringFrequency,
-          nextWateringDate,
-        });
-
-        return;
-      }
-
-      if (!isBetweenLastAndSecondWateredDates) {
-        return;
-      }
-
-      const inferredWateringFrequency = calculateWateringFrequency({
-        firstDate: careData.date,
-        secondDate: currentLastWateredDate,
-      });
-
-      const nextWateringDate =
-        inferredWateringFrequency > 0
-          ? calculateNextWateringDate({
-              lastWateredDate: currentLastWateredDate,
-              wateringFrequency: inferredWateringFrequency,
-            })
-          : null;
-
-      await updateDoc(plantRef, {
-        lastWateredDate: currentLastWateredDate,
-        secondLastWateredDate: careData.date,
-        inferredWateringFrequency,
-        nextWateringDate,
+    let inferredWateringFrequency = plantData.inferredWateringFrequency || 0;
+    if (lastWateredDate && secondLastWateredDate) {
+      inferredWateringFrequency = calculateWateringFrequency({
+        firstDate: secondLastWateredDate,
+        secondDate: lastWateredDate,
       });
     }
+
+    const wateringFrequency = plantData.wateringFrequency || 0;
+
+    let nextWateringDate: Date | null = null;
+    if (wateringFrequency !== 0 && lastWateredDate) {
+      nextWateringDate = calculateNextWateringDate({
+        lastWateredDate,
+        wateringFrequency,
+      });
+    } else if (inferredWateringFrequency !== 0 && lastWateredDate) {
+      nextWateringDate = calculateNextWateringDate({
+        lastWateredDate,
+        wateringFrequency: inferredWateringFrequency,
+      });
+    }
+
+    await updateDoc(plantRef, {
+      inferredWateringFrequency,
+      lastWateredDate,
+      nextWateringDate,
+      secondLastWateredDate,
+    });
   } catch (error) {
     throw error instanceof Error ? error : new Error('Unknown error');
   }
