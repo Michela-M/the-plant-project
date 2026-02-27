@@ -3,7 +3,7 @@
 ## Description
 
 `updatePlant` updates an existing plant document in Firestore with the provided fields.
-It performs a partial update using `updateDoc`, meaning only the specified fields are changed while the rest of the document remains untouched.
+It uses `updateDoc`, but this service always sends a normalized payload (including defaults), so omitted optional fields are written as fallback values.
 
 This service is typically used when editing a plant’s details such as its name, species, watering frequency, notes, last watered date, or image URL.
 The document path is user-scoped: `users/{userId}/plants/{plantId}`.
@@ -18,14 +18,20 @@ The document path is user-scoped: `users/{userId}/plants/{plantId}`.
 
 ### `plantData` fields
 
-| Field               | Type                | Description                                            |
-| ------------------- | ------------------- | ------------------------------------------------------ |
-| `name`              | `string`            | The plant’s name. Required.                            |
-| `species`           | `string` (optional) | The plant’s species. Defaults to an empty string.      |
-| `wateringFrequency` | `number` (optional) | Days between watering. Defaults to `0`.                |
-| `lastWateredDate`   | `Date` \| `null`    | The last time the plant was watered.                   |
-| `notes`             | `string` (optional) | Additional notes. Defaults to an empty string.         |
-| `imageUrl`          | `string` (optional) | URL of the plant’s image. Defaults to an empty string. |
+| Field                   | Type                        | Description                                            |
+| ----------------------- | --------------------------- | ------------------------------------------------------ |
+| `name`                  | `string`                    | The plant’s name. Required.                            |
+| `species`               | `string` (optional)         | The plant’s species. Defaults to an empty string.      |
+| `wateringFrequency`     | `number` (optional)         | Days between watering. Defaults to `0`.                |
+| `lastWateredDate`       | `Date` \| `null`            | The last time the plant was watered.                   |
+| `secondLastWateredDate` | `Date` \| `null` (optional) | Previous watering date. Defaults to `null`.            |
+| `notes`                 | `string` (optional)         | Additional notes. Defaults to an empty string.         |
+| `imageUrl`              | `string` (optional)         | URL of the plant’s image. Defaults to an empty string. |
+
+### Derived fields written to Firestore
+
+- `nextWateringDate`: `Date | null` (calculated only when `lastWateredDate` and `wateringFrequency > 0` are present)
+- `trackWatering`: `boolean` (`true` only when `nextWateringDate` is calculated)
 
 ## Return Value
 
@@ -72,6 +78,9 @@ try {
 
 - **Overwriting fields with defaults**  
   Because the service uses fallbacks (`''`, `0`, `null`), passing `undefined` may unintentionally overwrite existing values.
+
+- **Watering tracking conditions**  
+  `trackWatering` is enabled only when both `lastWateredDate` and `wateringFrequency > 0` are supplied. Otherwise `trackWatering` is `false` and `nextWateringDate` is `null`.
 
 - **Missing required fields**  
   Only name is required by your UI logic.

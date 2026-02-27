@@ -22,6 +22,7 @@ describe('updatePlant', () => {
       species: 'Pteridophyta',
       wateringFrequency: 7,
       lastWateredDate: new Date('2024-01-01'),
+      secondLastWateredDate: new Date('2023-12-25'),
       notes: 'Needs indirect light',
       imageUrl: 'http://example.com/fern.jpg',
     };
@@ -38,8 +39,11 @@ describe('updatePlant', () => {
       species: plantData.species,
       wateringFrequency: plantData.wateringFrequency,
       lastWateredDate: plantData.lastWateredDate,
+      secondLastWateredDate: plantData.secondLastWateredDate,
       notes: plantData.notes,
       imageUrl: plantData.imageUrl,
+      nextWateringDate: new Date('2024-01-08'),
+      trackWatering: true,
     });
   });
 
@@ -50,6 +54,7 @@ describe('updatePlant', () => {
       species: 'Pteridophyta',
       wateringFrequency: 7,
       lastWateredDate: new Date('2024-01-01'),
+      secondLastWateredDate: new Date('2023-12-25'),
       notes: 'Needs indirect light',
       imageUrl: 'http://example.com/fern.jpg',
     };
@@ -69,6 +74,7 @@ describe('updatePlant', () => {
       species: 'Pteridophyta',
       wateringFrequency: 7,
       lastWateredDate: new Date('2024-01-01'),
+      secondLastWateredDate: new Date('2023-12-25'),
       notes: 'Needs indirect light',
       imageUrl: 'http://example.com/fern.jpg',
     };
@@ -98,8 +104,38 @@ describe('updatePlant', () => {
       species: '',
       wateringFrequency: 0,
       lastWateredDate: null,
+      secondLastWateredDate: null,
       notes: '',
       imageUrl: '',
+      nextWateringDate: null,
+      trackWatering: false,
+    });
+  });
+
+  it('should disable watering tracking when watering frequency is 0', async () => {
+    const plantId = '123';
+    const plantData = {
+      name: 'Fern',
+      lastWateredDate: new Date('2024-01-01'),
+      wateringFrequency: 0,
+    };
+
+    const mockDocRef = {};
+    (doc as Mock).mockReturnValue(mockDocRef);
+    (updateDoc as Mock).mockResolvedValue(undefined);
+
+    await updatePlant(plantId, plantData, 'test-user');
+
+    expect(updateDoc).toHaveBeenCalledWith(mockDocRef, {
+      name: plantData.name,
+      species: '',
+      wateringFrequency: 0,
+      lastWateredDate: plantData.lastWateredDate,
+      secondLastWateredDate: null,
+      notes: '',
+      imageUrl: '',
+      nextWateringDate: null,
+      trackWatering: false,
     });
   });
 });
