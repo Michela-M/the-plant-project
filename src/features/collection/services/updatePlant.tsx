@@ -1,9 +1,6 @@
 import { doc, updateDoc } from 'firebase/firestore';
 import { db } from '@services/firebase';
-import {
-  calculateNextWateringDate,
-  calculateWateringFrequency,
-} from '../utils/wateringUtils';
+import { calculateNextWateringDate } from '../utils/wateringUtils';
 
 export const updatePlant = async (
   plantId: string,
