@@ -1,10 +1,8 @@
-import { describe } from 'vitest';
+import { describe, it, expect } from 'vitest';
 import {
   calculateWateringFrequency,
   calculateNextWateringDate,
 } from './wateringUtils';
-import { it, expect } from 'vitest';
-
 describe('wateringUtils - calculateWateringFrequency', () => {
   it('should calculate the watering frequency when both dates are provided', () => {
     const lastWateredDate = new Date('2024-06-01');
