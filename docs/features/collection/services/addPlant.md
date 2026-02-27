@@ -28,11 +28,14 @@ with:
 - `date: lastWateredDate`
 - `notes: ""`
 
+Both writes are queued in a single Firestore `writeBatch` and committed atomically.
+
 ## Parameters
 
 | Name                          | Type           | Required | Description                                       |
 | ----------------------------- | -------------- | -------- | ------------------------------------------------- |
 | `plantData.name`              | `string`       | Yes      | Plant name                                        |
+| `plantData.userId`            | `string`       | Yes      | User ID used to scope Firestore path              |
 | `plantData.species`           | `string`       | No       | Plant species. Defaults to `""`                   |
 | `plantData.notes`             | `string`       | No       | Freeform notes. Defaults to `""`                  |
 | `plantData.wateringFrequency` | `number`       | No       | Planned watering interval (days). Defaults to `0` |
@@ -62,6 +65,7 @@ import { addPlant } from '../services/addPlant';
 
 const plant = await addPlant({
   name: 'Aloe Vera',
+  userId: 'user-123',
   species: 'Aloe barbadensis miller',
   notes: 'Keep in bright indirect light',
   wateringFrequency: 7,
@@ -77,6 +81,7 @@ With basic error handling:
 try {
   await addPlant({
     name: values.name,
+    userId,
     species: values.species,
     notes: values.notes,
     wateringFrequency: values.wateringFrequency,
@@ -112,11 +117,11 @@ If `lastWateredDate` is not a valid `Date` object while watering calculation is 
 
 ### Firestore/network/permission errors
 
-Errors from `addDoc` are rethrown so callers can handle user feedback, retries, or telemetry.
+Errors from `writeBatch(...).commit()` are rethrown so callers can handle user feedback, retries, or telemetry.
 
-### Partial write risk
+### Atomic write behavior
 
-When `lastWateredDate` is provided, the function performs two writes (plant, then care entry). If the second write fails, the plant may already exist while the care entry does not.
+Plant creation and optional initial water care entry are committed together in one batch. Either all writes succeed, or none are committed.
 
 ### Unknown thrown values
 

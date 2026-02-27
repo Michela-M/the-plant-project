@@ -17,7 +17,6 @@ class User {
 
 class Plant {
   +id: string
-  +userId: string
   +name: string
   +species: string
   +creationDate: Date

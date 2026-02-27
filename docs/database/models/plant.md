@@ -22,15 +22,15 @@ Stores user‑specific information such as the plant’s nickname, species, wate
 | imageUrl                  | string  | yes      | Stored URL for the plant image                        |
 | notes                     | string  | yes      | Free‑form notes added by the user                     |
 
-History is stored as a subcollection and documented separately.
+Care entries are stored as a subcollection and documented separately.
 
 ## Relationships
 
 - (future) **Plant → Species** (many‑to‑one)  
   A plant references a single species entry, but many plants may reference the same species.
 
-- **Plant → History** (one‑to‑many)  
-  A plant can have multiple history events (watering, fertilizing, repotting, etc.).
+- **Plant → CareEntry** (one‑to‑many)  
+  A plant can have multiple care events (watering, fertilizing, repotting, etc.).
 
 - **Plant → User** (many‑to‑one)  
   Each plant belongs to a single user, but a user can have many plants.
@@ -39,7 +39,7 @@ History is stored as a subcollection and documented separately.
 
 `/users/{userId}/plants/{plantId}`
 
-History subcollection:
+Care entries subcollection:
 `/users/{userId}/plants/{plantId}/careEntries/{eventId}`
 
 ## Constraints and Rules
