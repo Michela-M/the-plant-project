@@ -1,4 +1,4 @@
-import { addDoc, collection } from 'firebase/firestore';
+import { collection, doc, writeBatch } from 'firebase/firestore';
 import { db } from '@services/firebase';
 import { calculateNextWateringDate } from '../utils/wateringUtils';
 
@@ -49,24 +49,30 @@ export const addPlant = async (plantData: {
       userId,
     };
 
-    const plantId = await addDoc(
-      collection(db, `users/${plantData.userId}/plants`),
-      plantDoc
+    const batch = writeBatch(db);
+    const plantsCollectionRef = collection(
+      db,
+      `users/${plantData.userId}/plants`
     );
+    const plantRef = doc(plantsCollectionRef);
+
+    batch.set(plantRef, plantDoc);
 
     if (plantData.lastWateredDate) {
-      await addDoc(
-        collection(
-          db,
-          `users/${plantData.userId}/plants/${plantId.id}/careEntries`
-        ),
-        {
-          careType: 'water',
-          date: plantData.lastWateredDate,
-          notes: '',
-        }
+      const careEntriesCollectionRef = collection(
+        db,
+        `users/${plantData.userId}/plants/${plantRef.id}/careEntries`
       );
+      const careEntryRef = doc(careEntriesCollectionRef);
+
+      batch.set(careEntryRef, {
+        careType: 'water',
+        date: plantData.lastWateredDate,
+        notes: '',
+      });
     }
+
+    await batch.commit();
 
     return plantDoc;
   } catch (error) {
