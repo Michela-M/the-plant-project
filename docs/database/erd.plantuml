@@ -17,27 +17,47 @@ class User {
 
 class Plant {
   +id: string
+  +userId: string
   +name: string
   +species: string
   +creationDate: Date
   +lastWateredDate: Date?
+  +secondLastWateredDate: Date?
   +wateringFrequency: number?
+  +inferredWateringFrequency: number?
+  +nextWateringDate: Date?
+  +imageUrl: string?
   +notes: string?
 }
 
-class Species <<planned>> {
+class Species {
   +id: string
   +commonName: string
   +scientificName: string
+  +family: string?
   +description: string?
-  //other relevant fields//
+  +image: string?
+  +tags: string[]?
+  +otherNames: string[]?
+  +type: string[]?
+  +similarSpecies: string[]?
+  +characteristics: object?
+  +watering: object?
+  +light: object?
+  +humidity: object?
+  +temperature: object?
+  +soilAndRepotting: object?
+  +fertilizing: object?
+  +pestsAndProblems: object?
+  +propagation: object?
 }
 
-class History {
+class CareEntry {
   +id: string
-  +type: string
+  +careType: string
   +date: Date
   +notes: string?
+  +otherCareType: string?
 }
 
 ' ============================
@@ -45,7 +65,7 @@ class History {
 ' ============================
 
 User "1" --> "many" Plant : owns
-Plant "1" --> "many" History : has
+Plant "1" --> "many" CareEntry : has
 
 ' ============================
 ' FUTURE RELATIONSHIPS (PLANNED)
