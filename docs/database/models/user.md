@@ -7,10 +7,10 @@ Each user document stores account-level profile metadata and acts as the parent 
 
 ## Fields
 
-| Field     | Type   | Optional | Description                                           |
-| --------- | ------ | -------- | ----------------------------------------------------- |
-| email     | string | no       | User email address saved at sign-up                   |
-| createdAt | Date   | no       | Timestamp set when the user account is registered     |
+| Field     | Type   | Optional | Description                                       |
+| --------- | ------ | -------- | ------------------------------------------------- |
+| email     | string | no       | User email address saved at sign-up               |
+| createdAt | Date   | no       | Timestamp set when the user account is registered |
 
 **Document ID:** The Firestore document ID is the Firebase Auth UID.
 
@@ -19,8 +19,8 @@ Each user document stores account-level profile metadata and acts as the parent 
 - **User → Plant** (one-to-many)
   One user can own many plant documents.
 
-- **User → History** (one-to-many, via plants)
-  Care history events belong to plants, which belong to a user.
+- **User → CareEntry** (one-to-many, via plants)
+  Care entry events belong to plants, which belong to a user.
 
 ## Firestore Storage
 
@@ -30,8 +30,8 @@ Each user document stores account-level profile metadata and acts as the parent 
 - User plants subcollection:
   `users/{userId}/plants/{plantId}`
 
-- Plant history subcollection:
-  `users/{userId}/plants/{plantId}/history/{eventId}`
+- Plant care entries subcollection:
+  `users/{userId}/plants/{plantId}/careEntries/{eventId}`
 
 ## Constraints and Rules
 

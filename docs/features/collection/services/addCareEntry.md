@@ -2,32 +2,42 @@
 
 ## Description
 
-`addCareEntry` creates a care-entry document for a specific plant in a user-scoped Firestore subcollection:
-`users/{userId}/plants/{plantId}/careEntries`.
+`addCareEntry` creates a care-entry document for a specific plant in:
 
-It writes the care event type, date, optional notes, and optional custom care label (`otherCareType`).
-Optional string fields are normalized to an empty string when omitted.
-This service performs only the write operation and does not return the new document ID.
+`users/{userId}/plants/{plantId}/careEntries`
+
+It always writes these fields to the care entry:
+
+- `careType`
+- `date`
+- `notes` (defaults to `""`)
+- `otherCareType` (defaults to `""`)
+
+If `careType` is exactly `"water"` (case-sensitive), the service also updates watering metadata on the parent plant document (`users/{userId}/plants/{plantId}`):
+
+- updates `lastWateredDate` / `secondLastWateredDate` based on date ordering
+- recalculates `inferredWateringFrequency` when both watering dates are available
+- computes `nextWateringDate` using explicit `wateringFrequency` first, then inferred frequency
+
+To support Firestore data safely, existing plant date fields are normalized from either JS `Date` or Firebase `Timestamp` via `firebaseTimestampToDate`.
 
 ## Parameters
 
-| Name                     | Type     | Required | Description                                                        |
-| ------------------------ | -------- | -------- | ------------------------------------------------------------------ |
-| `careData.careType`      | `string` | Yes      | Type of care event                                                 |
-| `careData.date`          | `Date`   | Yes      | Date/time of the care event                                        |
-| `careData.notes`         | `string` | No       | Optional notes. Defaults to `""` when not provided                 |
-| `careData.otherCareType` | `string` | No       | Optional custom care type text. Defaults to `""` when not provided |
-| `careData.plantId`       | `string` | Yes      | Plant document ID used in the Firestore path                       |
-| `careData.userId`        | `string` | Yes      | User ID used to scope the Firestore path                           |
+| Name                     | Type     | Required | Description                                                           |
+| ------------------------ | -------- | -------- | --------------------------------------------------------------------- |
+| `careData.careType`      | `string` | Yes      | Type of care event (for example: `"water"`, `"prune"`, `"fertilize"`) |
+| `careData.date`          | `Date`   | Yes      | Date/time of the care event                                           |
+| `careData.notes`         | `string` | No       | Optional notes. Defaults to `""`                                      |
+| `careData.otherCareType` | `string` | No       | Optional custom care text. Defaults to `""`                           |
+| `careData.plantId`       | `string` | Yes      | Parent plant document ID                                              |
+| `careData.userId`        | `string` | Yes      | User ID used to scope Firestore path                                  |
 
 ## Return Value
 
-The function returns:
+Returns `Promise<void>`.
 
-- `Promise<void>` — resolves when the care entry is successfully written
-- Throws if Firestore fails
-
-No value is returned because the created care entry document ID is not surfaced by this service.
+- Resolves when the care entry write is complete and any required plant watering updates are complete.
+- Rejects if Firestore read/write operations fail or if date computation throws.
 
 ## Usage
 
@@ -35,26 +45,25 @@ No value is returned because the created care entry document ID is not surfaced 
 import { addCareEntry } from '../services/addCareEntry';
 
 await addCareEntry({
-  userId: 'user-123',
-  plantId: 'plant-456',
-  careType: 'other',
-  otherCareType: 'Mist leaves',
+  careType: 'water',
   date: new Date(),
-  notes: 'Light misting after repot',
+  notes: 'Thorough watering after dry soil check',
+  plantId: 'plant-123',
+  userId: 'user-456',
 });
 ```
 
-With basic error handling:
+With error handling:
 
 ```tsx
 try {
   await addCareEntry({
-    userId,
-    plantId,
     careType: values.careType,
     date: values.date,
     notes: values.notes,
     otherCareType: values.otherCareType,
+    plantId,
+    userId,
   });
 } catch (error) {
   console.error('Failed to add care entry:', error);
@@ -63,27 +72,35 @@ try {
 
 ## Edge Cases
 
-### Missing optional notes
+### Non-water care types
 
-If `notes` is omitted, the service stores `""` to keep the Firestore field shape consistent.
+For non-water care types, only the care entry is created. Plant watering metadata is not read or updated.
 
-### Missing optional custom care label
+### Water entry newer than `lastWateredDate`
 
-If `otherCareType` is omitted, the service stores `""`.
-This allows the UI to read a consistent string field without undefined checks.
+The new date becomes `lastWateredDate`, and the old `lastWateredDate` moves to `secondLastWateredDate`.
 
-### Invalid or missing IDs
+### Water entry between `lastWateredDate` and `secondLastWateredDate`
 
-If `userId` or `plantId` is missing/invalid, Firestore path resolution fails and the service throws.
+`lastWateredDate` stays unchanged and `secondLastWateredDate` is updated to the new date.
 
-### Invalid dates
+### Missing plant document
 
-`date` must be a valid JavaScript `Date`. Invalid dates can cause Firestore write errors.
+If the plant document does not exist, the care entry is still created, but watering metadata update is skipped.
 
-### Unknown error values
+### Date normalization
 
-If Firestore throws a non-`Error` value, the service wraps it as `new Error('Unknown error')`.
+Existing plant date fields can be JS `Date` or Firebase `Timestamp`. Invalid values normalize to `null`.
 
-### Permission and network failures
+### Next watering date selection
 
-Permission-denied or network issues are not swallowed; they are rethrown so the caller can surface a toast or retry flow.
+`nextWateringDate` preference order:
+
+1. explicit `wateringFrequency` (if non-zero)
+2. `inferredWateringFrequency` (if non-zero)
+
+If both are `0`, `nextWateringDate` is `null`.
+
+### Multi-write consistency
+
+For `water` care entries, this service performs multiple Firestore operations (create care entry, read plant, update plant). A later failure does not automatically roll back earlier successful writes.

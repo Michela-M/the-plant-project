@@ -3,11 +3,11 @@ import formatRelativeDate from '@utils/formatRelativeDate';
 export default function PlantDetailsSchedule({
   plant,
 }: {
-  plant: { wateringFrequency?: number; lastWatered?: Date | null };
+  plant: { wateringFrequency?: number; lastWateredDate?: Date | null };
 }) {
   // 1. Empty state: no info at all
   if (
-    !plant.lastWatered &&
+    !plant.lastWateredDate &&
     (!plant.wateringFrequency || plant.wateringFrequency <= 0)
   ) {
     return (
@@ -21,12 +21,12 @@ export default function PlantDetailsSchedule({
   // 2. Compute next watering if both values exist
   let nextWatering: string | null = null;
   if (
-    plant.lastWatered &&
+    plant.lastWateredDate &&
     plant.wateringFrequency &&
     plant.wateringFrequency > 0
   ) {
     const next = new Date(
-      plant.lastWatered.getTime() +
+      plant.lastWateredDate.getTime() +
         plant.wateringFrequency * 24 * 60 * 60 * 1000
     );
     nextWatering =
@@ -39,10 +39,10 @@ export default function PlantDetailsSchedule({
 
       <div className="flex flex-col gap-1">
         {/* 3. Last watered (only if available) */}
-        {plant.lastWatered && (
+        {plant.lastWateredDate && (
           <div className="flex justify-between">
             <p>Last watered:</p>
-            <p>{formatRelativeDate({ date: plant.lastWatered })}</p>
+            <p>{formatRelativeDate({ date: plant.lastWateredDate })}</p>
           </div>
         )}
 
@@ -55,7 +55,7 @@ export default function PlantDetailsSchedule({
         )}
 
         {/* 5. Average interval (only if frequency exists) */}
-        {plant.wateringFrequency && plant.wateringFrequency > 0 && (
+        {(plant.wateringFrequency ?? 0) > 0 && (
           <div className="flex justify-between">
             <p>Watering frequency:</p>
             <p>{plant.wateringFrequency} days</p>
