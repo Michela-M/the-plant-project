@@ -80,6 +80,20 @@ describe('Button', () => {
     const button = screen.getByRole('button');
     expect(button.querySelector('.absolute')).not.toBeInTheDocument();
   });
+
+  it('shows full width when fullWidth is true', () => {
+    render(<Button label="Full Width" fullWidth={true} />);
+
+    const button = screen.getByRole('button');
+    expect(button.className).toContain('w-full');
+  });
+
+  it('does not show full width when fullWidth is false', () => {
+    render(<Button label="Not Full Width" fullWidth={false} />);
+
+    const button = screen.getByRole('button');
+    expect(button.className).not.toContain('w-full');
+  });
 });
 
 describe('IconButton', () => {

@@ -6,16 +6,17 @@
 
 ## Props
 
-| Prop      | Type                              | Required | Default     | Description                             |
-| --------- | --------------------------------- | -------- | ----------- | --------------------------------------- |
-| `label`   | `string`                          | yes      | —           | Text displayed inside the button        |
-| `icon`    | `ReactNode`                       | no       | —           | Optional icon displayed after the label |
-| `variant` | `'filled' / 'outlined' / 'ghost'` | no       | `'filled'`  | Visual style of the button              |
-| `tone`    | `'primary' / 'destructive'`       | no       | `'primary'` | Color tone of the button                |
-| `type`    | `'button' / 'submit' / 'reset'`   | no       | `'button'`  | Native button type                      |
-| `size`    | `'sm' / 'md'`                     | no       | `'md'`      | Button size                             |
-| `loading` | `boolean`                         | no       | `false`     | Shows spinner and disables interaction  |
-| `onClick` | `() => void`                      | no       | —           | Click handler                           |
+| Prop        | Type                              | Required | Default     | Description                                |
+| ----------- | --------------------------------- | -------- | ----------- | ------------------------------------------ |
+| `label`     | `string`                          | yes      | —           | Text displayed inside the button           |
+| `icon`      | `ReactNode`                       | no       | —           | Optional icon displayed after the label    |
+| `variant`   | `'filled' / 'outlined' / 'ghost'` | no       | `'filled'`  | Visual style of the button                 |
+| `tone`      | `'primary' / 'destructive'`       | no       | `'primary'` | Color tone of the button                   |
+| `type`      | `'button' / 'submit' / 'reset'`   | no       | `'button'`  | Native button type                         |
+| `size`      | `'sm' / 'md'`                     | no       | `'md'`      | Button size                                |
+| `loading`   | `boolean`                         | no       | `false`     | Shows spinner and disables interaction     |
+| `onClick`   | `() => void`                      | no       | —           | Click handler                              |
+| `fullWidth` | `boolean`                         | no       | `false`     | If true, button takes full container width |
 
 ## Example Usage
 
