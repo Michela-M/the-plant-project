@@ -6,6 +6,7 @@ import { imageValidation } from '@utils/imageValidation';
 
 import Button from '@components/Button';
 import TextField from '@components/TextField';
+import { Callout, H1 } from '@components/Typography';
 
 import { getPlantDetails } from '../services/getPlantDetails';
 import { updatePlant } from '../services/updatePlant';
@@ -148,7 +149,7 @@ export default function EditPlant() {
       className="w-1/2 mx-auto flex flex-col gap-2 py-8 px-4 bg-stone-50 shadow-md rounded-md"
       onSubmit={formik.handleSubmit}
     >
-      <h1 className="text-3xl font-bold text-green-900">Edit Plant</h1>
+      <H1>Edit Plant</H1>
 
       <div className="flex flex-row gap-6">
         <div className="w-1/3 flex flex-col gap-1">
@@ -156,7 +157,7 @@ export default function EditPlant() {
             previewUrl={previewUrl || plantDetails.imageUrl}
             onSelect={handleImagePickerSelect}
           />
-          <p className="text-sm text-red-500">{error}</p>
+          <Callout className="text-red-500">{error}</Callout>
         </div>
 
         <div className="w-2/3 flex flex-col gap-2">

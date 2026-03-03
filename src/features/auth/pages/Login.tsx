@@ -12,6 +12,7 @@ import { auth } from '@services/firebase';
 import { useToast } from '@context/toast/useToast';
 import { onAuthStateChanged } from 'firebase/auth';
 import { useAuth } from '@context/auth/useAuth';
+import { Callout, H1 } from '@components/Typography';
 
 export default function Login() {
   const navigate = useNavigate();
@@ -66,7 +67,7 @@ export default function Login() {
   return (
     <div className="flex justify-center items-center">
       <div className="flex flex-col gap-2 py-8 px-4 shadow-md rounded-md w-1/3 bg-stone-50">
-        <p className="text-3xl text-green-900 font-bold">Log in</p>
+        <H1>Log in</H1>
         <form className="flex flex-col gap-4 " onSubmit={formik.handleSubmit}>
           <TextField
             name="email"
@@ -109,9 +110,9 @@ export default function Login() {
             loading={loading}
           />
         </form>
-        <p className="text-sm">
+        <Callout className="text-center">
           Don't have an account? <Link href="/signup">Sign up</Link>
-        </p>
+        </Callout>
       </div>
     </div>
   );

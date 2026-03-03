@@ -1,3 +1,5 @@
+import { Callout } from './Typography';
+
 export default function Menu({ children }: { children: React.ReactNode }) {
   return (
     <div className="absolute bg-stone-50 shadow-md rounded-md mt-2 right-0 min-w-48 max-w-[20rem] w-max z-10">
@@ -28,11 +30,11 @@ export function MenuItem({
     >
       {label}
       {description && (
-        <p
-          className={`text-sm ${disabled ? 'text-stone-400' : 'text-stone-500'}`}
+        <Callout
+          className={`${disabled ? 'text-stone-400' : 'text-stone-500'}`}
         >
           {description}
-        </p>
+        </Callout>
       )}
     </button>
   );

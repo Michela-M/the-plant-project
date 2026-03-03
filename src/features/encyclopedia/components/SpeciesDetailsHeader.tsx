@@ -1,6 +1,7 @@
 import { useNavigate } from 'react-router-dom';
 import { ChevronLeft } from 'lucide-react';
 import Button, { IconButton } from '@components/Button';
+import { H1, H3 } from '@components/Typography';
 
 export default function SpeciesDetailsHeader({
   commonName,
@@ -22,10 +23,10 @@ export default function SpeciesDetailsHeader({
         label="Back to Encyclopedia"
       />
       <div className="flex-1 min-w-0">
-        <h3 className="text-xl text-gray-500">{family}</h3>
-        <h1 className="text-3xl">
+        <H3 className="text-gray-500">{family}</H3>
+        <H1>
           {commonName} ({scientificName})
-        </h1>
+        </H1>
       </div>
       <div className="flex gap-2 justify-end shrink-0">
         <Button label="Add to Collection" onClick={() => {}} />

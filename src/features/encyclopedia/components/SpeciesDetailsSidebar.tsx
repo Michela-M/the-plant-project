@@ -2,6 +2,7 @@ import ImagePreview from '@components/ImagePreview';
 import type { SpeciesDetailsData } from '../types/speciesDetails';
 import SimilarSpecies from './SimilarSpecies';
 import CharacteristicBadge from './CharacteristicBadge';
+import { H3 } from '@components/Typography';
 
 export default function SpeciesDetailsSidebar({
   speciesDetails,
@@ -22,7 +23,7 @@ export default function SpeciesDetailsSidebar({
         <p>Plant type: {speciesDetails.type.join(', ')}</p>
       </div>
       <div>
-        <h3 className="text-xl">Characteristics</h3>
+        <H3>Characteristics</H3>
         {CharacteristicBadge({
           label: 'difficulty',
           value: speciesDetails.characteristics.difficulty,
@@ -49,7 +50,7 @@ export default function SpeciesDetailsSidebar({
         })}
       </div>
       <div>
-        <h3 className="text-xl">Similar Species</h3>
+        <H3>Similar Species</H3>
         {speciesDetails.similarSpecies.length > 0 ? (
           <>
             {speciesDetails.similarSpecies.slice(0, 3).map((id) => (

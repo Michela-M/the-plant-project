@@ -8,6 +8,7 @@ import wateringCan from '@assets/icons/watering-can.svg?react';
 import fertilizerIcon from '@assets/icons/fertilizer.svg?react';
 import repotIcon from '@assets/icons/plant-pot.svg?react';
 import seedlings from '@assets/icons/seedlings.svg?react';
+import { H2, H3, Headline } from '@components/Typography';
 
 function getCareTypeIcon(careType: string) {
   switch (careType) {
@@ -96,7 +97,7 @@ export default function PlantDetailsHistory({ plantId }: { plantId: string }) {
   if (careHistory.length === 0) {
     return (
       <div className="flex flex-col">
-        <h2 className="text-2xl">Care History</h2>
+        <H2>Care History</H2>
         <p className="text-stone-500">No care history available.</p>
       </div>
     );
@@ -104,10 +105,10 @@ export default function PlantDetailsHistory({ plantId }: { plantId: string }) {
 
   return (
     <div className="flex flex-col gap-3">
-      <h2 className="text-2xl">Care History</h2>
+      <H2>Care History</H2>
       {groupedCareHistory.map((group) => (
         <div key={group.title} className="flex flex-col gap-3">
-          <p className="text-xl">{group.title}</p>
+          <H3>{group.title}</H3>
           {group.entries.map((entry) => (
             <CareEntry key={entry.id} entry={entry} />
           ))}
@@ -131,12 +132,12 @@ function CareEntry({
     <div className="flex flex-row px-3 gap-3 items-center">
       {getCareTypeIcon(entry.careType)}
       <div className="flex flex-col">
-        <p className="text-lg font-bold">
+        <Headline>
           {careLabels[entry.careType] || careLabels['other']}
           {entry.careType === 'other' && entry.otherCareType
             ? `: ${entry.otherCareType}`
             : ''}
-        </p>
+        </Headline>
         {entry.notes && <p>{entry.notes}</p>}
       </div>
     </div>

@@ -15,6 +15,7 @@ import RadioGroup, { RadioButton } from '@components/Radio';
 import * as Yup from 'yup';
 import { useFormik } from 'formik';
 import { addCareEntry } from '../services/addCareEntry';
+import { H1, H3 } from '@components/Typography';
 
 const addCareValidationSchema = Yup.object({
   date: Yup.date()
@@ -103,9 +104,9 @@ export default function PlantDetailsHeader({
       />
       <div className="w-full">
         {plant?.commonName && (
-          <h3 className="text-xl text-gray-500">{plant.commonName}</h3>
+          <H3 className="text-gray-500">{plant.commonName}</H3>
         )}
-        <h1 className="text-3xl">{plant?.name}</h1>
+        <H1>{plant?.name}</H1>
       </div>
       <div className="flex gap-2 h-fit">
         <div className="relative">

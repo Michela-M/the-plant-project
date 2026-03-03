@@ -7,6 +7,7 @@ import { useToast } from '@context/toast/useToast';
 import { addPlant } from '../services/addPlant';
 import { useState } from 'react';
 import { useAuth } from '@context/auth/useAuth';
+import { H1 } from '@components/Typography';
 
 const addPlantValidationSchema = Yup.object({
   name: Yup.string().required('Name is required'),
@@ -64,7 +65,7 @@ export default function AddPlant() {
 
   return (
     <div className="w-1/3 mx-auto flex flex-col gap-2 py-8 px-4 bg-stone-50 shadow-md rounded-md">
-      <h1 className="text-3xl font-bold text-green-900">Add a Plant</h1>
+      <H1>Add a Plant</H1>
       <form className="flex flex-col gap-4" onSubmit={formik.handleSubmit}>
         <TextField
           label="Name"

@@ -6,6 +6,7 @@ import { getAllPlants } from '../services/getAllPlants';
 import { useToast } from '@context/toast/useToast';
 import Spinner from '@components/Spinner';
 import { useAuth } from '@context/auth/useAuth';
+import { H1 } from '@components/Typography';
 
 export default function MyCollection() {
   const [plants, setPlants] = useState<
@@ -46,7 +47,7 @@ export default function MyCollection() {
   return (
     <div className="w-1/2 mx-auto py-8 flex flex-col gap-4">
       <div className="flex justify-between items-center">
-        <h1 className="text-3xl font-bold text-green-900">My Collection</h1>
+        <H1>My Collection</H1>
         <Button label="Add Plant" onClick={() => navigate('/add-plant')} />
       </div>
       {plants.length === 0 && (

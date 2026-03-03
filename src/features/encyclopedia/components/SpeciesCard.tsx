@@ -1,6 +1,7 @@
 import { CirclePlus } from 'lucide-react';
 import { IconButton } from '@components/Button';
 import { Link } from 'react-router-dom';
+import { Callout } from '@components/Typography';
 
 export default function SpeciesCard({
   imageUrl,
@@ -30,8 +31,10 @@ export default function SpeciesCard({
 
       <div className="flex">
         <Link to={speciesPath} className="grow">
-          <p className="text-stone-600">{family || 'Unknown Family'}</p>
-          <p className="text-lg">{commonName || 'Unknown'}</p>
+          <Callout className="text-stone-600">
+            {family || 'Unknown Family'}
+          </Callout>
+          <p>{commonName || 'Unknown'}</p>
         </Link>
         <div
           className="opacity-0 group-hover:opacity-100 py-2"
