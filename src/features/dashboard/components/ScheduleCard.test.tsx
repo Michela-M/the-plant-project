@@ -53,6 +53,26 @@ describe('ScheduleCard', () => {
     ).toHaveTextContent('8 days');
   });
 
+  it("shows 'N/A' when estimated watering frequency is missing", () => {
+    render(
+      <ScheduleCard
+        name="My Monstera"
+        species="Monstera Deliciosa"
+        wateringFrequency={0}
+        inferredWateringFrequency={null}
+        lastWateredDate={new Date('2026-03-01T10:00:00')}
+        imageUrl="https://example.com/monstera.jpg"
+      />
+    );
+
+    expect(
+      screen.getByTestId('estimated-watering-frequency')
+    ).toHaveTextContent('N/A');
+    expect(
+      screen.getByTestId('estimated-watering-frequency')
+    ).not.toHaveTextContent('null days');
+  });
+
   it("shows 'N/A' for last watered date when it's null", () => {
     render(
       <ScheduleCard

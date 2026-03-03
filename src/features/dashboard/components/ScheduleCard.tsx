@@ -17,6 +17,15 @@ export default function ScheduleCard({
   inferredWateringFrequency: number | null;
   imageUrl?: string | null;
 }) {
+  const hasWateringFrequency =
+    typeof wateringFrequency === 'number' &&
+    Number.isFinite(wateringFrequency) &&
+    wateringFrequency > 0;
+  const hasInferredWateringFrequency =
+    typeof inferredWateringFrequency === 'number' &&
+    Number.isFinite(inferredWateringFrequency) &&
+    inferredWateringFrequency > 0;
+
   return (
     <div
       className="bg-stone-50 shadow-md rounded-md px-2 py-2 flex gap-2 flex-col"
@@ -56,7 +65,7 @@ export default function ScheduleCard({
               : 'N/A'}
           </Callout>
         </div>
-        {wateringFrequency && wateringFrequency > 0 ? (
+        {hasWateringFrequency ? (
           <div className="flex justify-between gap-1">
             <Callout>Watering frequency: </Callout>
             <Callout
@@ -73,7 +82,9 @@ export default function ScheduleCard({
               className="whitespace-nowrap text-right"
               data-testid="estimated-watering-frequency"
             >
-              {inferredWateringFrequency} days
+              {hasInferredWateringFrequency
+                ? `${inferredWateringFrequency} days`
+                : 'N/A'}
             </Callout>
           </div>
         )}

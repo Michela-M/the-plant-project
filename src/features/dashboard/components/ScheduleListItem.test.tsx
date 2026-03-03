@@ -41,6 +41,25 @@ describe('ScheduleListItem', () => {
     ).toHaveTextContent('Estimated watering frequency: 8 days');
   });
 
+  it("shows 'N/A' when estimated watering frequency is missing", () => {
+    render(
+      <ScheduleListItem
+        name="My Monstera"
+        species="Monstera Deliciosa"
+        wateringFrequency={0}
+        inferredWateringFrequency={null}
+        imageUrl="https://example.com/monstera.jpg"
+      />
+    );
+
+    expect(
+      screen.getByTestId('estimated-watering-frequency')
+    ).toHaveTextContent('Estimated watering frequency: N/A');
+    expect(
+      screen.getByTestId('estimated-watering-frequency')
+    ).not.toHaveTextContent('null days');
+  });
+
   it('uses placeholder image when imageUrl is not provided', () => {
     render(
       <ScheduleListItem

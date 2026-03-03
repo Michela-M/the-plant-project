@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from 'react';
+import { useEffect, useState } from 'react';
 import {
   getScheduledPlants,
   type ScheduledPlant,
@@ -37,10 +37,7 @@ export default function Dashboard() {
     fetchPlants();
   }, [showError, user]);
 
-  const { todayOrOverdue, afterToday } = useMemo(
-    () => partitionScheduledPlants(plants),
-    [plants]
-  );
+  const { todayOrOverdue, afterToday } = partitionScheduledPlants(plants);
 
   if (loading) {
     return <Spinner />;
