@@ -1,4 +1,5 @@
 import formatRelativeDate from '@utils/formatRelativeDate';
+import { H2 } from '@components/Typography';
 
 export default function PlantDetailsSchedule({
   plant,
@@ -12,7 +13,7 @@ export default function PlantDetailsSchedule({
   ) {
     return (
       <div className="flex flex-col gap-3">
-        <h2 className="text-2xl">Watering Schedule</h2>
+        <H2>Watering Schedule</H2>
         <p className="text-stone-500">No watering information available.</p>
       </div>
     );
@@ -35,7 +36,7 @@ export default function PlantDetailsSchedule({
 
   return (
     <div className="flex flex-col gap-2">
-      <h2 className="text-2xl">Watering Schedule</h2>
+      <H2>Watering Schedule</H2>
 
       <div className="flex flex-col gap-1">
         {/* 3. Last watered (only if available) */}

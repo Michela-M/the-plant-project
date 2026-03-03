@@ -1,5 +1,6 @@
 import Button, { IconButton } from './Button';
 import { X } from 'lucide-react';
+import { H2 } from './Typography';
 
 interface ModalProps {
   title: string;
@@ -60,7 +61,7 @@ export default function Modal({
           />
         </div>
 
-        <h2 className="text-2xl mb-4">{title}</h2>
+        <H2 className="mb-4">{title}</H2>
         {children}
         {renderActions()}
       </div>

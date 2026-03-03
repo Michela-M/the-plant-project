@@ -1,3 +1,4 @@
+import { Callout } from '@components/Typography';
 import { Link } from 'react-router-dom';
 
 type PlantCardProps = {
@@ -23,8 +24,10 @@ export default function PlantCard({ plant }: PlantCardProps) {
         />
         <div className="flex">
           <div className="grow">
-            <p className="text-stone-600">{plant.commonName || ''}</p>
-            <p className="text-lg">{plant.name || 'Unnamed Plant'}</p>
+            <Callout className="text-stone-600">
+              {plant.commonName || ''}
+            </Callout>
+            <p>{plant.name || 'Unnamed Plant'}</p>
           </div>
         </div>
       </div>

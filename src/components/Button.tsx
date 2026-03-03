@@ -29,6 +29,7 @@ export default function Button({
   type = 'button',
   size = 'md',
   loading = false,
+  fullWidth = false,
 }: {
   label: string;
   icon?: ReactNode;
@@ -38,12 +39,13 @@ export default function Button({
   type?: 'button' | 'submit' | 'reset';
   size?: 'sm' | 'md';
   loading?: boolean;
+  fullWidth?: boolean;
 }) {
   return (
     <button
       type={type}
       onClick={onClick}
-      className={`relative flex items-center justify-center ${variantClasses[tone][variant]} ${size === 'sm' ? 'text-sm px-2 py-1 rounded-sm border gap-1' : 'text-md px-3 py-2 rounded-md border-2 gap-2'}`}
+      className={`relative flex items-center justify-center ${variantClasses[tone][variant]} ${size === 'sm' ? 'text-sm px-2 py-1 rounded-sm border gap-1' : 'text-md px-3 py-2 rounded-md border-2 gap-2'} ${fullWidth ? 'w-full' : ''}`}
       disabled={loading}
       aria-busy={loading}
     >

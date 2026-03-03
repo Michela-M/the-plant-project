@@ -2,6 +2,7 @@ import Tag from '@components/Tag';
 import { IconButton } from '@components/Button';
 import { CirclePlus } from 'lucide-react';
 import { Link } from 'react-router-dom';
+import { Callout } from '@components/Typography';
 
 export default function SpeciesListItem({
   family,
@@ -34,11 +35,15 @@ export default function SpeciesListItem({
         <div className="w-3/4">
           <div className="flex">
             <div className="grow">
-              <p className="text-stone-600">{family || 'Unknown Family'}</p>
-              <p className="text-lg">{commonName || 'Unknown'}</p>
+              <Callout className="text-stone-600">
+                {family || 'Unknown Family'}
+              </Callout>
+              <p>{commonName || 'Unknown'}</p>
             </div>
           </div>
-          {description && <p className="line-clamp-2">{description}</p>}
+          {description && (
+            <Callout className="line-clamp-2">{description}</Callout>
+          )}
           <div className="flex flex-wrap gap-2 mt-1">
             {tags.map((tag, index) => (
               <Tag key={`${tag}-${index}`} label={tag} />

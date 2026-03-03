@@ -9,6 +9,7 @@ import { useNavigate } from 'react-router-dom';
 import { useToast } from '@context/toast/useToast';
 import { signupValidationSchema } from '@utils/validation';
 import { useAuth } from '@context/auth/useAuth';
+import { Callout, H1 } from '@components/Typography';
 
 export default function SignUp() {
   const navigate = useNavigate();
@@ -49,7 +50,7 @@ export default function SignUp() {
   return (
     <div className="flex justify-center items-center">
       <div className="flex flex-col gap-2 py-8 px-4 shadow-md rounded-md w-1/3 bg-stone-50">
-        <p className="text-3xl text-green-900 font-bold">Sign up</p>
+        <H1>Sign up</H1>
         <form className="flex flex-col gap-4 " onSubmit={formik.handleSubmit}>
           <TextField
             name="email"
@@ -112,9 +113,9 @@ export default function SignUp() {
             loading={loading}
           />
         </form>
-        <p className="text-sm">
+        <Callout className="text-center">
           Already have an account? <Link href="/login">Log in</Link>
-        </p>
+        </Callout>
       </div>
     </div>
   );

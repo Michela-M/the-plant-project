@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react';
 import { createPortal } from 'react-dom';
+import { Callout } from './Typography';
 
 export default function ImagePreview({
   url,
@@ -30,7 +31,7 @@ export default function ImagePreview({
         />
       </button>
       {description && (
-        <p className="text-sm text-gray-500 mt-2">{description}</p>
+        <Callout className="text-gray-500 mt-2">{description}</Callout>
       )}
 
       {isOpen &&

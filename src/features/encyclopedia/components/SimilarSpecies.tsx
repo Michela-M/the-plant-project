@@ -5,6 +5,7 @@ import { useToast } from '@context/toast/useToast';
 import { Link } from 'react-router-dom';
 import Tag from '@components/Tag';
 import type { SpeciesDetailsData } from '../types/speciesDetails';
+import { Callout } from '@components/Typography';
 
 export default function SimilarSpecies({ speciesId }: { speciesId: string }) {
   const [similarSpecies, setSimilarSpecies] =
@@ -37,10 +38,10 @@ export default function SimilarSpecies({ speciesId }: { speciesId: string }) {
           alt={similarSpecies?.commonName || 'Plant Image'}
         />
         <div className="w-3/4">
-          <p className="text-stone-600">
+          <Callout className="text-stone-600">
             {similarSpecies?.family || 'Unknown Family'}
-          </p>
-          <p className="text-lg">{similarSpecies?.commonName || 'Unknown'}</p>
+          </Callout>
+          <p>{similarSpecies?.commonName || 'Unknown'}</p>
 
           <div className="flex flex-wrap gap-2 mt-1">
             {similarSpecies?.tags.map((tag, index) => (

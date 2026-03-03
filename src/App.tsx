@@ -3,7 +3,7 @@ import { BrowserRouter, Route, Routes } from 'react-router-dom';
 
 import AddPlant from '@features/collection/pages/AddPlant';
 import { AuthProvider } from '@context/auth/AuthContext';
-import Dashboard from '@features/dashboard/Dashboard';
+import Dashboard from '@features/dashboard/pages/Dashboard';
 import EditPlant from '@features/collection/pages/EditPlant';
 import Encyclopedia from '@features/encyclopedia/pages/Encyclopedia';
 

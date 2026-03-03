@@ -1,6 +1,7 @@
 import { Info, TriangleAlert, CircleAlert, CircleCheck, X } from 'lucide-react';
 import { IconButton } from './Button';
 import { useEffect } from 'react';
+import { Callout, Headline } from './Typography';
 
 const typeClasses = {
   info: 'bg-blue-600',
@@ -60,8 +61,10 @@ export default function Toast({
             />
           )}
           <div className="flex flex-col flex-1">
-            <p className="text-stone-50 w-full text-lg">{message || ''}</p>
-            {detail && <p className="text-stone-100 text-sm">{detail}</p>}
+            <Headline className="text-stone-50 w-full">
+              {message || ''}
+            </Headline>
+            {detail && <Callout className="text-stone-100">{detail}</Callout>}
           </div>
 
           <IconButton

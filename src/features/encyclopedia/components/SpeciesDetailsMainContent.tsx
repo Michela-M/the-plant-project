@@ -1,3 +1,4 @@
+import { H3 } from '@components/Typography';
 import type {
   SpeciesCareSection,
   SpeciesDetailsData,
@@ -57,7 +58,7 @@ function SpeciesDetailsSection({
 }) {
   return (
     <div className="flex flex-col">
-      <h3 className="text-xl">{header}</h3>
+      <H3>{header}</H3>
       <p>{content.text}</p>
       {content.images.length > 0 && (
         <div className="flex gap-4 mt-4">

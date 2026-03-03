@@ -6,6 +6,7 @@ import SpeciesListItem from '../components/SpeciesListItem';
 import { getAllSpecies } from '../services/getAllSpecies';
 import { useToast } from '@context/toast/useToast';
 import Spinner from '@components/Spinner';
+import { H1 } from '@components/Typography';
 
 export default function Encyclopedia() {
   const [selectedIndex, setSelectedIndex] = useState(0);
@@ -52,7 +53,7 @@ export default function Encyclopedia() {
   return (
     <div className="w-1/2 mx-auto py-8 flex flex-col gap-4">
       <div className="flex justify-between items-center">
-        <h1 className="text-3xl font-bold text-green-900">Encyclopedia</h1>
+        <H1>Encyclopedia</H1>
         <ButtonRadio
           icons={icons}
           selectedIndex={selectedIndex}
