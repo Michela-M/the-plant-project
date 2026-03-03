@@ -6,14 +6,14 @@ The **Typography** components provide a consistent set of text styles for headin
 
 ## Components
 
-| Component  | Renders | Class names         | Description                                 |
-| ---------- | ------- | ------------------- | ------------------------------------------- |
-| `H1`       | `h1`    | `text-3xl`          | Primary page heading.                       |
-| `H2`       | `h2`    | `text-2xl`          | Section heading under the page title.       |
-| `H3`       | `h3`    | `text-xl`           | Subsection heading.                         |
-| `Headline` | `p`     | `text-lg font-bold` | Prominent supporting statement.             |
-| `Callout`  | `p`     | `text-sm`           | Secondary body text for helper information. |
-| `Caption`  | `p`     | `text-xs`           | Small metadata or timestamp text.           |
+| Component  | Renders | Class names                         | Description                                 |
+| ---------- | ------- | ----------------------------------- | ------------------------------------------- |
+| `H1`       | `h1`    | `text-3xl font-bold text-green-900` | Primary page heading.                       |
+| `H2`       | `h2`    | `text-2xl text-green-900`           | Section heading under the page title.       |
+| `H3`       | `h3`    | `text-xl`                           | Subsection heading.                         |
+| `Headline` | `p`     | `text-lg font-bold`                 | Prominent supporting statement.             |
+| `Callout`  | `p`     | `text-sm`                           | Secondary body text for helper information. |
+| `Caption`  | `p`     | `text-xs`                           | Small metadata or timestamp text.           |
 
 ## Props
 
