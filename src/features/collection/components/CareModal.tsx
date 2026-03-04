@@ -55,14 +55,18 @@ export default function CareModal({
       return;
     }
 
+    if (!user?.id) {
+      setLoadingPlants(true);
+      return;
+    }
+
     const fetchPlants = async () => {
       setLoadingPlants(true);
       try {
-        const plantsData = await getAllPlants(user?.id || '');
+        const plantsData = await getAllPlants(user.id);
         setPlants(
           plantsData.map((plant) => ({ id: plant.id, name: plant.name }))
         );
-        console.log('Fetched plants:', plantsData);
       } catch (error) {
         showError(
           'Error loading plants',
@@ -179,6 +183,7 @@ export default function CareModal({
           )}
           {!plantId && (
             <Select
+              id="plant"
               label="Select plant"
               name="plant"
               options={plants.map((plant) => plant.name)}

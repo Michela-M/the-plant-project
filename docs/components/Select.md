@@ -9,7 +9,7 @@ It provides:
 - A visible label with proper label-to-control association
 - Controlled selection via `value` and `onSelect`
 - Optional validation error messaging
-- Optional `name`, `id`, and blur handling for form integrations
+- Required `id`, plus optional `name` and blur handling for form integrations
 
 ## Props
 
@@ -19,7 +19,7 @@ It provides:
 | `onSelect` | `(option: string) => void`                             | Yes      | —       | Called with the selected option value when selection changes          |
 | `label`    | `string`                                               | Yes      | —       | Label text shown above the select                                     |
 | `name`     | `string`                                               | No       | —       | Native select `name` attribute                                        |
-| `id`       | `string`                                               | No       | —       | Native select `id`; if omitted, falls back to `name`, then `label`    |
+| `id`       | `string`                                               | Yes      | —       | Native select `id`, used for `label` ↔ `select` association           |
 | `value`    | `string`                                               | No       | `''`    | Controlled selected value                                             |
 | `error`    | `string`                                               | No       | —       | Error message shown below the field and error border styling applied  |
 | `onBlur`   | `(event: React.FocusEvent<HTMLSelectElement>) => void` | No       | —       | Blur handler used by form libraries (for touched/validation behavior) |
@@ -35,6 +35,7 @@ export default function PlantPicker() {
 
   return (
     <Select
+      id="plant"
       label="Select plant"
       name="plant"
       options={['Monstera', 'Ficus', 'Pothos']}

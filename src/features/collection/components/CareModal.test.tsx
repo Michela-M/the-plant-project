@@ -101,6 +101,21 @@ describe('CareModal', () => {
     expect(screen.getByText('Loading...')).toBeInTheDocument();
   });
 
+  it('does not fetch plants or show an error while user id is not available', () => {
+    mockUseAuth.mockReturnValueOnce({
+      user: null,
+      loading: true,
+      setUser: vi.fn(),
+      logout: vi.fn(),
+    });
+
+    render(<CareModal setShowCareModal={vi.fn()} />);
+
+    expect(screen.getByText('Loading...')).toBeInTheDocument();
+    expect(mockGetAllPlants).not.toHaveBeenCalled();
+    expect(mockShowError).not.toHaveBeenCalled();
+  });
+
   it('submits a care entry using selected plant option', async () => {
     const setShowCareModal = vi.fn();
     const user = userEvent.setup();

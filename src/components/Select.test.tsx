@@ -7,6 +7,7 @@ describe('Select', () => {
   it('renders label and default placeholder option', () => {
     render(
       <Select
+        id="plant"
         label="Plant"
         name="plant"
         options={['Monstera', 'Ficus']}
@@ -23,6 +24,7 @@ describe('Select', () => {
   it('renders provided options', () => {
     render(
       <Select
+        id="plant"
         label="Plant"
         options={['Monstera', 'Ficus']}
         onSelect={() => {}}
@@ -41,6 +43,7 @@ describe('Select', () => {
 
     render(
       <Select
+        id="plant"
         label="Plant"
         options={['Monstera', 'Ficus']}
         onSelect={onSelect}
@@ -55,6 +58,7 @@ describe('Select', () => {
   it('uses value for controlled selection', () => {
     render(
       <Select
+        id="plant"
         label="Plant"
         options={['Monstera', 'Ficus']}
         value="Monstera"
@@ -72,6 +76,7 @@ describe('Select', () => {
     render(
       <>
         <Select
+          id="plant"
           label="Plant"
           options={['Monstera', 'Ficus']}
           onSelect={() => {}}
@@ -90,6 +95,7 @@ describe('Select', () => {
   it('displays error message when error prop is provided', () => {
     render(
       <Select
+        id="plant"
         label="Plant"
         options={['Monstera', 'Ficus']}
         onSelect={() => {}}
@@ -100,7 +106,7 @@ describe('Select', () => {
     expect(screen.getByText('Plant is required')).toBeInTheDocument();
   });
 
-  it('prefers explicit id over name and label for htmlFor/id association', () => {
+  it('uses id for htmlFor/id association', () => {
     render(
       <Select
         id="plant-id"
