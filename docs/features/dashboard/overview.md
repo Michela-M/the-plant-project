@@ -14,6 +14,7 @@ This feature currently includes:
 - Partitioning logic for today/overdue vs after-today reminders
 - “Today” card grid for immediate care actions
 - “Upcoming Care” grouped list by date with relative labels
+- Dashboard-level care entry creation via shared `CareModal`
 - Loading and basic empty states
 
 ## Routes
@@ -45,6 +46,12 @@ This feature currently includes:
 2. Each plant is shown as a `ScheduleCard` with species, name, image, last watering, and watering frequency.
 3. Card actions (`Watered`, `Snooze`) are currently placeholder UI actions.
 
+### Create New Care Entry
+
+1. Clicking `New entry` opens the shared collection `CareModal`.
+2. Submitting the modal calls `addCareEntry` and closes the modal on success.
+3. The page reloads to refresh dashboard data after creation.
+
 ### Render Upcoming Care
 
 1. `UpcomingCareSection` groups `afterToday` plants by calendar date (`YYYY-MM-DD`).
@@ -54,7 +61,8 @@ This feature currently includes:
 
 ## Display Behavior
 
-- Dashboard heading uses shared typography (`H1`) and includes a `New entry` button (currently placeholder).
+- Dashboard heading uses shared typography (`H1`) and includes a `New entry` button that opens `CareModal`.
+- Dashboard displays a care-guidance note below the header.
 - Species names in schedule components use `Callout` styling with muted text color.
 - Missing plant images fall back to a placeholder URL.
 - Last watered date displays relative text via `formatRelativeDate`, or `N/A` when missing.
@@ -86,6 +94,7 @@ Current dashboard model fields:
 - `firebase/firestore` for scheduled-plant query
 - Auth context (`useAuth`) for current user id
 - Toast context (`useToast`) for async error feedback
+- Shared collection workflow (`CareModal`, `addCareEntry`)
 - Shared components (`Spinner`, `Button`, `Typography`)
 - `formatRelativeDate` utility for relative day labels
 
@@ -97,7 +106,7 @@ Current dashboard model fields:
 
 ## Current Limitations
 
-- `Watered`, `Snooze`, and `New entry` actions are UI placeholders and not wired to persistence workflows.
+- `Watered` and `Snooze` actions are UI placeholders and not wired to persistence workflows.
 - Today/overdue section does not currently render an explicit empty-state message when there are no due plants.
 - Options action in upcoming list item (`IconButton`) is currently visual-only.
 
@@ -114,5 +123,7 @@ Current dashboard model fields:
 - `src/features/dashboard/components/ScheduleListItem.tsx`
 - `src/features/dashboard/services/getScheduledPlants.tsx`
 - `src/features/dashboard/services/partitionScheduledPlants.ts`
+- `src/features/collection/components/CareModal.tsx`
+- `src/features/collection/services/addCareEntry.ts`
 - `src/utils/formatRelativeDate.tsx`
 - `src/App.tsx`
