@@ -11,10 +11,12 @@ import Button from '@components/Button';
 import TodayCareSection from '../components/TodayCareSection';
 import UpcomingCareSection from '../components/UpcomingCareSection';
 import { H1 } from '@components/Typography';
+import CareModal from '../../collection/components/CareModal';
 
 export default function Dashboard() {
   const [plants, setPlants] = useState<ScheduledPlant[]>([]);
   const { showError } = useToast();
+  const [showCareModal, setShowCareModal] = useState(false);
 
   const [loading, setLoading] = useState(true);
   const { user } = useAuth();
@@ -47,7 +49,7 @@ export default function Dashboard() {
     <div className="w-3/4 mx-auto py-8 flex flex-col gap-4">
       <div className="flex justify-between items-center">
         <H1>Care Dashboard</H1>
-        <Button onClick={() => {}} label="New entry" />
+        <Button onClick={() => setShowCareModal(true)} label="New entry" />
       </div>
       <p>
         These care reminders are general guidelines based on typical plant
@@ -59,6 +61,7 @@ export default function Dashboard() {
         <TodayCareSection plants={todayOrOverdue} />
       )}
       <UpcomingCareSection plants={afterToday} />
+      {showCareModal && <CareModal setShowCareModal={setShowCareModal} />}
     </div>
   );
 }
