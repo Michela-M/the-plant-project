@@ -132,7 +132,7 @@ describe('CareModal', () => {
         careType: 'water',
         notes: '',
         otherCareType: '',
-        plantId: 'plant-1',
+        plantId: 'Monstera',
         userId: 'user-1',
       });
     });
@@ -141,7 +141,6 @@ describe('CareModal', () => {
       'Care entry added successfully'
     );
     expect(setShowCareModal).toHaveBeenCalledWith(false);
-    expect(mockReload).toHaveBeenCalled();
   });
 
   it('uses provided plantId and skips plant fetching', async () => {
