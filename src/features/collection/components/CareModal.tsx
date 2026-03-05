@@ -91,8 +91,8 @@ export default function CareModal({
     onSubmit: async (values) => {
       try {
         const careDate = combineDateWithCurrentTime(values.date);
-        const selectedPlantId = plantId ?? values.plant;
-
+        const selectedPlantId =
+          plantId ?? plants.find((plant) => plant.name === values.plant)?.id;
         if (!selectedPlantId) {
           showError('Please select a plant');
           return;
