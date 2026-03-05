@@ -32,12 +32,19 @@ export default function WaterModal({
     },
     validationSchema: Yup.object(waterValidationSchema),
     onSubmit: async (values) => {
+      if (!user || !user.id) {
+        showError(
+          'Error watering plant',
+          'You must be logged in to add a care entry.'
+        );
+        return;
+      }
       try {
         const careDate = combineDateWithCurrentTime(values.date);
 
         await addCareEntry({
           plantId,
-          userId: user?.id || '',
+          userId: user.id,
           careType: 'water',
           date: careDate,
           notes: values.notes,
