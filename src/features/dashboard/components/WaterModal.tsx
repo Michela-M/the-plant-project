@@ -45,7 +45,10 @@ export default function WaterModal({
         setShowWaterModal(false);
         showSuccess('Plant watered', 'Care entry added successfully');
       } catch (error) {
-        showError('Error', 'Failed to add care entry');
+        showError(
+          'Error watering plant',
+          error instanceof Error ? error.message : 'Unknown error'
+        );
       }
     },
   });

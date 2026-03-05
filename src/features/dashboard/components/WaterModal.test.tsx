@@ -111,8 +111,8 @@ describe('WaterModal', () => {
 
     await waitFor(() => {
       expect(mockShowError).toHaveBeenCalledWith(
-        'Error',
-        'Failed to add care entry'
+        'Error watering plant',
+        'failed'
       );
     });
 
