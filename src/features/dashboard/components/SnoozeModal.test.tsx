@@ -38,6 +38,7 @@ describe('SnoozeModal', () => {
   });
 
   afterEach(() => {
+    vi.useRealTimers();
     vi.restoreAllMocks();
   });
 
@@ -51,38 +52,36 @@ describe('SnoozeModal', () => {
   });
 
   it('submits tomorrow option by default', async () => {
+    vi.useFakeTimers();
+    vi.setSystemTime(new Date('2026-03-05T10:30:00.000Z'));
+
     const setShowSnoozeModal = vi.fn();
-    const submitTime = new Date();
 
     render(
       <SnoozeModal plantId="plant-1" setShowSnoozeModal={setShowSnoozeModal} />
     );
 
     fireEvent.click(screen.getByRole('button', { name: 'Confirm' }));
+    await vi.runAllTimersAsync();
+    await Promise.resolve();
 
-    await waitFor(() => {
-      expect(mockUpdateNextWatering).toHaveBeenCalledTimes(1);
-      const nextWateringDate = mockUpdateNextWatering.mock.calls[0][2] as Date;
-      expect(mockUpdateNextWatering).toHaveBeenCalledWith(
-        'plant-1',
-        'user-1',
-        expect.any(Date)
-      );
-      expect(nextWateringDate).toBeInstanceOf(Date);
-      const dayDiff = Math.round(
-        (nextWateringDate.getTime() - submitTime.getTime()) /
-          (1000 * 60 * 60 * 24)
-      );
-      expect(dayDiff).toBe(1);
-      expect(setShowSnoozeModal).toHaveBeenCalledWith(false);
-      expect(mockShowSuccess).toHaveBeenCalledWith(
-        'Watering reminder snoozed successfully!'
-      );
-    });
+    expect(mockUpdateNextWatering).toHaveBeenCalledTimes(1);
+    const nextWateringDate = mockUpdateNextWatering.mock.calls[0][2] as Date;
+    expect(mockUpdateNextWatering).toHaveBeenCalledWith(
+      'plant-1',
+      'user-1',
+      new Date('2026-03-06T10:30:00.000Z')
+    );
+    expect(nextWateringDate).toEqual(new Date('2026-03-06T10:30:00.000Z'));
+    expect(setShowSnoozeModal).toHaveBeenCalledWith(false);
+    expect(mockShowSuccess).toHaveBeenCalledWith(
+      'Watering reminder snoozed successfully!'
+    );
   });
 
   it('submits custom snooze days when days input is used', async () => {
-    const submitTime = new Date();
+    vi.useFakeTimers();
+    vi.setSystemTime(new Date('2026-03-05T10:30:00.000Z'));
 
     render(<SnoozeModal plantId="plant-1" setShowSnoozeModal={vi.fn()} />);
 
@@ -90,21 +89,32 @@ describe('SnoozeModal', () => {
     fireEvent.focus(daysInput);
     fireEvent.change(daysInput, { target: { value: '5' } });
     fireEvent.click(screen.getByRole('button', { name: 'Confirm' }));
+    await vi.runAllTimersAsync();
+    await Promise.resolve();
+
+    expect(mockUpdateNextWatering).toHaveBeenCalledTimes(1);
+    const nextWateringDate = mockUpdateNextWatering.mock.calls[0][2] as Date;
+    expect(mockUpdateNextWatering).toHaveBeenCalledWith(
+      'plant-1',
+      'user-1',
+      new Date('2026-03-10T10:30:00.000Z')
+    );
+    expect(nextWateringDate).toEqual(new Date('2026-03-10T10:30:00.000Z'));
+  });
+
+  it('shows validation message for invalid snooze days and blocks submit', async () => {
+    render(<SnoozeModal plantId="plant-1" setShowSnoozeModal={vi.fn()} />);
+
+    const daysInput = screen.getByLabelText('Number of days');
+    fireEvent.focus(daysInput);
+    fireEvent.change(daysInput, { target: { value: '0' } });
+    fireEvent.blur(daysInput);
+    fireEvent.click(screen.getByRole('button', { name: 'Confirm' }));
 
     await waitFor(() => {
-      expect(mockUpdateNextWatering).toHaveBeenCalledTimes(1);
-      const nextWateringDate = mockUpdateNextWatering.mock.calls[0][2] as Date;
-      expect(mockUpdateNextWatering).toHaveBeenCalledWith(
-        'plant-1',
-        'user-1',
-        expect.any(Date)
-      );
-      expect(nextWateringDate).toBeInstanceOf(Date);
-      const dayDiff = Math.round(
-        (nextWateringDate.getTime() - submitTime.getTime()) /
-          (1000 * 60 * 60 * 24)
-      );
-      expect(dayDiff).toBe(5);
+      expect(screen.getByText('Must be greater than 0')).toBeInTheDocument();
+      expect(daysInput).toHaveAttribute('aria-invalid', 'true');
+      expect(mockUpdateNextWatering).not.toHaveBeenCalled();
     });
   });
 
@@ -145,6 +155,26 @@ describe('SnoozeModal', () => {
       expect(mockShowError).toHaveBeenCalledWith(
         'User not authenticated. Please log in again.'
       );
+    });
+  });
+
+  it('shows an error toast when snoozing fails', async () => {
+    const setShowSnoozeModal = vi.fn();
+
+    mockUpdateNextWatering.mockRejectedValueOnce(new Error('Write failed'));
+
+    render(
+      <SnoozeModal plantId="plant-1" setShowSnoozeModal={setShowSnoozeModal} />
+    );
+
+    fireEvent.click(screen.getByRole('button', { name: 'Confirm' }));
+
+    await waitFor(() => {
+      expect(mockShowError).toHaveBeenCalledWith(
+        'Error snoozing reminder',
+        'Write failed'
+      );
+      expect(setShowSnoozeModal).not.toHaveBeenCalledWith(false);
     });
   });
 
