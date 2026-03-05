@@ -1,8 +1,12 @@
 import Button from '@components/Button';
 import { Headline, Callout } from '@components/Typography';
 import formatRelativeDate from '@utils/formatRelativeDate';
+import WaterModal from './WaterModal';
+import { useState } from 'react';
+import SnoozeModal from './SnoozeModal';
 
 export default function ScheduleCard({
+  id,
   name,
   species,
   lastWateredDate,
@@ -10,6 +14,7 @@ export default function ScheduleCard({
   inferredWateringFrequency,
   imageUrl,
 }: {
+  id: string;
   name: string;
   species: string;
   lastWateredDate: Date | null;
@@ -25,6 +30,9 @@ export default function ScheduleCard({
     typeof inferredWateringFrequency === 'number' &&
     Number.isFinite(inferredWateringFrequency) &&
     inferredWateringFrequency > 0;
+
+  const [showWaterModal, setShowWaterModal] = useState(false);
+  const [showSnoozeModal, setShowSnoozeModal] = useState(false);
 
   return (
     <div
@@ -45,11 +53,16 @@ export default function ScheduleCard({
         alt={name + ' image'}
       />
       <div className="flex gap-2">
-        <Button size="sm" label="Watered" onClick={() => {}} fullWidth />
+        <Button
+          size="sm"
+          label="Watered"
+          onClick={() => setShowWaterModal(true)}
+          fullWidth
+        />
         <Button
           size="sm"
           label="Snooze"
-          onClick={() => {}}
+          onClick={() => setShowSnoozeModal(true)}
           variant="outlined"
         />
       </div>
@@ -89,6 +102,12 @@ export default function ScheduleCard({
           </div>
         )}
       </div>
+      {showWaterModal && (
+        <WaterModal plantId={id} setShowWaterModal={setShowWaterModal} />
+      )}
+      {showSnoozeModal && (
+        <SnoozeModal plantId={id} setShowSnoozeModal={setShowSnoozeModal} />
+      )}
     </div>
   );
 }

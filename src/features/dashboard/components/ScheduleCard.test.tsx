@@ -1,6 +1,18 @@
-import { render, screen } from '@testing-library/react';
+import { fireEvent, render, screen } from '@testing-library/react';
 import { afterEach, describe, expect, it, vi } from 'vitest';
 import ScheduleCard from './ScheduleCard';
+
+vi.mock('./WaterModal', () => ({
+  default: ({ plantId }: { plantId: string }) => (
+    <div data-testid="water-modal">WaterModal for {plantId}</div>
+  ),
+}));
+
+vi.mock('./SnoozeModal', () => ({
+  default: ({ plantId }: { plantId: string }) => (
+    <div data-testid="snooze-modal">SnoozeModal for {plantId}</div>
+  ),
+}));
 
 describe('ScheduleCard', () => {
   afterEach(() => {
@@ -13,6 +25,7 @@ describe('ScheduleCard', () => {
 
     render(
       <ScheduleCard
+        id="plant-1"
         name="My Monstera"
         species="Monstera Deliciosa"
         wateringFrequency={7}
@@ -39,6 +52,7 @@ describe('ScheduleCard', () => {
   it('shows estimated watering frequency when watering frequency is 0', () => {
     render(
       <ScheduleCard
+        id="plant-1"
         name="My Monstera"
         species="Monstera Deliciosa"
         wateringFrequency={0}
@@ -56,6 +70,7 @@ describe('ScheduleCard', () => {
   it("shows 'N/A' when estimated watering frequency is missing", () => {
     render(
       <ScheduleCard
+        id="plant-1"
         name="My Monstera"
         species="Monstera Deliciosa"
         wateringFrequency={0}
@@ -76,6 +91,7 @@ describe('ScheduleCard', () => {
   it("shows 'N/A' for last watered date when it's null", () => {
     render(
       <ScheduleCard
+        id="plant-1"
         name="My Monstera"
         species="Monstera Deliciosa"
         wateringFrequency={7}
@@ -91,6 +107,7 @@ describe('ScheduleCard', () => {
   it('uses placeholder image when imageUrl is null', () => {
     render(
       <ScheduleCard
+        id="plant-1"
         name="My Monstera"
         species="Monstera Deliciosa"
         wateringFrequency={7}
@@ -104,6 +121,46 @@ describe('ScheduleCard', () => {
     expect(img).toBeInTheDocument();
     expect(img.src).toBe(
       'https://larchcottage.co.uk/wp-content/uploads/2024/05/placeholder.jpg'
+    );
+  });
+
+  it('opens WaterModal when Watered is clicked', () => {
+    render(
+      <ScheduleCard
+        id="plant-123"
+        name="My Monstera"
+        species="Monstera Deliciosa"
+        wateringFrequency={7}
+        inferredWateringFrequency={8}
+        lastWateredDate={new Date('2026-03-01T10:00:00')}
+        imageUrl={null}
+      />
+    );
+
+    fireEvent.click(screen.getByRole('button', { name: 'Watered' }));
+
+    expect(screen.getByTestId('water-modal')).toHaveTextContent(
+      'WaterModal for plant-123'
+    );
+  });
+
+  it('opens SnoozeModal when Snooze is clicked', () => {
+    render(
+      <ScheduleCard
+        id="plant-123"
+        name="My Monstera"
+        species="Monstera Deliciosa"
+        wateringFrequency={7}
+        inferredWateringFrequency={8}
+        lastWateredDate={new Date('2026-03-01T10:00:00')}
+        imageUrl={null}
+      />
+    );
+
+    fireEvent.click(screen.getByRole('button', { name: 'Snooze' }));
+
+    expect(screen.getByTestId('snooze-modal')).toHaveTextContent(
+      'SnoozeModal for plant-123'
     );
   });
 });

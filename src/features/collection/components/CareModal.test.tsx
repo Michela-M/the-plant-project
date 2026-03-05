@@ -132,7 +132,7 @@ describe('CareModal', () => {
         careType: 'water',
         notes: '',
         otherCareType: '',
-        plantId: 'Monstera',
+        plantId: 'plant-1',
         userId: 'user-1',
       });
     });
