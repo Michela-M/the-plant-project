@@ -36,7 +36,7 @@ It wraps a small transactional form in `Modal` and saves data through `addCareEn
   - shows toast: `Plant watered` / `Care entry added successfully`
 - On failure:
   - keeps modal open
-  - shows toast: `Error` / `Failed to add care entry`
+  - shows toast: `Error watering plant` / `<error message>`
 
 ## Example Usage
 
