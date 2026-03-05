@@ -4,7 +4,6 @@ import RadioGroup, { RadioButton } from './Radio';
 
 describe('Radio', () => {
   it('renders RadioGroup and RadioButton components', () => {
-    // Test implementation will go here
     render(
       <RadioGroup label="Test Group">
         <RadioButton
@@ -20,6 +19,25 @@ describe('Radio', () => {
     expect(screen.getByLabelText('Option 1')).toBeInTheDocument();
   });
 
+  it('supports a ReactNode label', () => {
+    render(
+      <RadioGroup label="Test Group">
+        <RadioButton
+          label={
+            <span>
+              Option <strong>1</strong>
+            </span>
+          }
+          value="option1"
+          checked={false}
+          onChange={() => {}}
+        />
+      </RadioGroup>
+    );
+
+    expect(screen.getByLabelText('Option 1')).toBeInTheDocument();
+  });
+
   it('handles onChange events correctly', () => {
     const handleChange = vi.fn();
     render(
@@ -28,17 +46,13 @@ describe('Radio', () => {
           label="Option 1"
           value="option1"
           checked={true}
-          onChange={() => {
-            handleChange('option1');
-          }}
+          onChange={handleChange}
         />
         <RadioButton
           label="Option 2"
           value="option2"
           checked={false}
-          onChange={() => {
-            handleChange('option2');
-          }}
+          onChange={handleChange}
         />
       </RadioGroup>
     );
@@ -46,6 +60,39 @@ describe('Radio', () => {
     const option2 = screen.getByLabelText('Option 2');
     option2.click();
     expect(handleChange).toHaveBeenCalledWith('option2');
+  });
+
+  it('uses the default radio group name', () => {
+    render(
+      <RadioGroup label="Test Group">
+        <RadioButton
+          label="Option 1"
+          value="option1"
+          checked={false}
+          onChange={() => {}}
+        />
+      </RadioGroup>
+    );
+
+    const option1 = screen.getByLabelText('Option 1');
+    expect(option1).toHaveAttribute('name', 'radio-group');
+  });
+
+  it('applies a custom radio group name', () => {
+    render(
+      <RadioGroup label="Test Group">
+        <RadioButton
+          label="Option 1"
+          value="option1"
+          checked={false}
+          onChange={() => {}}
+          name="care-type"
+        />
+      </RadioGroup>
+    );
+
+    const option1 = screen.getByLabelText('Option 1');
+    expect(option1).toHaveAttribute('name', 'care-type');
   });
 
   it('applies disabled styles correctly', () => {

@@ -30,7 +30,7 @@ export function RadioButton({
   disabled,
   name = 'radio-group',
 }: {
-  label: string;
+  label: React.ReactNode;
   value: string;
   checked: boolean;
   onChange: (value: string) => void;
