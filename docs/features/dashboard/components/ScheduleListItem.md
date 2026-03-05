@@ -8,6 +8,7 @@
 
 | Prop                        | Type             | Required | Description                                                      |
 | --------------------------- | ---------------- | -------- | ---------------------------------------------------------------- |
+| `id`                        | `string`         | yes      | Plant id used when opening `WaterModal` from the options menu.   |
 | `name`                      | `string`         | yes      | Plant display name.                                              |
 | `species`                   | `string`         | yes      | Species/common label displayed above the name.                   |
 | `wateringFrequency`         | `number \| null` | yes      | If greater than `0`, shows “Watering frequency: X days”.         |
@@ -19,11 +20,15 @@
 - Shows **Watering frequency** when `wateringFrequency > 0`.
 - Otherwise shows **Estimated watering frequency** using `inferredWateringFrequency`.
 - Includes an options `IconButton` (ellipsis) for item actions.
+- Options menu includes:
+  - `Plant watered` which opens `WaterModal` for the current plant id.
+  - `Remove from schedule` which is currently disabled.
 
 ## Example Usage
 
 ```tsx
 <ScheduleListItem
+  id="plant-2"
   name="Snake Plant"
   species="Sansevieria trifasciata"
   wateringFrequency={null}
