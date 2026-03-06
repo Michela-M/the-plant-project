@@ -1,14 +1,19 @@
 import { IconButton } from '@components/Button';
+import Menu, { MenuItem } from '@components/Menu';
 import { Callout, Headline } from '@components/Typography';
 import { EllipsisVertical } from 'lucide-react';
+import { useState } from 'react';
+import WaterModal from './WaterModal';
 
 export default function ScheduleListItem({
+  id,
   name,
   species,
   wateringFrequency,
   inferredWateringFrequency,
   imageUrl,
 }: {
+  id: string;
   name: string;
   species: string;
   wateringFrequency: number | null;
@@ -23,6 +28,9 @@ export default function ScheduleListItem({
     typeof inferredWateringFrequency === 'number' &&
     Number.isFinite(inferredWateringFrequency) &&
     inferredWateringFrequency > 0;
+
+  const [showMenu, setShowMenu] = useState(false);
+  const [showWaterModal, setShowWaterModal] = useState(false);
 
   return (
     <div className="flex flex-row gap-4">
@@ -52,13 +60,33 @@ export default function ScheduleListItem({
           </p>
         )}
       </div>
-      <div>
+      <div className="relative">
         <IconButton
           icon={<EllipsisVertical />}
           label="Options"
           variant="ghost"
+          onClick={() => setShowMenu(!showMenu)}
         />
+        {showMenu && (
+          <Menu>
+            <MenuItem
+              label="Plant watered"
+              onClick={() => {
+                setShowWaterModal(true);
+                setShowMenu(false);
+              }}
+            />
+            <MenuItem
+              label="Remove from schedule"
+              onClick={() => {}}
+              disabled
+            />
+          </Menu>
+        )}
       </div>
+      {showWaterModal && (
+        <WaterModal plantId={id} setShowWaterModal={setShowWaterModal} />
+      )}
     </div>
   );
 }

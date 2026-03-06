@@ -8,6 +8,7 @@
 
 | Prop                        | Type             | Required | Description                                                                         |
 | --------------------------- | ---------------- | -------- | ----------------------------------------------------------------------------------- |
+| `id`                        | `string`         | yes      | Plant id passed to action modals (`WaterModal`, `SnoozeModal`).                     |
 | `name`                      | `string`         | yes      | Plant display name.                                                                 |
 | `species`                   | `string`         | yes      | Species label shown above the name.                                                 |
 | `lastWateredDate`           | `Date \| null`   | yes      | Last watering date; rendered as relative text using `formatRelativeDate`, or `N/A`. |
@@ -21,11 +22,14 @@
 - Shows **Watering frequency** when `wateringFrequency > 0`.
 - Otherwise shows **Estimated watering frequency** using `inferredWateringFrequency`.
 - Renders `Watered` and `Snooze` action buttons.
+- Clicking `Watered` opens `WaterModal` for the current plant id.
+- Clicking `Snooze` opens `SnoozeModal` for the current plant id.
 
 ## Example Usage
 
 ```tsx
 <ScheduleCard
+  id="plant-123"
   name="Monstera"
   species="Monstera deliciosa"
   lastWateredDate={new Date('2026-03-01T10:00:00Z')}

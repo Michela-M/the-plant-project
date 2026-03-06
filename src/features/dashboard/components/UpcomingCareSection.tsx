@@ -74,6 +74,7 @@ export default function UpcomingCareSection({
               {group.plants.map((plant) => (
                 <ScheduleListItem
                   key={plant.id}
+                  id={plant.id}
                   name={plant.name}
                   species={plant.species}
                   wateringFrequency={plant.wateringFrequency ?? 0}

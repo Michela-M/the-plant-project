@@ -44,7 +44,10 @@ This feature currently includes:
 
 1. `TodayCareSection` renders only when `todayOrOverdue.length > 0`.
 2. Each plant is shown as a `ScheduleCard` with species, name, image, last watering, and watering frequency.
-3. Card actions (`Watered`, `Snooze`) are currently placeholder UI actions.
+3. Card actions are functional:
+
+- `Watered` opens `WaterModal` and creates a water care entry.
+- `Snooze` opens `SnoozeModal` and updates `nextWateringDate`.
 
 ### Create New Care Entry
 
@@ -55,9 +58,10 @@ This feature currently includes:
 ### Render Upcoming Care
 
 1. `UpcomingCareSection` groups `afterToday` plants by calendar date (`YYYY-MM-DD`).
-2. Each group renders a heading with absolute date and relative date label (e.g., `Friday, 6 Mar (in 3 days)`).
+2. Each group renders a heading with absolute date and relative date label (e.g., `Friday 6 Mar (in 3 days)`).
 3. Each plant renders as a `ScheduleListItem` row.
 4. If there are no upcoming items, it shows `No upcoming care.`.
+5. Each row has an options menu where `Plant watered` opens `WaterModal`.
 
 ## Display Behavior
 
@@ -69,6 +73,7 @@ This feature currently includes:
 - Frequency display behavior:
   - Uses `wateringFrequency` when value is greater than `0`.
   - Falls back to `inferredWateringFrequency` otherwise.
+- Upcoming row options include a disabled `Remove from schedule` action placeholder.
 
 ## Data Source (Current State)
 
@@ -95,6 +100,8 @@ Current dashboard model fields:
 - Auth context (`useAuth`) for current user id
 - Toast context (`useToast`) for async error feedback
 - Shared collection workflow (`CareModal`, `addCareEntry`)
+- Dashboard care actions (`WaterModal`, `SnoozeModal`)
+- Dashboard schedule update service (`updateNextWatering`)
 - Shared components (`Spinner`, `Button`, `Typography`)
 - `formatRelativeDate` utility for relative day labels
 
@@ -106,9 +113,9 @@ Current dashboard model fields:
 
 ## Current Limitations
 
-- `Watered` and `Snooze` actions are UI placeholders and not wired to persistence workflows.
 - Today/overdue section does not currently render an explicit empty-state message when there are no due plants.
-- Options action in upcoming list item (`IconButton`) is currently visual-only.
+- `Remove from schedule` in upcoming item options is currently disabled and not implemented.
+- Dashboard data is not optimistically refreshed after `WaterModal`/`SnoozeModal` actions; users rely on subsequent reload/refetch.
 
 ## Access Control
 
@@ -123,6 +130,7 @@ Current dashboard model fields:
 - `src/features/dashboard/components/ScheduleListItem.tsx`
 - `src/features/dashboard/services/getScheduledPlants.tsx`
 - `src/features/dashboard/services/partitionScheduledPlants.ts`
+- `src/features/dashboard/services/updateNextWateringDate.tsx`
 - `src/features/collection/components/CareModal.tsx`
 - `src/features/collection/services/addCareEntry.ts`
 - `src/utils/formatRelativeDate.tsx`

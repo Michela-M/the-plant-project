@@ -19,6 +19,7 @@ export default function TodayCareSection({
         plants.map((plant) => (
           <ScheduleCard
             key={plant.id}
+            id={plant.id}
             name={plant.name}
             species={plant.species}
             wateringFrequency={plant.wateringFrequency ?? null}

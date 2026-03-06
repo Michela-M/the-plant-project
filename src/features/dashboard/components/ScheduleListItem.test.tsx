@@ -1,11 +1,18 @@
-import { render, screen } from '@testing-library/react';
-import { describe, expect, it } from 'vitest';
+import { fireEvent, render, screen } from '@testing-library/react';
+import { describe, expect, it, vi } from 'vitest';
 import ScheduleListItem from './ScheduleListItem';
+
+vi.mock('./WaterModal', () => ({
+  default: ({ plantId }: { plantId: string }) => (
+    <div data-testid="water-modal">WaterModal for {plantId}</div>
+  ),
+}));
 
 describe('ScheduleListItem', () => {
   it('renders correctly', () => {
     render(
       <ScheduleListItem
+        id="plant-1"
         name="My Monstera"
         species="Monstera Deliciosa"
         wateringFrequency={7}
@@ -28,6 +35,7 @@ describe('ScheduleListItem', () => {
   it('shows estimated watering frequency when watering frequency is 0', () => {
     render(
       <ScheduleListItem
+        id="plant-1"
         name="My Monstera"
         species="Monstera Deliciosa"
         wateringFrequency={0}
@@ -44,6 +52,7 @@ describe('ScheduleListItem', () => {
   it("shows 'N/A' when estimated watering frequency is missing", () => {
     render(
       <ScheduleListItem
+        id="plant-1"
         name="My Monstera"
         species="Monstera Deliciosa"
         wateringFrequency={0}
@@ -63,6 +72,7 @@ describe('ScheduleListItem', () => {
   it('uses placeholder image when imageUrl is not provided', () => {
     render(
       <ScheduleListItem
+        id="plant-1"
         name="My Monstera"
         species="Monstera Deliciosa"
         wateringFrequency={7}
@@ -76,5 +86,36 @@ describe('ScheduleListItem', () => {
     expect(img.src).toBe(
       'https://larchcottage.co.uk/wp-content/uploads/2024/05/placeholder.jpg'
     );
+  });
+
+  it('opens options menu and launches WaterModal from menu action', () => {
+    render(
+      <ScheduleListItem
+        id="plant-123"
+        name="My Monstera"
+        species="Monstera Deliciosa"
+        wateringFrequency={7}
+        inferredWateringFrequency={8}
+        imageUrl={null}
+      />
+    );
+
+    fireEvent.click(screen.getByRole('button', { name: 'Options' }));
+
+    expect(
+      screen.getByRole('button', { name: 'Plant watered' })
+    ).toBeInTheDocument();
+    expect(
+      screen.getByRole('button', { name: 'Remove from schedule' })
+    ).toBeDisabled();
+
+    fireEvent.click(screen.getByRole('button', { name: 'Plant watered' }));
+
+    expect(screen.getByTestId('water-modal')).toHaveTextContent(
+      'WaterModal for plant-123'
+    );
+    expect(
+      screen.queryByRole('button', { name: 'Plant watered' })
+    ).not.toBeInTheDocument();
   });
 });
