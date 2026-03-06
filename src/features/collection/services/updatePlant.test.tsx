@@ -53,7 +53,6 @@ describe('updatePlant', () => {
         name: 'Monstera',
         species: 'Monstera deliciosa',
         notes: 'Updated notes',
-        imageUrl: '',
         wateringFrequency: 7,
         inferredWateringFrequency: 7,
         nextWateringDate: new Date('2024-01-08'),
@@ -91,9 +90,6 @@ describe('updatePlant', () => {
       plantRef,
       expect.objectContaining({
         name: 'Pothos',
-        species: '',
-        notes: '',
-        imageUrl: '',
         wateringFrequency: 0,
         inferredWateringFrequency: 9,
         nextWateringDate: new Date('2024-01-19'),
@@ -101,7 +97,7 @@ describe('updatePlant', () => {
     );
   });
 
-  it('keeps nextWateringDate null when wateringFrequency is zero and dates are missing', async () => {
+  it('does not update watering fields when wateringFrequency is omitted', async () => {
     const plantId = 'plant-1';
     const userId = 'user-1';
 
@@ -124,13 +120,7 @@ describe('updatePlant', () => {
     );
 
     const plantRef = (doc as Mock).mock.results[0].value;
-    expect(updateDoc).toHaveBeenCalledWith(
-      plantRef,
-      expect.objectContaining({
-        wateringFrequency: 0,
-        nextWateringDate: null,
-      })
-    );
+    expect(updateDoc).toHaveBeenCalledWith(plantRef, { name: 'ZZ Plant' });
   });
 
   it('uses stored lastWateredDate/secondLastWateredDate values when inferring schedule', async () => {
@@ -163,14 +153,26 @@ describe('updatePlant', () => {
       plantRef,
       expect.objectContaining({
         name: 'Snake Plant',
-        species: '',
-        notes: '',
-        imageUrl: '',
         wateringFrequency: 0,
         inferredWateringFrequency: 7,
         nextWateringDate: new Date('2024-01-08'),
       })
     );
+  });
+
+  it('returns without calling updateDoc when no props are provided', async () => {
+    (getDoc as Mock).mockResolvedValue({
+      data: () => ({
+        inferredWateringFrequency: 3,
+        lastWateredDate: new Date('2024-01-01'),
+        secondLastWateredDate: new Date('2023-12-25'),
+      }),
+      exists: () => true,
+    });
+
+    await updatePlant('plant-1', {}, 'user-1');
+
+    expect(updateDoc).not.toHaveBeenCalled();
   });
 
   it('propagates updateDoc errors', async () => {
