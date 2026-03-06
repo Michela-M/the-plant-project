@@ -74,6 +74,16 @@ export default function PlantDetails() {
           commonName: plantDetails?.species || '',
           trackWatering: plantDetails?.trackWatering || false,
         }}
+        onTrackWateringChange={(trackWatering) => {
+          setPlantDetails((prev) =>
+            prev
+              ? {
+                  ...prev,
+                  trackWatering,
+                }
+              : prev
+          );
+        }}
       />
       <div className="flex gap-6">
         <div className="w-5/8 flex flex-col gap-6">

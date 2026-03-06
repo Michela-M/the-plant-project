@@ -6,9 +6,10 @@ The **PlantDetailsHeader** component renders the top section of the plant detail
 
 ## Props
 
-| Prop    | Type   | Required | Description                                        |
-| ------- | ------ | -------- | -------------------------------------------------- |
-| `plant` | object | yes      | Plant data used for display and action navigation. |
+| Prop                    | Type                               | Required | Description                                                        |
+| ----------------------- | ---------------------------------- | -------- | ------------------------------------------------------------------ |
+| `plant`                 | object                             | yes      | Plant data used for display and action navigation.                 |
+| `onTrackWateringChange` | `(trackWatering: boolean) => void` | no       | Optional callback fired after successful watering tracking toggle. |
 
 ### `plant` shape
 
@@ -26,6 +27,7 @@ The **PlantDetailsHeader** component renders the top section of the plant detail
 - Options menu provides `Edit`, `Delete`, and watering tracking toggle (`Track watering` / `Remove from schedule`).
 - Delete opens a destructive confirmation modal.
 - Watering toggle updates only `trackWatering` on the plant record.
+- When provided, `onTrackWateringChange` is called after successful toggle so parent state can update immediately.
 - Confirmed delete calls `deletePlant`, shows toast feedback, and navigates to `/collection` on success.
 
 ## Example Usage

@@ -16,6 +16,7 @@ import { updatePlant } from '../services/updatePlant';
 
 export default function PlantDetailsHeader({
   plant,
+  onTrackWateringChange,
 }: {
   plant: {
     id: string;
@@ -23,6 +24,7 @@ export default function PlantDetailsHeader({
     commonName?: string;
     trackWatering: boolean;
   };
+  onTrackWateringChange?: (trackWatering: boolean) => void;
 }) {
   const navigate = useNavigate();
   const { user } = useAuth();
@@ -48,14 +50,17 @@ export default function PlantDetailsHeader({
   };
 
   const toggleTrackWatering = async () => {
+    const nextTrackWatering = !plant.trackWatering;
+
     try {
       await updatePlant(
         plant.id,
         {
-          trackWatering: !plant.trackWatering,
+          trackWatering: nextTrackWatering,
         },
         user?.id || ''
       );
+      onTrackWateringChange?.(nextTrackWatering);
       showSuccess(
         plant.trackWatering
           ? 'Plant removed from schedule successfully'

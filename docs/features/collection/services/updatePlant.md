@@ -21,7 +21,7 @@ Fields that may be written by this service (only when provided or derived):
 
 Watering behavior:
 
-- The service reads the existing plant document first.
+- The service reads the existing plant document only when `wateringFrequency` is provided (for watering inference/recalculation).
 - `lastWateredDate` and `secondLastWateredDate` are read from stored plant data and used for calculations.
 - Watering calculations run only when `plantData.wateringFrequency` is provided.
 - If provided `wateringFrequency !== 0`, `inferredWateringFrequency` is set to that value.

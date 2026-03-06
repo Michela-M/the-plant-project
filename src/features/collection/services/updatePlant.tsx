@@ -21,51 +21,8 @@ export const updatePlant = async (
   try {
     const plantRef = doc(db, `users/${userId}/plants`, plantId);
 
-    const plantSnapshot = await getDoc(plantRef);
-    const existingPlantData = plantSnapshot.exists()
-      ? (plantSnapshot.data() as {
-          inferredWateringFrequency?: number;
-          lastWateredDate?: unknown;
-          secondLastWateredDate?: unknown;
-          wateringFrequency?: number;
-        })
-      : {};
-
     const hasWateringFrequency = plantData.wateringFrequency !== undefined;
     const wateringFrequency = plantData.wateringFrequency;
-    const lastWateredDate = firebaseTimestampToDate(
-      existingPlantData.lastWateredDate
-    );
-    const secondLastWateredDate = firebaseTimestampToDate(
-      existingPlantData.secondLastWateredDate
-    );
-
-    let inferredWateringFrequency =
-      existingPlantData.inferredWateringFrequency || 0;
-    let nextWateringDate: Date | null = null;
-
-    if (wateringFrequency !== undefined && wateringFrequency !== 0) {
-      inferredWateringFrequency = wateringFrequency;
-      if (lastWateredDate !== null) {
-        nextWateringDate = calculateNextWateringDate({
-          lastWateredDate,
-          wateringFrequency: inferredWateringFrequency,
-        });
-      }
-    } else if (
-      wateringFrequency === 0 &&
-      lastWateredDate !== null &&
-      secondLastWateredDate !== null
-    ) {
-      inferredWateringFrequency = calculateWateringFrequency({
-        firstDate: secondLastWateredDate,
-        secondDate: lastWateredDate,
-      });
-      nextWateringDate = calculateNextWateringDate({
-        lastWateredDate,
-        wateringFrequency: inferredWateringFrequency,
-      });
-    }
 
     const updateData: {
       imageUrl?: string;
@@ -95,6 +52,45 @@ export const updatePlant = async (
     }
 
     if (hasWateringFrequency && wateringFrequency !== undefined) {
+      const plantSnapshot = await getDoc(plantRef);
+      const existingPlantData = plantSnapshot.exists()
+        ? (plantSnapshot.data() as {
+            inferredWateringFrequency?: number;
+            lastWateredDate?: unknown;
+            secondLastWateredDate?: unknown;
+          })
+        : {};
+
+      const lastWateredDate = firebaseTimestampToDate(
+        existingPlantData.lastWateredDate
+      );
+      const secondLastWateredDate = firebaseTimestampToDate(
+        existingPlantData.secondLastWateredDate
+      );
+
+      let inferredWateringFrequency =
+        existingPlantData.inferredWateringFrequency || 0;
+      let nextWateringDate: Date | null = null;
+
+      if (wateringFrequency !== 0) {
+        inferredWateringFrequency = wateringFrequency;
+        if (lastWateredDate !== null) {
+          nextWateringDate = calculateNextWateringDate({
+            lastWateredDate,
+            wateringFrequency: inferredWateringFrequency,
+          });
+        }
+      } else if (lastWateredDate !== null && secondLastWateredDate !== null) {
+        inferredWateringFrequency = calculateWateringFrequency({
+          firstDate: secondLastWateredDate,
+          secondDate: lastWateredDate,
+        });
+        nextWateringDate = calculateNextWateringDate({
+          lastWateredDate,
+          wateringFrequency: inferredWateringFrequency,
+        });
+      }
+
       updateData.wateringFrequency = wateringFrequency;
       updateData.inferredWateringFrequency = inferredWateringFrequency;
       updateData.nextWateringDate = nextWateringDate;

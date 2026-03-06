@@ -101,16 +101,6 @@ describe('updatePlant', () => {
     const plantId = 'plant-1';
     const userId = 'user-1';
 
-    (getDoc as Mock).mockResolvedValue({
-      data: () => ({
-        inferredWateringFrequency: 3,
-        lastWateredDate: null,
-        secondLastWateredDate: null,
-        wateringFrequency: 0,
-      }),
-      exists: () => true,
-    });
-
     await updatePlant(
       plantId,
       {
@@ -120,6 +110,7 @@ describe('updatePlant', () => {
     );
 
     const plantRef = (doc as Mock).mock.results[0].value;
+    expect(getDoc).not.toHaveBeenCalled();
     expect(updateDoc).toHaveBeenCalledWith(plantRef, { name: 'ZZ Plant' });
   });
 
@@ -161,18 +152,18 @@ describe('updatePlant', () => {
   });
 
   it('returns without calling updateDoc when no props are provided', async () => {
-    (getDoc as Mock).mockResolvedValue({
-      data: () => ({
-        inferredWateringFrequency: 3,
-        lastWateredDate: new Date('2024-01-01'),
-        secondLastWateredDate: new Date('2023-12-25'),
-      }),
-      exists: () => true,
-    });
-
     await updatePlant('plant-1', {}, 'user-1');
 
+    expect(getDoc).not.toHaveBeenCalled();
     expect(updateDoc).not.toHaveBeenCalled();
+  });
+
+  it('does not read existing plant when only trackWatering is updated', async () => {
+    await updatePlant('plant-1', { trackWatering: false }, 'user-1');
+
+    const plantRef = (doc as Mock).mock.results[0].value;
+    expect(getDoc).not.toHaveBeenCalled();
+    expect(updateDoc).toHaveBeenCalledWith(plantRef, { trackWatering: false });
   });
 
   it('propagates updateDoc errors', async () => {
