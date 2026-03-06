@@ -22,6 +22,7 @@ export default function PlantDetails() {
     notes: string;
     creationDate: Date | null;
     imageUrl: string | null;
+    trackWatering: boolean;
   } | null>(null);
 
   const [loading, setLoading] = useState(true);
@@ -71,6 +72,7 @@ export default function PlantDetails() {
           id: plantDetails?.id || '',
           name: plantDetails?.name || '',
           commonName: plantDetails?.species || '',
+          trackWatering: plantDetails?.trackWatering || false,
         }}
       />
       <div className="flex gap-6">

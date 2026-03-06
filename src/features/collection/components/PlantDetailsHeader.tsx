@@ -12,11 +12,17 @@ import { useToast } from '@context/toast/useToast';
 import { useAuth } from '@context/auth/useAuth';
 import { H1, H3 } from '@components/Typography';
 import CareModal from './CareModal';
+import { updatePlant } from '../services/updatePlant';
 
 export default function PlantDetailsHeader({
   plant,
 }: {
-  plant: { id: string; name: string; commonName?: string };
+  plant: {
+    id: string;
+    name: string;
+    commonName?: string;
+    trackWatering: boolean;
+  };
 }) {
   const navigate = useNavigate();
   const { user } = useAuth();
@@ -36,6 +42,28 @@ export default function PlantDetailsHeader({
     } catch (error) {
       showError(
         'Error deleting plant',
+        error instanceof Error ? error.message : 'Unknown error'
+      );
+    }
+  };
+
+  const toggleTrackWatering = async () => {
+    try {
+      await updatePlant(
+        plant.id,
+        {
+          trackWatering: !plant.trackWatering,
+        },
+        user?.id || ''
+      );
+      showSuccess(
+        plant.trackWatering
+          ? 'Plant removed from schedule successfully'
+          : 'Plant added to schedule successfully'
+      );
+    } catch (error) {
+      showError(
+        'Error updating plant',
         error instanceof Error ? error.message : 'Unknown error'
       );
     }
@@ -103,9 +131,15 @@ export default function PlantDetailsHeader({
                 danger
               />
               <MenuItem
-                label="Remove from schedule"
-                onClick={() => {}}
-                disabled
+                label={
+                  plant.trackWatering
+                    ? 'Remove from schedule'
+                    : 'Track watering'
+                }
+                onClick={() => {
+                  toggleTrackWatering();
+                  setShowOptionsMenu(false);
+                }}
               />
             </Menu>
           )}
