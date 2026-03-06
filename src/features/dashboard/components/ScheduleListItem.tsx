@@ -38,8 +38,13 @@ export default function ScheduleListItem({
   const { showError, showSuccess } = useToast();
 
   const handleRemoveFromSchedule = async () => {
+    if (!user?.id) {
+      showError('Error removing plant from schedule', 'You must be signed in to modify your schedule.');
+      return;
+    }
+
     try {
-      await updatePlant(id, { trackWatering: false }, user?.id || '');
+      await updatePlant(id, { trackWatering: false }, user.id);
       showSuccess('Plant removed from schedule successfully');
     } catch (error) {
       showError(
