@@ -65,8 +65,14 @@ This feature currently includes:
 1. Existing plant data is fetched and used to prefill form fields.
 2. User can update text fields and optionally choose a new image.
 3. Selected image is validated and uploaded with `uploadPlantImage`.
-4. `updatePlant` saves changes to Firestore.
+4. `updatePlant` saves only explicitly provided changes to Firestore (partial update).
 5. On success, a success toast appears and user is redirected to `/plants/:id`.
+
+### Toggle Water Tracking
+
+1. User opens the plant details options menu.
+2. User selects `Track watering` or `Remove from schedule`.
+3. `updatePlant` updates `trackWatering` without overwriting unrelated plant fields.
 
 ### Delete Plant
 
@@ -111,6 +117,7 @@ Fields currently used by UI/services:
 - `notes: string`
 - `creationDate: Date`
 - `imageUrl: string | null`
+- `trackWatering: boolean`
 
 Care history path: `users/{userId}/plants/{plantId}/careEntries`
 

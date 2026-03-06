@@ -18,6 +18,7 @@
 - Skips plants where `nextWateringDate` is `null`.
 - Renders **“No upcoming care.”** when no grouped entries exist.
 - Preserves incoming order of date groups based on the first occurrence of each date key.
+- Delegates per-item interactions (for example, `Plant watered` and `Remove from schedule`) to `ScheduleListItem`.
 
 ## Notes
 

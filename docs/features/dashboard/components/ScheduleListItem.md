@@ -22,7 +22,9 @@
 - Includes an options `IconButton` (ellipsis) for item actions.
 - Options menu includes:
   - `Plant watered` which opens `WaterModal` for the current plant id.
-  - `Remove from schedule` which is currently disabled.
+  - `Remove from schedule` which updates the plant with `trackWatering: false`.
+- On successful remove, shows toast: `Plant removed from schedule successfully`.
+- On remove failure, shows an error toast with the service error message.
 
 ## Example Usage
 

@@ -61,7 +61,10 @@ This feature currently includes:
 2. Each group renders a heading with absolute date and relative date label (e.g., `Friday 6 Mar (in 3 days)`).
 3. Each plant renders as a `ScheduleListItem` row.
 4. If there are no upcoming items, it shows `No upcoming care.`.
-5. Each row has an options menu where `Plant watered` opens `WaterModal`.
+5. Each row has an options menu:
+
+- `Plant watered` opens `WaterModal`.
+- `Remove from schedule` updates the plant with `trackWatering: false`.
 
 ## Display Behavior
 
@@ -73,7 +76,7 @@ This feature currently includes:
 - Frequency display behavior:
   - Uses `wateringFrequency` when value is greater than `0`.
   - Falls back to `inferredWateringFrequency` otherwise.
-- Upcoming row options include a disabled `Remove from schedule` action placeholder.
+- Upcoming row options include active `Plant watered` and `Remove from schedule` actions.
 
 ## Data Source (Current State)
 
@@ -114,7 +117,6 @@ Current dashboard model fields:
 ## Current Limitations
 
 - Today/overdue section does not currently render an explicit empty-state message when there are no due plants.
-- `Remove from schedule` in upcoming item options is currently disabled and not implemented.
 - Dashboard data is not optimistically refreshed after `WaterModal`/`SnoozeModal` actions; users rely on subsequent reload/refetch.
 
 ## Access Control
