@@ -4,6 +4,9 @@ import { Callout, Headline } from '@components/Typography';
 import { EllipsisVertical } from 'lucide-react';
 import { useState } from 'react';
 import WaterModal from './WaterModal';
+import { useAuth } from '@context/auth/useAuth';
+import { useToast } from '@context/toast/useToast';
+import { updatePlant } from '@features/collection/services/updatePlant';
 
 export default function ScheduleListItem({
   id,
@@ -31,6 +34,20 @@ export default function ScheduleListItem({
 
   const [showMenu, setShowMenu] = useState(false);
   const [showWaterModal, setShowWaterModal] = useState(false);
+  const { user } = useAuth();
+  const { showError, showSuccess } = useToast();
+
+  const handleRemoveFromSchedule = async () => {
+    try {
+      await updatePlant(id, { trackWatering: false }, user?.id || '');
+      showSuccess('Plant removed from schedule successfully');
+    } catch (error) {
+      showError(
+        'Error removing plant from schedule',
+        error instanceof Error ? error.message : 'Unknown error'
+      );
+    }
+  };
 
   return (
     <div className="flex flex-row gap-4">
@@ -78,8 +95,10 @@ export default function ScheduleListItem({
             />
             <MenuItem
               label="Remove from schedule"
-              onClick={() => {}}
-              disabled
+              onClick={() => {
+                handleRemoveFromSchedule();
+                setShowMenu(false);
+              }}
             />
           </Menu>
         )}

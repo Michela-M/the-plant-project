@@ -1,6 +1,29 @@
-import { fireEvent, render, screen } from '@testing-library/react';
-import { describe, expect, it, vi } from 'vitest';
+import { beforeEach, describe, expect, it, vi } from 'vitest';
+import { fireEvent, render, screen, waitFor } from '@testing-library/react';
 import ScheduleListItem from './ScheduleListItem';
+
+const { mockUseAuth, mockShowSuccess, mockShowError, mockUpdatePlant } =
+  vi.hoisted(() => ({
+    mockUseAuth: vi.fn(),
+    mockShowSuccess: vi.fn(),
+    mockShowError: vi.fn(),
+    mockUpdatePlant: vi.fn(),
+  }));
+
+vi.mock('@context/auth/useAuth', () => ({
+  useAuth: () => mockUseAuth(),
+}));
+
+vi.mock('@context/toast/useToast', () => ({
+  useToast: () => ({
+    showSuccess: mockShowSuccess,
+    showError: mockShowError,
+  }),
+}));
+
+vi.mock('@features/collection/services/updatePlant', () => ({
+  updatePlant: mockUpdatePlant,
+}));
 
 vi.mock('./WaterModal', () => ({
   default: ({ plantId }: { plantId: string }) => (
@@ -9,6 +32,17 @@ vi.mock('./WaterModal', () => ({
 }));
 
 describe('ScheduleListItem', () => {
+  beforeEach(() => {
+    vi.clearAllMocks();
+    mockUseAuth.mockReturnValue({
+      user: { id: 'user-1', email: 'test@example.com' },
+      loading: false,
+      setUser: vi.fn(),
+      logout: vi.fn(),
+    });
+    mockUpdatePlant.mockResolvedValue(undefined);
+  });
+
   it('renders correctly', () => {
     render(
       <ScheduleListItem
@@ -107,7 +141,7 @@ describe('ScheduleListItem', () => {
     ).toBeInTheDocument();
     expect(
       screen.getByRole('button', { name: 'Remove from schedule' })
-    ).toBeDisabled();
+    ).toBeInTheDocument();
 
     fireEvent.click(screen.getByRole('button', { name: 'Plant watered' }));
 
@@ -117,5 +151,65 @@ describe('ScheduleListItem', () => {
     expect(
       screen.queryByRole('button', { name: 'Plant watered' })
     ).not.toBeInTheDocument();
+  });
+
+  it('removes plant from schedule and shows success toast', async () => {
+    render(
+      <ScheduleListItem
+        id="plant-123"
+        name="My Monstera"
+        species="Monstera Deliciosa"
+        wateringFrequency={7}
+        inferredWateringFrequency={8}
+        imageUrl={null}
+      />
+    );
+
+    fireEvent.click(screen.getByRole('button', { name: 'Options' }));
+    fireEvent.click(
+      screen.getByRole('button', { name: 'Remove from schedule' })
+    );
+
+    await waitFor(() => {
+      expect(mockUpdatePlant).toHaveBeenCalledWith(
+        'plant-123',
+        { trackWatering: false },
+        'user-1'
+      );
+      expect(mockShowSuccess).toHaveBeenCalledWith(
+        'Plant removed from schedule successfully'
+      );
+    });
+
+    expect(
+      screen.queryByRole('button', { name: 'Remove from schedule' })
+    ).not.toBeInTheDocument();
+  });
+
+  it('shows error toast when remove from schedule fails', async () => {
+    mockUpdatePlant.mockRejectedValueOnce(new Error('Write failed'));
+
+    render(
+      <ScheduleListItem
+        id="plant-123"
+        name="My Monstera"
+        species="Monstera Deliciosa"
+        wateringFrequency={7}
+        inferredWateringFrequency={8}
+        imageUrl={null}
+      />
+    );
+
+    fireEvent.click(screen.getByRole('button', { name: 'Options' }));
+    fireEvent.click(
+      screen.getByRole('button', { name: 'Remove from schedule' })
+    );
+
+    await waitFor(() => {
+      expect(mockShowError).toHaveBeenCalledWith(
+        'Error removing plant from schedule',
+        'Write failed'
+      );
+    });
   });
 });
