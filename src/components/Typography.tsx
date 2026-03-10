@@ -7,7 +7,7 @@ function mergeClassNames(defaultClassName: string, className?: string) {
   return [defaultClassName, className].filter(Boolean).join(' ');
 }
 
-export function H1({ className, ...props }: H1Props) {
+export function H1({ className, children, ...props }: H1Props) {
   return (
     <h1
       className={mergeClassNames(
@@ -15,21 +15,29 @@ export function H1({ className, ...props }: H1Props) {
         className
       )}
       {...props}
-    />
+    >
+      {children}
+    </h1>
   );
 }
 
-export function H2({ className, ...props }: H2Props) {
+export function H2({ className, children, ...props }: H2Props) {
   return (
     <h2
       className={mergeClassNames('text-2xl text-green-900', className)}
       {...props}
-    />
+    >
+      {children}
+    </h2>
   );
 }
 
-export function H3({ className, ...props }: H3Props) {
-  return <h3 className={mergeClassNames('text-xl', className)} {...props} />;
+export function H3({ className, children, ...props }: H3Props) {
+  return (
+    <h3 className={mergeClassNames('text-xl', className)} {...props}>
+      {children}
+    </h3>
+  );
 }
 
 export function Headline({ className, ...props }: ParagraphProps) {
