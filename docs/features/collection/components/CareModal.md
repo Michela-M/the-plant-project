@@ -28,7 +28,7 @@ The **CareModal** component captures and submits a new plant care entry. It supp
 
 - On mount without `plantId`, the component fetches plants via `getAllPlants(user.id)` and shows a spinner while loading.
 - On submit, the date is converted with `combineDateWithCurrentTime` and saved through `addCareEntry`.
-- When `careType` is `water`, the component calls `updateWateringDates` first and passes those returned fields into `addCareEntry`.
+- When `careType` is `water`, the component calls `updateWateringDates(selectedPlantId, user.id, { date: careDate })` first and passes those returned fields into `addCareEntry`.
 - A success toast is shown after save and the modal closes.
 - Errors from plant loading or submission are surfaced with toast errors.
 

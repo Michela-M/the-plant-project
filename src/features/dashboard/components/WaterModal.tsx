@@ -43,11 +43,9 @@ export default function WaterModal({
       try {
         const careDate = combineDateWithCurrentTime(values.date);
 
-        const wateringUpdateData = await updateWateringDates(
-          plantId,
-          user.id,
-          careDate
-        );
+        const wateringUpdateData = await updateWateringDates(plantId, user.id, {
+          date: careDate,
+        });
 
         await addCareEntry({
           date: careDate,

@@ -6,31 +6,37 @@ import {
 } from './wateringUtils';
 import { firebaseTimestampToDate } from './firebaseDate';
 
+type UpdateWateringDatesOptions =
+  | { date: Date; wateringFreq?: never }
+  | { date?: never; wateringFreq: number };
+
 export default async function updateWateringDates(
   plantId: string,
   userId: string,
-  date: Date
+  options: UpdateWateringDatesOptions
 ) {
+  const { date, wateringFreq } = options;
   const plantDetails = await getPlantDetails(plantId, userId);
   let lastWateredDate = firebaseTimestampToDate(plantDetails?.lastWateredDate);
   let secondLastWateredDate = firebaseTimestampToDate(
     plantDetails?.secondLastWateredDate
   );
-  const wateringFrequency = plantDetails?.wateringFrequency || 0;
+  const wateringFrequency =
+    wateringFreq || plantDetails?.wateringFrequency || 0;
 
   // Update lastWateredDate and secondLastWateredDate based on the new care entry date
-  if (!lastWateredDate || date > lastWateredDate) {
-    secondLastWateredDate = lastWateredDate;
-    lastWateredDate = date;
-  } else if (!secondLastWateredDate || date > secondLastWateredDate) {
-    secondLastWateredDate = date;
+  if (date) {
+    if (!lastWateredDate || date > lastWateredDate) {
+      secondLastWateredDate = lastWateredDate;
+      lastWateredDate = date;
+    } else if (!secondLastWateredDate || date > secondLastWateredDate) {
+      secondLastWateredDate = date;
+    }
   }
 
   // Calculate inferred watering frequency based on the two most recent watering dates
   let inferredWateringFrequency =
-    plantDetails?.inferredWateringFrequency ||
-    plantDetails?.wateringFrequency ||
-    0;
+    plantDetails?.inferredWateringFrequency || wateringFrequency || 0;
   if (
     lastWateredDate &&
     secondLastWateredDate &&

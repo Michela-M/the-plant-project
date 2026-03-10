@@ -101,11 +101,9 @@ export default function CareModal({
 
         const wateringUpdateData =
           values.careType === 'water'
-            ? await updateWateringDates(
-                selectedPlantId,
-                user?.id || '',
-                careDate
-              )
+            ? await updateWateringDates(selectedPlantId, user?.id || '', {
+                date: careDate,
+              })
             : {};
 
         await addCareEntry({

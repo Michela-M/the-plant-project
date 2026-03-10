@@ -5,6 +5,7 @@ import WaterModal from './WaterModal';
 
 const {
   mockAddCareEntry,
+  mockUpdateWateringDates,
   mockShowError,
   mockShowSuccess,
   mockUseAuth,
@@ -12,6 +13,7 @@ const {
   mockGetLocalDateInputValue,
 } = vi.hoisted(() => ({
   mockAddCareEntry: vi.fn(),
+  mockUpdateWateringDates: vi.fn(),
   mockShowError: vi.fn(),
   mockShowSuccess: vi.fn(),
   mockUseAuth: vi.fn(),
@@ -21,6 +23,10 @@ const {
 
 vi.mock('@features/collection/services/addCareEntry', () => ({
   addCareEntry: mockAddCareEntry,
+}));
+
+vi.mock('@features/collection/utils/updateWateringDates', () => ({
+  default: mockUpdateWateringDates,
 }));
 
 vi.mock('@context/toast/useToast', () => ({
@@ -57,6 +63,12 @@ describe('WaterModal', () => {
     mockCombineDateWithCurrentTime.mockReturnValue(
       new Date('2026-03-01T12:00:00.000Z')
     );
+    mockUpdateWateringDates.mockResolvedValue({
+      inferredWateringFrequency: 0,
+      lastWateredDate: new Date('2026-03-01T12:00:00.000Z'),
+      secondLastWateredDate: null,
+      nextWateringDate: null,
+    });
     mockAddCareEntry.mockResolvedValue(undefined);
   });
 
@@ -81,6 +93,13 @@ describe('WaterModal', () => {
 
     await waitFor(() => {
       expect(mockCombineDateWithCurrentTime).toHaveBeenCalledWith('2026-03-01');
+      expect(mockUpdateWateringDates).toHaveBeenCalledWith(
+        'plant-1',
+        'user-1',
+        {
+          date: new Date('2026-03-01T12:00:00.000Z'),
+        }
+      );
       expect(mockAddCareEntry).toHaveBeenCalledWith({
         plantId: 'plant-1',
         userId: 'user-1',

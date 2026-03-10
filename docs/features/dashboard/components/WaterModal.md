@@ -25,7 +25,7 @@ It wraps a small transactional form in `Modal` and saves data through `addCareEn
 - Initializes `date` with `getLocalDateInputValue(new Date())`.
 - Validates with Yup (`date` must be valid and not in the future).
 - On submit, converts the selected date using `combineDateWithCurrentTime`.
-- Before saving, computes watering metadata through `updateWateringDates(plantId, user.id, careDate)`.
+- Before saving, computes watering metadata through `updateWateringDates(plantId, user.id, { date: careDate })`.
 - If user is not authenticated, shows error toast and exits without saving.
 - Calls `addCareEntry` with:
   - `plantId`
