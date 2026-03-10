@@ -83,7 +83,7 @@ This service does not apply defaults or compute watering dates. The caller must 
 ### `lastWateredDate` controls care-entry creation
 
 If `lastWateredDate` is `null`, no care entry is added.
-If `lastWateredDate` is present, one care entry is batched with `{ type: 'watering', date: lastWateredDate }`.
+If `lastWateredDate` is present, one care entry is batched with `{ careType: 'water', date: lastWateredDate }`.
 
 ### Invalid `lastWateredDate`
 

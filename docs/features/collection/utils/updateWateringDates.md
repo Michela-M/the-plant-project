@@ -31,20 +31,20 @@ updateWateringDates(
 
 ## Returned Fields
 
-| Field                       | Type           | Description                                                                                                                                                             |
-| --------------------------- | -------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `inferredWateringFrequency` | `number`       | Frequency in days derived from two most recent watering dates when possible; otherwise falls back to stored inferred value, then explicit watering frequency, then `0`. |
-| `lastWateredDate`           | `Date \| null` | Most recent watering date after applying the new event.                                                                                                                 |
-| `secondLastWateredDate`     | `Date \| null` | Second most recent watering date after applying the new event.                                                                                                          |
-| `nextWateringDate`          | `Date \| null` | Next due date based on explicit `wateringFrequency` first, then inferred frequency.                                                                                     |
+| Field                       | Type           | Description                                                                                                                                                              |
+| --------------------------- | -------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| `inferredWateringFrequency` | `number`       | Frequency in days derived from two most recent watering dates when possible; otherwise falls back to stored inferred value, then effective watering frequency, then `0`. |
+| `lastWateredDate`           | `Date \| null` | Most recent watering date after applying the new event.                                                                                                                  |
+| `secondLastWateredDate`     | `Date \| null` | Second most recent watering date after applying the new event.                                                                                                           |
+| `nextWateringDate`          | `Date \| null` | Next due date based on explicit `wateringFrequency` first, then inferred frequency.                                                                                      |
 
 ## Behavior Notes
 
 - Fetches plant details via `getPlantDetails(plantId, userId)`.
 - Normalizes Firestore date-like values with `firebaseTimestampToDate`.
 - Updates the `lastWateredDate` and `secondLastWateredDate` ordering when `options.date` is provided.
-- Initializes `wateringFrequency` from `options.wateringFreq || plantDetails.wateringFrequency || 0`.
-- Initializes inferred frequency from `plantDetails.inferredWateringFrequency || wateringFrequency || 0`.
+- Initializes `wateringFrequency` from `options.wateringFreq ?? plantDetails.wateringFrequency ?? 0`.
+- Initializes inferred frequency from `plantDetails.inferredWateringFrequency ?? wateringFrequency ?? 0`.
 - Recomputes inferred frequency with `calculateWateringFrequency` only when both watering dates are present and ordered.
 - Computes next date with `calculateNextWateringDate`:
   - uses explicit `wateringFrequency` when non-zero
@@ -75,5 +75,5 @@ const scheduleUpdateData = await updateWateringDates(plantId, userId, {
 
 - If existing date fields are missing/invalid, they normalize to `null`.
 - If the new date is older than `lastWateredDate` but newer than `secondLastWateredDate`, only `secondLastWateredDate` is replaced.
-- Because `wateringFrequency` uses `||` fallback, passing `wateringFreq: 0` behaves like "not provided" and falls back to stored `wateringFrequency`.
+- Because `wateringFrequency` uses `??` fallback, passing `wateringFreq: 0` is treated as explicitly provided.
 - If both explicit and inferred frequencies are `0`, no new `nextWateringDate` is computed.

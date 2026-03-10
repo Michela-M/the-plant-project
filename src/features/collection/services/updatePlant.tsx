@@ -12,6 +12,8 @@ export const updatePlant = async (
     wateringFrequency?: number;
     nextWateringDate?: Date | null;
     inferredWateringFrequency?: number | null;
+    lastWateredDate?: Date | null;
+    secondLastWateredDate?: Date | null;
   },
   userId: string
 ) => {
@@ -27,6 +29,8 @@ export const updatePlant = async (
       wateringFrequency?: number;
       nextWateringDate?: Date | null;
       inferredWateringFrequency?: number | null;
+      lastWateredDate?: Date | null;
+      secondLastWateredDate?: Date | null;
     } = plantData;
 
     await updateDoc(plantRef, updateData);

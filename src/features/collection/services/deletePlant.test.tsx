@@ -37,10 +37,7 @@ describe('deletePlant', () => {
     (collection as Mock).mockReturnValue(careEntriesCollectionRef);
     (getDocs as Mock).mockResolvedValue({
       empty: false,
-      forEach: (callback: (docSnap: { ref: unknown }) => void) => {
-        callback({ ref: careEntryRef1 });
-        callback({ ref: careEntryRef2 });
-      },
+      docs: [{ ref: careEntryRef1 }, { ref: careEntryRef2 }],
     });
     (writeBatch as Mock).mockReturnValue({
       delete: batchDelete,
@@ -65,6 +62,37 @@ describe('deletePlant', () => {
     expect(deleteDoc).toHaveBeenCalledWith(plantDocRef);
   });
 
+  it('chunks careEntries deletion into multiple batches when over 500 docs', async () => {
+    const docs = Array.from({ length: 501 }, (_, index) => ({
+      ref: { id: `care-ref-${index}` },
+    }));
+    const batchDelete1 = vi.fn();
+    const batchDelete2 = vi.fn();
+    const commit1 = vi.fn().mockResolvedValue(undefined);
+    const commit2 = vi.fn().mockResolvedValue(undefined);
+    const plantDocRef = { id: 'plant-ref' };
+
+    (collection as Mock).mockReturnValue({ id: 'care-entries-ref' });
+    (getDocs as Mock).mockResolvedValue({
+      empty: false,
+      docs,
+    });
+    (writeBatch as Mock)
+      .mockReturnValueOnce({ delete: batchDelete1, commit: commit1 })
+      .mockReturnValueOnce({ delete: batchDelete2, commit: commit2 });
+    (doc as Mock).mockReturnValue(plantDocRef);
+    (deleteDoc as Mock).mockResolvedValue(undefined);
+
+    await deletePlant('123', 'test-user');
+
+    expect(writeBatch).toHaveBeenCalledTimes(2);
+    expect(batchDelete1).toHaveBeenCalledTimes(500);
+    expect(batchDelete2).toHaveBeenCalledTimes(1);
+    expect(commit1).toHaveBeenCalledTimes(1);
+    expect(commit2).toHaveBeenCalledTimes(1);
+    expect(deleteDoc).toHaveBeenCalledWith(plantDocRef);
+  });
+
   it('deletes only the plant document when careEntries is empty', async () => {
     const plantDocRef = { id: 'plant-ref' };
     const careEntriesCollectionRef = { id: 'care-entries-ref' };
@@ -72,7 +100,7 @@ describe('deletePlant', () => {
     (collection as Mock).mockReturnValue(careEntriesCollectionRef);
     (getDocs as Mock).mockResolvedValue({
       empty: true,
-      forEach: vi.fn(),
+      docs: [],
     });
     (doc as Mock).mockReturnValue(plantDocRef);
     (deleteDoc as Mock).mockResolvedValue(undefined);
@@ -89,7 +117,7 @@ describe('deletePlant', () => {
     (collection as Mock).mockReturnValue({ id: 'care-entries-ref' });
     (getDocs as Mock).mockResolvedValue({
       empty: true,
-      forEach: vi.fn(),
+      docs: [],
     });
     (doc as Mock).mockReturnValue({});
     (deleteDoc as Mock).mockRejectedValue(mockError);

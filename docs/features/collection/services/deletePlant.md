@@ -10,7 +10,7 @@ Before deleting the plant document, it deletes all documents in the plant's `car
 Deletion order:
 
 1. Read `careEntries` subcollection.
-2. If entries exist, delete them in a Firestore batch.
+2. If entries exist, delete them in one or more Firestore batches (chunked to max 500 deletes per batch).
 3. Delete the plant document.
 
 ## Parameters
@@ -43,6 +43,10 @@ await deletePlant('abc123', 'user-123');
 ### No care entries
 
 If the `careEntries` subcollection is empty, the service skips batch deletion and deletes only the plant document.
+
+### More than 500 care entries
+
+Firestore write batches are limited to 500 operations. The service chunks care entry deletes into batches of 500 or fewer and commits each batch before deleting the plant document.
 
 ### Firestore errors
 

@@ -52,16 +52,16 @@ describe('wateringUtils - calculateWateringFrequency', () => {
     });
     expect(result).toBe(1);
   });
-});
 
-it('should calculate elapsed days from timestamps exactly', () => {
-  const firstDate = new Date('2024-06-01T00:00:00.000Z');
-  const secondDate = new Date('2024-06-04T00:00:00.000Z');
-  const result = calculateWateringFrequency({
-    firstDate,
-    secondDate,
+  it('should calculate elapsed days from timestamps exactly', () => {
+    const firstDate = new Date('2024-06-01T00:00:00.000Z');
+    const secondDate = new Date('2024-06-04T00:00:00.000Z');
+    const result = calculateWateringFrequency({
+      firstDate,
+      secondDate,
+    });
+    expect(result).toBe(3);
   });
-  expect(result).toBe(3);
 });
 
 describe('wateringUtils - calculateNextWateringDate', () => {

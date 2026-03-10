@@ -113,7 +113,10 @@ Fields currently used by UI/services:
 - `name: string`
 - `species: string`
 - `wateringFrequency: number`
+- `inferredWateringFrequency: number | null`
 - `lastWateredDate: Date | null`
+- `secondLastWateredDate: Date | null`
+- `nextWateringDate: Date | null`
 - `notes: string`
 - `creationDate: Date`
 - `imageUrl: string | null`

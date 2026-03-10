@@ -20,14 +20,16 @@ Fields that may be written by this service (when provided):
 - `wateringFrequency`
 - `nextWateringDate`
 - `inferredWateringFrequency`
+- `lastWateredDate`
+- `secondLastWateredDate`
 
 ## Parameters
 
-| Name        | Type                                                                                                                                                                                                       | Required | Description                          |
-| ----------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | -------- | ------------------------------------ |
-| `plantId`   | `string`                                                                                                                                                                                                   | Yes      | Plant document ID                    |
-| `plantData` | `{ imageUrl?: string; name?: string; notes?: string; species?: string; trackWatering?: boolean; wateringFrequency?: number; nextWateringDate?: Date \| null; inferredWateringFrequency?: number \| null }` | Yes      | Partial plant fields to update       |
-| `userId`    | `string`                                                                                                                                                                                                   | Yes      | User ID used to scope Firestore path |
+| Name        | Type                                                                                                                                                                                                                                                                             | Required | Description                          |
+| ----------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | -------- | ------------------------------------ |
+| `plantId`   | `string`                                                                                                                                                                                                                                                                         | Yes      | Plant document ID                    |
+| `plantData` | `{ imageUrl?: string; name?: string; notes?: string; species?: string; trackWatering?: boolean; wateringFrequency?: number; nextWateringDate?: Date \| null; inferredWateringFrequency?: number \| null; lastWateredDate?: Date \| null; secondLastWateredDate?: Date \| null }` | Yes      | Partial plant fields to update       |
+| `userId`    | `string`                                                                                                                                                                                                                                                                         | Yes      | User ID used to scope Firestore path |
 
 ### `plantData` fields
 
@@ -41,6 +43,8 @@ Fields that may be written by this service (when provided):
 | `wateringFrequency`         | `number`         | No       | Watering interval in days          |
 | `nextWateringDate`          | `Date \| null`   | No       | Next scheduled watering date       |
 | `inferredWateringFrequency` | `number \| null` | No       | Inferred watering interval in days |
+| `lastWateredDate`           | `Date \| null`   | No       | Most recent watered date           |
+| `secondLastWateredDate`     | `Date \| null`   | No       | Second most recent watered date    |
 
 ## Return Value
 

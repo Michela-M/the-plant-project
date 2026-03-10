@@ -111,7 +111,7 @@ describe('updateWateringDates', () => {
     });
   });
 
-  it('uses explicit stored wateringFrequency for nextWateringDate', async () => {
+  it('uses explicit stored wateringFrequency for nextWateringDate while preserving inferred value', async () => {
     const lastWateredDate = new Date('2026-03-01T12:00:00.000Z');
 
     (getPlantDetails as Mock).mockResolvedValue(
@@ -126,7 +126,7 @@ describe('updateWateringDates', () => {
     });
 
     expect(result).toEqual({
-      inferredWateringFrequency: 7,
+      inferredWateringFrequency: 0,
       lastWateredDate,
       nextWateringDate: new Date('2026-03-08T12:00:00.000Z'),
       secondLastWateredDate: lastWateredDate,
@@ -152,6 +152,29 @@ describe('updateWateringDates', () => {
       inferredWateringFrequency: 1,
       lastWateredDate,
       nextWateringDate: new Date('2026-03-08T12:00:00.000Z'),
+      secondLastWateredDate: null,
+    });
+  });
+
+  it('treats wateringFreq: 0 as explicitly provided (does not fall back to stored wateringFrequency)', async () => {
+    const lastWateredDate = new Date('2026-03-05T12:00:00.000Z');
+
+    (getPlantDetails as Mock).mockResolvedValue(
+      buildPlantDetails({
+        inferredWateringFrequency: 0,
+        lastWateredDate,
+        wateringFrequency: 7,
+      })
+    );
+
+    const result = await updateWateringDates('plant-8', 'user-1', {
+      wateringFreq: 0,
+    });
+
+    expect(result).toEqual({
+      inferredWateringFrequency: 0,
+      lastWateredDate,
+      nextWateringDate: null,
       secondLastWateredDate: null,
     });
   });

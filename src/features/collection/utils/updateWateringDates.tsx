@@ -22,7 +22,7 @@ export default async function updateWateringDates(
     plantDetails?.secondLastWateredDate
   );
   const wateringFrequency =
-    wateringFreq || plantDetails?.wateringFrequency || 0;
+    wateringFreq ?? plantDetails?.wateringFrequency ?? 0;
 
   // Update lastWateredDate and secondLastWateredDate based on the new care entry date
   if (date) {
@@ -36,7 +36,7 @@ export default async function updateWateringDates(
 
   // Calculate inferred watering frequency based on the two most recent watering dates
   let inferredWateringFrequency =
-    plantDetails?.inferredWateringFrequency || wateringFrequency || 0;
+    plantDetails?.inferredWateringFrequency ?? wateringFrequency ?? 0;
   if (
     lastWateredDate &&
     secondLastWateredDate &&

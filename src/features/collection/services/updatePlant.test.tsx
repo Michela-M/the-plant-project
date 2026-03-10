@@ -24,6 +24,8 @@ describe('updatePlant', () => {
       species: 'Monstera deliciosa',
       notes: 'Rotate weekly',
       wateringFrequency: 7,
+      lastWateredDate: new Date('2026-03-10T12:00:00.000Z'),
+      secondLastWateredDate: new Date('2026-03-03T12:00:00.000Z'),
       nextWateringDate: new Date('2026-03-17T12:00:00.000Z'),
     };
 
