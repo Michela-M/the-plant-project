@@ -1,10 +1,5 @@
-import { doc, getDoc, updateDoc } from 'firebase/firestore';
+import { doc, updateDoc } from 'firebase/firestore';
 import { db } from '@services/firebase';
-import {
-  calculateNextWateringDate,
-  calculateWateringFrequency,
-} from '../utils/wateringUtils';
-import { firebaseTimestampToDate } from '../utils/firebaseDate';
 
 export const updatePlant = async (
   plantId: string,
@@ -14,15 +9,13 @@ export const updatePlant = async (
     notes?: string;
     species?: string;
     wateringFrequency?: number;
-    trackWatering?: boolean;
+    nextWateringDate?: Date | null;
+    inferredWateringFrequency?: number | null;
   },
   userId: string
 ) => {
   try {
     const plantRef = doc(db, `users/${userId}/plants`, plantId);
-
-    const hasWateringFrequency = plantData.wateringFrequency !== undefined;
-    const wateringFrequency = plantData.wateringFrequency;
 
     const updateData: {
       imageUrl?: string;
@@ -30,79 +23,9 @@ export const updatePlant = async (
       notes?: string;
       species?: string;
       wateringFrequency?: number;
-      inferredWateringFrequency?: number;
       nextWateringDate?: Date | null;
-      trackWatering?: boolean;
-    } = {};
-
-    if (plantData.imageUrl !== undefined) {
-      updateData.imageUrl = plantData.imageUrl;
-    }
-
-    if (plantData.name !== undefined) {
-      updateData.name = plantData.name;
-    }
-
-    if (plantData.notes !== undefined) {
-      updateData.notes = plantData.notes;
-    }
-
-    if (plantData.species !== undefined) {
-      updateData.species = plantData.species;
-    }
-
-    if (hasWateringFrequency && wateringFrequency !== undefined) {
-      const plantSnapshot = await getDoc(plantRef);
-      const existingPlantData = plantSnapshot.exists()
-        ? (plantSnapshot.data() as {
-            inferredWateringFrequency?: number;
-            lastWateredDate?: unknown;
-            secondLastWateredDate?: unknown;
-          })
-        : {};
-
-      const lastWateredDate = firebaseTimestampToDate(
-        existingPlantData.lastWateredDate
-      );
-      const secondLastWateredDate = firebaseTimestampToDate(
-        existingPlantData.secondLastWateredDate
-      );
-
-      let inferredWateringFrequency =
-        existingPlantData.inferredWateringFrequency || 0;
-      let nextWateringDate: Date | null = null;
-
-      if (wateringFrequency !== 0) {
-        inferredWateringFrequency = wateringFrequency;
-        if (lastWateredDate !== null) {
-          nextWateringDate = calculateNextWateringDate({
-            lastWateredDate,
-            wateringFrequency: inferredWateringFrequency,
-          });
-        }
-      } else if (lastWateredDate !== null && secondLastWateredDate !== null) {
-        inferredWateringFrequency = calculateWateringFrequency({
-          firstDate: secondLastWateredDate,
-          secondDate: lastWateredDate,
-        });
-        nextWateringDate = calculateNextWateringDate({
-          lastWateredDate,
-          wateringFrequency: inferredWateringFrequency,
-        });
-      }
-
-      updateData.wateringFrequency = wateringFrequency;
-      updateData.inferredWateringFrequency = inferredWateringFrequency;
-      updateData.nextWateringDate = nextWateringDate;
-    }
-
-    if (plantData.trackWatering !== undefined) {
-      updateData.trackWatering = plantData.trackWatering;
-    }
-
-    if (Object.keys(updateData).length === 0) {
-      return;
-    }
+      inferredWateringFrequency?: number | null;
+    } = plantData;
 
     await updateDoc(plantRef, updateData);
   } catch (error) {

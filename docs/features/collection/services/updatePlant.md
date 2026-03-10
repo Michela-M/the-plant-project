@@ -6,56 +6,46 @@
 
 `users/{userId}/plants/{plantId}`
 
-It performs a **partial update** of editable fields and recalculates watering metadata only when `wateringFrequency` is explicitly provided.
+It performs a **partial Firestore update** using only the fields passed in `plantData`.
 
-Fields that may be written by this service (only when provided or derived):
+This service does **not** fetch existing plant data or derive watering fields. It forwards the provided payload directly to `updateDoc`.
 
-- `name` (when provided)
-- `species` (when provided)
-- `notes` (when provided)
-- `imageUrl` (when provided)
-- `trackWatering` (when provided)
-- `wateringFrequency` (when provided)
-- `inferredWateringFrequency` (when `wateringFrequency` is provided)
-- `nextWateringDate` (when `wateringFrequency` is provided)
+Fields that may be written by this service (when provided):
 
-Watering behavior:
-
-- The service reads the existing plant document only when `wateringFrequency` is provided (for watering inference/recalculation).
-- `lastWateredDate` and `secondLastWateredDate` are read from stored plant data and used for calculations.
-- Watering calculations run only when `plantData.wateringFrequency` is provided.
-- If provided `wateringFrequency !== 0`, `inferredWateringFrequency` is set to that value.
-- If provided `wateringFrequency !== 0` and `lastWateredDate` exists, `nextWateringDate` is calculated from `lastWateredDate + wateringFrequency`.
-- If provided `wateringFrequency === 0` and both stored watering dates exist, `inferredWateringFrequency` is recalculated from date distance and used for `nextWateringDate`.
-- If provided `wateringFrequency === 0` and required date values are missing, `nextWateringDate` is set to `null`.
-
-Stored date values are normalized using `firebaseTimestampToDate` to safely handle either JS `Date` or Firebase `Timestamp` values.
+- `name`
+- `species`
+- `notes`
+- `imageUrl`
+- `wateringFrequency`
+- `nextWateringDate`
+- `inferredWateringFrequency`
 
 ## Parameters
 
-| Name        | Type     | Required | Description                             |
-| ----------- | -------- | -------- | --------------------------------------- |
-| `plantId`   | `string` | Yes      | Plant document ID                       |
-| `userId`    | `string` | Yes      | User ID used to scope Firestore path    |
-| `plantData` | `object` | Yes      | Partial editable plant fields to update |
+| Name        | Type                                                                                                                                                                              | Required | Description                          |
+| ----------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | -------- | ------------------------------------ |
+| `plantId`   | `string`                                                                                                                                                                          | Yes      | Plant document ID                    |
+| `plantData` | `{ imageUrl?: string; name?: string; notes?: string; species?: string; wateringFrequency?: number; nextWateringDate?: Date \| null; inferredWateringFrequency?: number \| null }` | Yes      | Partial plant fields to update       |
+| `userId`    | `string`                                                                                                                                                                          | Yes      | User ID used to scope Firestore path |
 
 ### `plantData` fields
 
-| Field               | Type      | Required | Description                                  |
-| ------------------- | --------- | -------- | -------------------------------------------- |
-| `name`              | `string`  | No       | Plant name                                   |
-| `species`           | `string`  | No       | Plant species                                |
-| `wateringFrequency` | `number`  | No       | Desired watering interval in days            |
-| `notes`             | `string`  | No       | Optional notes                               |
-| `imageUrl`          | `string`  | No       | Optional image URL                           |
-| `trackWatering`     | `boolean` | No       | Whether watering reminders should be tracked |
+| Field                       | Type             | Required | Description                        |
+| --------------------------- | ---------------- | -------- | ---------------------------------- |
+| `name`                      | `string`         | No       | Plant name                         |
+| `species`                   | `string`         | No       | Plant species                      |
+| `notes`                     | `string`         | No       | Optional notes                     |
+| `imageUrl`                  | `string`         | No       | Optional image URL                 |
+| `wateringFrequency`         | `number`         | No       | Watering interval in days          |
+| `nextWateringDate`          | `Date \| null`   | No       | Next scheduled watering date       |
+| `inferredWateringFrequency` | `number \| null` | No       | Inferred watering interval in days |
 
 ## Return Value
 
 Returns `Promise<void>`.
 
 - Resolves when the Firestore update succeeds.
-- Rejects when Firestore read/write fails or a date calculation throws.
+- Rejects when Firestore update fails.
 
 ## Usage
 
@@ -67,9 +57,11 @@ await updatePlant(
   {
     name: 'Monstera Deliciosa',
     species: 'Monstera deliciosa',
-    wateringFrequency: 7,
     notes: 'Rotate weekly for even growth',
     imageUrl: 'https://example.com/plant.jpg',
+    wateringFrequency: 7,
+    inferredWateringFrequency: 7,
+    nextWateringDate: new Date('2026-03-17T12:00:00.000Z'),
   },
   'user-456'
 );
@@ -87,34 +79,18 @@ try {
 
 ## Edge Cases
 
-### Missing stored plant document
+### Omitted optional fields
 
-If the document is missing, only explicitly provided fields are written. Watering schedule fields are written only if `wateringFrequency` is provided.
+Fields not included in `plantData` are not part of the Firestore update payload.
 
-### `wateringFrequency` is non-zero but no `lastWateredDate`
+### Empty payload
 
-`inferredWateringFrequency` is set to `wateringFrequency`, but `nextWateringDate` stays `null` because there is no base date.
+If `plantData` is empty, the function still calls `updateDoc` with an empty object.
 
-### `wateringFrequency` is zero with full watering history
+### Watering values
 
-When both `lastWateredDate` and `secondLastWateredDate` exist, inferred frequency is recalculated from the two dates and used to derive `nextWateringDate`.
-
-### `wateringFrequency` omitted
-
-No watering schedule fields are recalculated or written. Existing watering data remains unchanged.
-
-### `wateringFrequency` is zero with missing history
-
-If one or both stored watering dates are missing, inferred recalculation is skipped and `nextWateringDate` is written as `null`.
-
-### Date shape differences from Firestore
-
-Stored date fields may be JS `Date` or Firebase `Timestamp`; invalid values normalize to `null`.
+`wateringFrequency`, `inferredWateringFrequency`, and `nextWateringDate` are not computed by this service. Callers must provide any derived values they want to store.
 
 ### Unknown thrown values
 
 If a non-`Error` value is thrown internally, it is converted to `new Error('Unknown error')`.
-
-### Empty update payload
-
-If `plantData` does not contain any supported fields, the function returns early and does not call Firestore `updateDoc`.

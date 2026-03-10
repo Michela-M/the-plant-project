@@ -1,11 +1,10 @@
 import { beforeEach, describe, expect, it, type Mock, vi } from 'vitest';
-import { doc, getDoc, updateDoc } from 'firebase/firestore';
+import { doc, updateDoc } from 'firebase/firestore';
 import { updatePlant } from './updatePlant';
 import { db } from '@services/firebase';
 
 vi.mock('firebase/firestore', () => ({
   doc: vi.fn(),
-  getDoc: vi.fn(),
   updateDoc: vi.fn(),
 }));
 
@@ -18,177 +17,84 @@ describe('updatePlant', () => {
     vi.clearAllMocks();
   });
 
-  it('uses explicit wateringFrequency and calculates next watering date when non-zero', async () => {
-    const plantId = 'plant-1';
-    const userId = 'user-1';
-    const lastWateredDate = new Date('2024-01-01');
+  it('updates a plant document with provided fields', async () => {
+    const mockPlantRef = { id: 'plant-ref' };
+    const plantData = {
+      name: 'Monstera',
+      species: 'Monstera deliciosa',
+      notes: 'Rotate weekly',
+      wateringFrequency: 7,
+      nextWateringDate: new Date('2026-03-17T12:00:00.000Z'),
+    };
 
-    (getDoc as Mock).mockResolvedValue({
-      data: () => ({
-        inferredWateringFrequency: 0,
-        lastWateredDate,
-        secondLastWateredDate: new Date('2023-12-25'),
-        wateringFrequency: 0,
-      }),
-      exists: () => true,
-    });
+    (doc as Mock).mockReturnValue(mockPlantRef);
+    (updateDoc as Mock).mockResolvedValue(undefined);
 
-    await updatePlant(
-      plantId,
-      {
-        name: 'Monstera',
-        notes: 'Updated notes',
-        species: 'Monstera deliciosa',
-        wateringFrequency: 7,
-      },
-      userId
-    );
+    await updatePlant('plant-1', plantData, 'user-1');
 
-    const plantRef = (doc as Mock).mock.results[0].value;
-    expect(doc).toHaveBeenCalledWith(db, `users/${userId}/plants`, plantId);
-    expect(getDoc).toHaveBeenCalledWith(plantRef);
-    expect(updateDoc).toHaveBeenCalledWith(
-      plantRef,
-      expect.objectContaining({
-        name: 'Monstera',
-        species: 'Monstera deliciosa',
-        notes: 'Updated notes',
-        wateringFrequency: 7,
-        inferredWateringFrequency: 7,
-        nextWateringDate: new Date('2024-01-08'),
-      })
-    );
+    expect(doc).toHaveBeenCalledWith(db, 'users/user-1/plants', 'plant-1');
+    expect(updateDoc).toHaveBeenCalledWith(mockPlantRef, plantData);
   });
 
-  it('uses inferred frequency when wateringFrequency is zero and both watering dates exist', async () => {
-    const plantId = 'plant-1';
-    const userId = 'user-1';
-    const lastWateredDate = new Date('2024-01-10');
-    const secondLastWateredDate = new Date('2024-01-01');
+  it('passes through nullable watering metadata values', async () => {
+    const mockPlantRef = { id: 'plant-ref' };
+    const plantData = {
+      inferredWateringFrequency: null,
+      nextWateringDate: null,
+    };
 
-    (getDoc as Mock).mockResolvedValue({
-      data: () => ({
-        inferredWateringFrequency: 0,
-        lastWateredDate,
-        secondLastWateredDate,
-        wateringFrequency: 0,
-      }),
-      exists: () => true,
-    });
+    (doc as Mock).mockReturnValue(mockPlantRef);
+    (updateDoc as Mock).mockResolvedValue(undefined);
 
-    await updatePlant(
-      plantId,
-      {
-        name: 'Pothos',
-        wateringFrequency: 0,
-      },
-      userId
-    );
+    await updatePlant('plant-2', plantData, 'user-1');
 
-    const plantRef = (doc as Mock).mock.results[0].value;
-    expect(updateDoc).toHaveBeenCalledWith(
-      plantRef,
-      expect.objectContaining({
-        name: 'Pothos',
-        wateringFrequency: 0,
-        inferredWateringFrequency: 9,
-        nextWateringDate: new Date('2024-01-19'),
-      })
-    );
+    expect(updateDoc).toHaveBeenCalledWith(mockPlantRef, plantData);
   });
 
-  it('does not update watering fields when wateringFrequency is omitted', async () => {
-    const plantId = 'plant-1';
-    const userId = 'user-1';
+  it('supports updating only a subset of fields', async () => {
+    const mockPlantRef = { id: 'plant-ref' };
+    const plantData = {
+      imageUrl: 'https://example.com/plant.jpg',
+    };
 
-    await updatePlant(
-      plantId,
-      {
-        name: 'ZZ Plant',
-      },
-      userId
-    );
+    (doc as Mock).mockReturnValue(mockPlantRef);
+    (updateDoc as Mock).mockResolvedValue(undefined);
 
-    const plantRef = (doc as Mock).mock.results[0].value;
-    expect(getDoc).not.toHaveBeenCalled();
-    expect(updateDoc).toHaveBeenCalledWith(plantRef, { name: 'ZZ Plant' });
+    await updatePlant('plant-3', plantData, 'user-99');
+
+    expect(doc).toHaveBeenCalledWith(db, 'users/user-99/plants', 'plant-3');
+    expect(updateDoc).toHaveBeenCalledWith(mockPlantRef, plantData);
   });
 
-  it('uses stored lastWateredDate/secondLastWateredDate values when inferring schedule', async () => {
-    const plantId = 'plant-1';
-    const userId = 'user-1';
-    const storedLast = new Date('2024-01-01');
-    const storedSecondLast = new Date('2023-12-25');
-
-    (getDoc as Mock).mockResolvedValue({
-      data: () => ({
-        inferredWateringFrequency: 1,
-        lastWateredDate: storedLast,
-        secondLastWateredDate: storedSecondLast,
-        wateringFrequency: 0,
-      }),
-      exists: () => true,
-    });
-
-    await updatePlant(
-      plantId,
-      {
-        name: 'Snake Plant',
-        wateringFrequency: 0,
-      },
-      userId
-    );
-
-    const plantRef = (doc as Mock).mock.results[0].value;
-    expect(updateDoc).toHaveBeenCalledWith(
-      plantRef,
-      expect.objectContaining({
-        name: 'Snake Plant',
-        wateringFrequency: 0,
-        inferredWateringFrequency: 7,
-        nextWateringDate: new Date('2024-01-08'),
-      })
-    );
-  });
-
-  it('returns without calling updateDoc when no props are provided', async () => {
-    await updatePlant('plant-1', {}, 'user-1');
-
-    expect(getDoc).not.toHaveBeenCalled();
-    expect(updateDoc).not.toHaveBeenCalled();
-  });
-
-  it('does not read existing plant when only trackWatering is updated', async () => {
-    await updatePlant('plant-1', { trackWatering: false }, 'user-1');
-
-    const plantRef = (doc as Mock).mock.results[0].value;
-    expect(getDoc).not.toHaveBeenCalled();
-    expect(updateDoc).toHaveBeenCalledWith(plantRef, { trackWatering: false });
-  });
-
-  it('propagates updateDoc errors', async () => {
+  it('rethrows Firestore errors as-is when error is an Error instance', async () => {
     const error = new Error('Update failed');
 
-    (getDoc as Mock).mockResolvedValue({
-      data: () => ({
-        inferredWateringFrequency: 0,
-        lastWateredDate: new Date('2024-01-01'),
-        secondLastWateredDate: null,
-        wateringFrequency: 3,
-      }),
-      exists: () => true,
-    });
+    (doc as Mock).mockReturnValue({});
     (updateDoc as Mock).mockRejectedValue(error);
 
     await expect(
       updatePlant(
-        'plant-1',
+        'plant-4',
         {
-          name: 'Calathea',
-          wateringFrequency: 3,
+          name: 'Pothos',
         },
         'user-1'
       )
-    ).rejects.toThrow(error);
+    ).rejects.toThrow('Update failed');
+  });
+
+  it('throws a standard Unknown error for non-Error failures', async () => {
+    (doc as Mock).mockReturnValue({});
+    (updateDoc as Mock).mockRejectedValue('bad failure');
+
+    await expect(
+      updatePlant(
+        'plant-5',
+        {
+          notes: 'Test note',
+        },
+        'user-1'
+      )
+    ).rejects.toThrow('Unknown error');
   });
 });
