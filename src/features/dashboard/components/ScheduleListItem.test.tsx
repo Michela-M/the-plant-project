@@ -117,9 +117,7 @@ describe('ScheduleListItem', () => {
 
     const img = screen.getByAltText('My Monstera image') as HTMLImageElement;
     expect(img).toBeInTheDocument();
-    expect(img.src).toBe(
-      'https://larchcottage.co.uk/wp-content/uploads/2024/05/placeholder.jpg'
-    );
+    expect(img.src).toContain('/public/images/placeholder.jpg');
   });
 
   it('opens options menu and launches WaterModal from menu action', () => {

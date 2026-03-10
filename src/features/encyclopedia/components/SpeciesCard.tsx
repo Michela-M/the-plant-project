@@ -21,10 +21,7 @@ export default function SpeciesCard({
       <Link to={speciesPath}>
         <img
           className="aspect-square overflow-hidden object-cover w-full"
-          src={
-            imageUrl ||
-            'https://larchcottage.co.uk/wp-content/uploads/2024/05/placeholder.jpg'
-          }
+          src={imageUrl || '/public/images/placeholder.jpg'}
           alt={commonName || 'Plant Image'}
         />
       </Link>

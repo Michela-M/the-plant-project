@@ -46,10 +46,7 @@ export default function ScheduleCard({
 
       <img
         className="aspect-square object-cover w-full"
-        src={
-          imageUrl ||
-          'https://larchcottage.co.uk/wp-content/uploads/2024/05/placeholder.jpg'
-        }
+        src={imageUrl || '/public/images/placeholder.jpg'}
         alt={name + ' image'}
       />
       <div className="flex gap-2">

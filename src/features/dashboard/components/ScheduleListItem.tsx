@@ -39,7 +39,10 @@ export default function ScheduleListItem({
 
   const handleRemoveFromSchedule = async () => {
     if (!user?.id) {
-      showError('Error removing plant from schedule', 'You must be signed in to modify your schedule.');
+      showError(
+        'Error removing plant from schedule',
+        'You must be signed in to modify your schedule.'
+      );
       return;
     }
 
@@ -59,10 +62,7 @@ export default function ScheduleListItem({
       <div className="aspect-square overflow-hidden object-cover">
         <img
           className="w-32"
-          src={
-            imageUrl ||
-            'https://larchcottage.co.uk/wp-content/uploads/2024/05/placeholder.jpg'
-          }
+          src={imageUrl || '/public/images/placeholder.jpg'}
           alt={name + ' image'}
         />
       </div>

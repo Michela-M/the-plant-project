@@ -16,10 +16,7 @@ export default function PlantCard({ plant }: PlantCardProps) {
       <div>
         <img
           className="aspect-square overflow-hidden object-cover w-full"
-          src={
-            plant.imageUrl ||
-            'https://larchcottage.co.uk/wp-content/uploads/2024/05/placeholder.jpg'
-          }
+          src={plant.imageUrl || '/public/images/placeholder.jpg'}
           alt={plant.commonName || 'Plant Image'}
         />
         <div className="flex">

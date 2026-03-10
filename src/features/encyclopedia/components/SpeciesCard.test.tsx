@@ -62,7 +62,7 @@ describe('SpeciesCard component', () => {
 
     expect(screen.getByAltText('Plant Image')).toHaveAttribute(
       'src',
-      'https://larchcottage.co.uk/wp-content/uploads/2024/05/placeholder.jpg'
+      '/public/images/placeholder.jpg'
     );
     expect(screen.getByText('Unknown Family')).toBeInTheDocument();
     expect(screen.getByText('Unknown')).toBeInTheDocument();

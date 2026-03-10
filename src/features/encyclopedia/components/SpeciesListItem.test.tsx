@@ -49,10 +49,7 @@ describe('SpeciesListItem', () => {
     expect(screen.getByText('A plant with missing data.')).toBeInTheDocument();
 
     const img = screen.getByAltText('Plant Image');
-    expect(img).toHaveAttribute(
-      'src',
-      'https://larchcottage.co.uk/wp-content/uploads/2024/05/placeholder.jpg'
-    );
+    expect(img).toHaveAttribute('src', '/public/images/placeholder.jpg');
   });
 
   it('icon button is hidden by default', () => {

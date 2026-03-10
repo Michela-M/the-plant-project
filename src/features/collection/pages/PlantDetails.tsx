@@ -94,10 +94,7 @@ export default function PlantDetails() {
         </div>
         <div className="w-3/8 flex flex-col gap-6">
           <ImagePreview
-            url={
-              plantDetails?.imageUrl ||
-              'https://larchcottage.co.uk/wp-content/uploads/2024/05/placeholder.jpg'
-            }
+            url={plantDetails?.imageUrl || '/public/images/placeholder.jpg'}
             alt="Plant image"
           />
           <PlantDetailsSchedule

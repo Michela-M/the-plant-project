@@ -50,10 +50,7 @@ export default function ImagePicker({
       <div className="aspect-square overflow-hidden object-cover w-full">
         <img
           className="aspect-square object-cover w-full"
-          src={
-            safeUrl ||
-            'https://larchcottage.co.uk/wp-content/uploads/2024/05/placeholder.jpg'
-          }
+          src={safeUrl || '/public/images/placeholder.jpg'}
           alt="Plant preview"
         />
       </div>
@@ -64,10 +61,10 @@ export default function ImagePicker({
         size="sm"
         onClick={() => {
           setLoading(true);
-          
+
           // Clear any existing focus listener before adding a new one
           clearFocusListener();
-          
+
           // Add focus listener to detect when file picker closes
           const handleFocus = () => {
             if (isMountedRef.current) {
@@ -75,10 +72,10 @@ export default function ImagePicker({
             }
             focusListenerRef.current = null;
           };
-          
+
           focusListenerRef.current = handleFocus;
           window.addEventListener('focus', handleFocus, { once: true });
-          
+
           inputRef.current?.click();
         }}
         loading={loading}

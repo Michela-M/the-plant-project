@@ -70,10 +70,7 @@ export default function Encyclopedia() {
           {species.map((specie) => (
             <SpeciesCard
               key={specie.id}
-              imageUrl={
-                specie.image ??
-                'https://larchcottage.co.uk/wp-content/uploads/2024/05/placeholder.jpg'
-              }
+              imageUrl={specie.image ?? '/public/images/placeholder.jpg'}
               family={specie.family}
               commonName={specie.commonName}
               id={specie.id}
@@ -89,10 +86,7 @@ export default function Encyclopedia() {
               commonName={specie.commonName}
               description={specie.description}
               tags={specie.tags}
-              imageUrl={
-                specie.image ??
-                'https://larchcottage.co.uk/wp-content/uploads/2024/05/placeholder.jpg'
-              }
+              imageUrl={specie.image ?? '/public/images/placeholder.jpg'}
               id={specie.id}
             />
           ))}

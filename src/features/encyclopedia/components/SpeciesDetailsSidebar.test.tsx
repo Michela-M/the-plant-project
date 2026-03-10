@@ -12,7 +12,9 @@ import { describe, it, expect, vi } from 'vitest';
 
 vi.mock('./SimilarSpecies', () => ({
   default: ({ speciesId }: { speciesId: string }) => (
-    <div data-testid="similar-species-item">Mock similar species {speciesId}</div>
+    <div data-testid="similar-species-item">
+      Mock similar species {speciesId}
+    </div>
   ),
 }));
 
@@ -83,10 +85,7 @@ describe('SpeciesDetailsSidebar', () => {
     const speciesWithoutImage = { ...mockSpeciesDetails, image: '' };
     render(<SpeciesDetailsSidebar speciesDetails={speciesWithoutImage} />);
     const image = screen.getByRole('img', { name: /aloe vera image/i });
-    expect(image).toHaveAttribute(
-      'src',
-      'https://larchcottage.co.uk/wp-content/uploads/2024/05/placeholder.jpg'
-    );
+    expect(image).toHaveAttribute('src', '/public/images/placeholder.jpg');
   });
 
   it('shows "No similar species listed." if similarSpecies array is empty', () => {

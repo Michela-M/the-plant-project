@@ -41,9 +41,7 @@ describe('ImagePicker', () => {
     render(<ImagePicker previewUrl={null} onSelect={() => {}} />);
 
     const img = screen.getByRole('img') as HTMLImageElement;
-    expect(img.src).toBe(
-      'https://larchcottage.co.uk/wp-content/uploads/2024/05/placeholder.jpg'
-    );
+    expect(img.src).toContain('/public/images/placeholder.jpg');
   });
 
   it('triggers file input click when button is clicked', () => {
@@ -72,9 +70,7 @@ describe('ImagePicker', () => {
     );
 
     let img = screen.getByRole('img') as HTMLImageElement;
-    expect(img.src).toBe(
-      'https://larchcottage.co.uk/wp-content/uploads/2024/05/placeholder.jpg'
-    );
+    expect(img.src).toContain('/public/images/placeholder.jpg');
 
     // Test another unsafe URL
     rerender(
@@ -84,8 +80,6 @@ describe('ImagePicker', () => {
       />
     );
     img = screen.getByRole('img') as HTMLImageElement;
-    expect(img.src).toBe(
-      'https://larchcottage.co.uk/wp-content/uploads/2024/05/placeholder.jpg'
-    );
+    expect(img.src).toContain('/public/images/placeholder.jpg');
   });
 });

@@ -40,7 +40,7 @@ describe('PlantCard component', () => {
 
     expect(screen.getByAltText('Plant Image')).toHaveAttribute(
       'src',
-      'https://larchcottage.co.uk/wp-content/uploads/2024/05/placeholder.jpg'
+      '/public/images/placeholder.jpg'
     );
     expect(screen.getByText('Sansevieria trifasciata')).toBeInTheDocument();
   });

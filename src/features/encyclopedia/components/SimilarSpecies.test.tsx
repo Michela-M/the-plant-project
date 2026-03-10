@@ -34,7 +34,7 @@ describe('SimilarSpecies', () => {
     expect(screen.getByText('Unknown')).toBeInTheDocument();
     expect(screen.getByAltText('Plant Image')).toHaveAttribute(
       'src',
-      'https://larchcottage.co.uk/wp-content/uploads/2024/05/placeholder.jpg'
+      '/public/images/placeholder.jpg'
     );
   });
 
