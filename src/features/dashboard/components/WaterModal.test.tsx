@@ -87,6 +87,10 @@ describe('WaterModal', () => {
         careType: 'water',
         date: new Date('2026-03-01T12:00:00.000Z'),
         notes: 'Watered thoroughly',
+        inferredWateringFrequency: 0,
+        lastWateredDate: new Date('2026-03-01T12:00:00.000Z'),
+        secondLastWateredDate: null,
+        nextWateringDate: null,
       });
     });
 

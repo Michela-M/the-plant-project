@@ -7,6 +7,7 @@ import combineDateWithCurrentTime from '@utils/combineDateWithCurrentTime';
 import { addCareEntry } from '@features/collection/services/addCareEntry';
 import { useAuth } from '@context/auth/useAuth';
 import { useToast } from '@context/toast/useToast';
+import updateWateringDates from '@features/collection/utils/updateWateringDates';
 
 const waterValidationSchema = {
   date: Yup.date()
@@ -42,13 +43,21 @@ export default function WaterModal({
       try {
         const careDate = combineDateWithCurrentTime(values.date);
 
+        const wateringUpdateData = await updateWateringDates(
+          plantId,
+          user.id,
+          careDate
+        );
+
         await addCareEntry({
+          date: careDate,
+          careType: 'water',
+          notes: values.notes,
           plantId,
           userId: user.id,
-          careType: 'water',
-          date: careDate,
-          notes: values.notes,
+          ...wateringUpdateData,
         });
+
         setShowWaterModal(false);
         showSuccess('Plant watered', 'Care entry added successfully');
       } catch (error) {

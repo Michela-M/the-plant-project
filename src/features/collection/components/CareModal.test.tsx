@@ -134,6 +134,10 @@ describe('CareModal', () => {
         otherCareType: '',
         plantId: 'plant-1',
         userId: 'user-1',
+        inferredWateringFrequency: 0,
+        lastWateredDate: new Date('2026-03-01T12:00:00.000Z'),
+        secondLastWateredDate: null,
+        nextWateringDate: null,
       });
     });
 

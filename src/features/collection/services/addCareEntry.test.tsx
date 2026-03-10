@@ -1,15 +1,13 @@
-import { addDoc, collection, doc, getDoc, updateDoc } from 'firebase/firestore';
-import { type Mock, beforeEach, describe, expect, it, vi } from 'vitest';
+import { beforeEach, describe, expect, it, vi, type Mock } from 'vitest';
+import { collection, doc, writeBatch } from 'firebase/firestore';
 import { addCareEntry } from './addCareEntry';
 import { db } from '@services/firebase';
 
 // --- Mock Firestore ---
 vi.mock('firebase/firestore', () => ({
-  addDoc: vi.fn(),
   collection: vi.fn(),
   doc: vi.fn(),
-  getDoc: vi.fn(),
-  updateDoc: vi.fn(),
+  writeBatch: vi.fn(),
 }));
 
 vi.mock('@services/firebase', () => ({
@@ -21,173 +19,146 @@ describe('addCareEntry', () => {
     vi.clearAllMocks();
   });
 
-  it('creates a care entry with defaults for optional fields', async () => {
-    const careData = {
-      careType: 'prune',
-      date: new Date('2024-01-10'),
-      plantId: 'plant-1',
-      userId: 'user-1',
+  it('creates a care entry and commits the batch for non-water care', async () => {
+    const mockBatch = {
+      set: vi.fn(),
+      update: vi.fn(),
+      commit: vi.fn().mockResolvedValue(undefined),
     };
+    const careEntriesCollectionRef = {};
+    const careEntryRef = {};
 
-    (addDoc as Mock).mockResolvedValue({ id: 'entry-1' });
-
-    await addCareEntry(careData);
-
-    expect(collection).toHaveBeenCalledWith(
-      db,
-      `users/${careData.userId}/plants/${careData.plantId}/careEntries`
-    );
-
-    const [, careEntryDoc] = (addDoc as Mock).mock.calls[0];
-    expect(careEntryDoc).toEqual(
-      expect.objectContaining({
-        careType: 'prune',
-        date: careData.date,
-        notes: '',
-        otherCareType: '',
-      })
-    );
-  });
-
-  it('does not update plant watering fields for non-water care entries', async () => {
-    (addDoc as Mock).mockResolvedValue({ id: 'entry-1' });
+    (writeBatch as Mock).mockReturnValue(mockBatch);
+    (collection as Mock).mockReturnValue(careEntriesCollectionRef);
+    (doc as Mock).mockReturnValue(careEntryRef);
 
     await addCareEntry({
       careType: 'fertilize',
-      date: new Date('2024-01-10'),
-      notes: 'monthly',
+      date: new Date('2026-03-01T10:00:00Z'),
+      notes: 'Fed with diluted liquid fertilizer',
+      otherCareType: 'foliar spray',
       plantId: 'plant-1',
       userId: 'user-1',
     });
 
-    expect(getDoc).not.toHaveBeenCalled();
-    expect(updateDoc).not.toHaveBeenCalled();
-  });
-
-  it('updates last and second-last watering dates when water date is newer than last', async () => {
-    const newWaterDate = new Date('2024-01-10');
-    const existingLastWateredDate = new Date('2024-01-01');
-
-    (addDoc as Mock).mockResolvedValue({ id: 'entry-1' });
-    (getDoc as Mock).mockResolvedValue({
-      data: () => ({
-        inferredWateringFrequency: 0,
-        lastWateredDate: existingLastWateredDate,
-        secondLastWateredDate: null,
-        wateringFrequency: 3,
-      }),
-      exists: () => true,
-    });
-
-    await addCareEntry({
-      careType: 'water',
-      date: newWaterDate,
-      plantId: 'plant-1',
-      userId: 'user-1',
-    });
-
-    const plantRef = (doc as Mock).mock.results[0].value;
-    expect(doc).toHaveBeenCalledWith(db, 'users/user-1/plants/plant-1');
-    expect(getDoc).toHaveBeenCalledWith(plantRef);
-
-    expect(updateDoc).toHaveBeenCalledWith(
-      plantRef,
-      expect.objectContaining({
-        inferredWateringFrequency: 9,
-        lastWateredDate: newWaterDate,
-        nextWateringDate: new Date('2024-01-13'),
-        secondLastWateredDate: existingLastWateredDate,
-      })
+    expect(writeBatch).toHaveBeenCalledWith(db);
+    expect(collection).toHaveBeenCalledWith(
+      db,
+      'users/user-1/plants/plant-1/careEntries'
     );
+    expect(doc).toHaveBeenCalledWith(careEntriesCollectionRef);
+    expect(mockBatch.set).toHaveBeenCalledWith(careEntryRef, {
+      careType: 'fertilize',
+      date: new Date('2026-03-01T10:00:00Z'),
+      notes: 'Fed with diluted liquid fertilizer',
+      otherCareType: 'foliar spray',
+    });
+    expect(mockBatch.update).not.toHaveBeenCalled();
+    expect(mockBatch.commit).toHaveBeenCalled();
   });
 
-  it('updates second-last date when water date is between last and second-last', async () => {
-    const newWaterDate = new Date('2024-01-06');
-    const existingLastWateredDate = new Date('2024-01-10');
-    const existingSecondLastWateredDate = new Date('2024-01-01');
+  it('updates plant watering fields when care type is water', async () => {
+    const mockBatch = {
+      set: vi.fn(),
+      update: vi.fn(),
+      commit: vi.fn().mockResolvedValue(undefined),
+    };
+    const careEntriesCollectionRef = {};
+    const careEntryRef = {};
+    const plantRef = {};
+    const lastWateredDate = new Date('2026-03-05T08:00:00Z');
+    const secondLastWateredDate = new Date('2026-02-26T08:00:00Z');
+    const nextWateringDate = new Date('2026-03-12T08:00:00Z');
 
-    (addDoc as Mock).mockResolvedValue({ id: 'entry-1' });
-    (getDoc as Mock).mockResolvedValue({
-      data: () => ({
-        inferredWateringFrequency: 0,
-        lastWateredDate: existingLastWateredDate,
-        secondLastWateredDate: existingSecondLastWateredDate,
-        wateringFrequency: 0,
-      }),
-      exists: () => true,
-    });
+    (writeBatch as Mock).mockReturnValue(mockBatch);
+    (collection as Mock).mockReturnValue(careEntriesCollectionRef);
+    (doc as Mock)
+      .mockReturnValueOnce(careEntryRef)
+      .mockReturnValueOnce(plantRef);
 
     await addCareEntry({
       careType: 'water',
-      date: newWaterDate,
+      date: lastWateredDate,
+      plantId: 'plant-1',
+      userId: 'user-1',
+      inferredWateringFrequency: 7,
+      lastWateredDate,
+      secondLastWateredDate,
+      nextWateringDate,
+    });
+
+    expect(mockBatch.update).toHaveBeenCalledWith(plantRef, {
+      inferredWateringFrequency: 7,
+      lastWateredDate,
+      secondLastWateredDate,
+      nextWateringDate,
+    });
+    expect(doc).toHaveBeenNthCalledWith(2, db, 'users/user-1/plants/plant-1');
+    expect(mockBatch.commit).toHaveBeenCalled();
+  });
+
+  it('uses empty strings for optional notes and otherCareType', async () => {
+    const mockBatch = {
+      set: vi.fn(),
+      update: vi.fn(),
+      commit: vi.fn().mockResolvedValue(undefined),
+    };
+    const careEntriesCollectionRef = {};
+    const careEntryRef = {};
+
+    (writeBatch as Mock).mockReturnValue(mockBatch);
+    (collection as Mock).mockReturnValue(careEntriesCollectionRef);
+    (doc as Mock).mockReturnValue(careEntryRef);
+
+    await addCareEntry({
+      careType: 'prune',
+      date: new Date('2026-03-07T10:00:00Z'),
       plantId: 'plant-1',
       userId: 'user-1',
     });
 
-    const plantRef = (doc as Mock).mock.results[0].value;
-
-    expect(updateDoc).toHaveBeenCalledWith(
-      plantRef,
-      expect.objectContaining({
-        inferredWateringFrequency: 4,
-        lastWateredDate: existingLastWateredDate,
-        nextWateringDate: new Date('2024-01-14'),
-        secondLastWateredDate: newWaterDate,
-      })
-    );
+    expect(mockBatch.set).toHaveBeenCalledWith(careEntryRef, {
+      careType: 'prune',
+      date: new Date('2026-03-07T10:00:00Z'),
+      notes: '',
+      otherCareType: '',
+    });
   });
 
-  it('returns without updating plant fields when plant document does not exist', async () => {
-    (addDoc as Mock).mockResolvedValue({ id: 'entry-1' });
-    (getDoc as Mock).mockResolvedValue({
-      data: () => undefined,
-      exists: () => false,
-    });
+  it('propagates errors from batch commit', async () => {
+    const error = new Error('commit failed');
+    const mockBatch = {
+      set: vi.fn(),
+      update: vi.fn(),
+      commit: vi.fn().mockRejectedValue(error),
+    };
 
-    await addCareEntry({
-      careType: 'water',
-      date: new Date('2024-01-10'),
-      plantId: 'plant-1',
-      userId: 'user-1',
-    });
-
-    expect(updateDoc).not.toHaveBeenCalled();
-  });
-
-  it('propagates errors from care-entry creation', async () => {
-    const error = new Error('Firestore write failed');
-    (addDoc as Mock).mockRejectedValue(error);
+    (writeBatch as Mock).mockReturnValue(mockBatch);
+    (collection as Mock).mockReturnValue({});
+    (doc as Mock).mockReturnValue({});
 
     await expect(
       addCareEntry({
         careType: 'water',
-        date: new Date('2024-01-10'),
+        date: new Date('2026-03-01T10:00:00Z'),
         plantId: 'plant-1',
         userId: 'user-1',
       })
     ).rejects.toThrow(error);
   });
 
-  it('propagates errors from plant update', async () => {
-    (addDoc as Mock).mockResolvedValue({ id: 'entry-1' });
-    (getDoc as Mock).mockResolvedValue({
-      data: () => ({
-        inferredWateringFrequency: 0,
-        lastWateredDate: new Date('2024-01-01'),
-        secondLastWateredDate: null,
-        wateringFrequency: 3,
-      }),
-      exists: () => true,
+  it('throws Unknown error for non-Error thrown values', async () => {
+    (writeBatch as Mock).mockImplementation(() => {
+      throw 'bad';
     });
-    (updateDoc as Mock).mockRejectedValue(new Error('Update failed'));
 
     await expect(
       addCareEntry({
         careType: 'water',
-        date: new Date('2024-01-10'),
+        date: new Date('2026-03-01T10:00:00Z'),
         plantId: 'plant-1',
         userId: 'user-1',
       })
-    ).rejects.toThrow('Update failed');
+    ).rejects.toThrow('Unknown error');
   });
 });
