@@ -6,17 +6,7 @@
 
 `users/{userId}/plants`
 
-It accepts required identity fields plus optional plant metadata, applies defaults for omitted values, computes watering-related fields when possible, writes the plant document, and returns the constructed plant object.
-
-Default behavior:
-
-- `species` and `notes` default to `""`
-- `wateringFrequency` defaults to `0`
-- `lastWateredDate` defaults to `null`
-- `inferredWateringFrequency` is derived from `wateringFrequency` (`0` when not provided)
-- `secondLastWateredDate` is initialized as `null`
-
-If both `wateringFrequency` and `lastWateredDate` are truthy, the service calculates `nextWateringDate` and sets `trackWatering` to `true`. Otherwise, `nextWateringDate` is `null` and `trackWatering` is `false`.
+It accepts a complete plant payload (including watering-related fields already computed by the caller), writes the plant document, and optionally writes an initial watering entry.
 
 If `lastWateredDate` is provided, the service also creates an initial care entry in:
 
@@ -26,53 +16,43 @@ with:
 
 - `careType: "water"`
 - `date: lastWateredDate`
-- `notes: ""`
 
 Both writes are queued in a single Firestore `writeBatch` and committed atomically.
 
 ## Parameters
 
-| Name                          | Type           | Required | Description                                       |
-| ----------------------------- | -------------- | -------- | ------------------------------------------------- |
-| `plantData.name`              | `string`       | Yes      | Plant name                                        |
-| `plantData.userId`            | `string`       | Yes      | User ID used to scope Firestore path              |
-| `plantData.species`           | `string`       | No       | Plant species. Defaults to `""`                   |
-| `plantData.notes`             | `string`       | No       | Freeform notes. Defaults to `""`                  |
-| `plantData.wateringFrequency` | `number`       | No       | Planned watering interval (days). Defaults to `0` |
-| `plantData.lastWateredDate`   | `Date \| null` | No       | Most recent watering date. Defaults to `null`     |
+| Name                          | Type           | Required | Description                                                |
+| ----------------------------- | -------------- | -------- | ---------------------------------------------------------- |
+| `plantData.name`              | `string`       | Yes      | Plant name                                                 |
+| `plantData.userId`            | `string`       | Yes      | User ID used to scope Firestore path                       |
+| `plantData.species`           | `string`       | Yes      | Plant species                                              |
+| `plantData.notes`             | `string`       | Yes      | Freeform notes                                             |
+| `plantData.wateringFrequency` | `number`       | Yes      | Planned watering interval (days)                           |
+| `plantData.lastWateredDate`   | `Date \| null` | Yes      | Most recent watering date                                  |
+| `plantData.nextWateringDate`  | `Date \| null` | Yes      | Next watering date (precomputed by caller when applicable) |
+| `plantData.trackWatering`     | `boolean`      | Yes      | Whether watering tracking is enabled                       |
 
 ## Return Value
 
-`Promise<PlantDoc>` where `PlantDoc` includes:
+`Promise<void>`.
 
-- `creationDate: Date`
-- `name: string`
-- `species: string`
-- `notes: string`
-- `wateringFrequency: number`
-- `lastWateredDate: Date | null`
-- `inferredWateringFrequency: number`
-- `secondLastWateredDate: null`
-- `nextWateringDate: Date | null`
-- `trackWatering: boolean`
-
-The promise rejects if plant creation, optional care-entry creation, or watering-date calculation fails.
+The promise resolves when the batch commit succeeds. It rejects if any batch operation fails.
 
 ## Usage
 
 ```tsx
 import { addPlant } from '../services/addPlant';
 
-const plant = await addPlant({
-  name: 'Aloe Vera',
-  userId: 'user-123',
-  species: 'Aloe barbadensis miller',
-  notes: 'Keep in bright indirect light',
-  wateringFrequency: 7,
+await addPlant({
   lastWateredDate: new Date('2026-02-20'),
+  name: 'Aloe Vera',
+  nextWateringDate: new Date('2026-02-27'),
+  notes: 'Keep in bright indirect light',
+  species: 'Aloe barbadensis miller',
+  trackWatering: true,
+  userId: 'user-123',
+  wateringFrequency: 7,
 });
-
-console.log(plant.nextWateringDate);
 ```
 
 With basic error handling:
@@ -80,12 +60,14 @@ With basic error handling:
 ```tsx
 try {
   await addPlant({
-    name: values.name,
-    userId,
-    species: values.species,
-    notes: values.notes,
-    wateringFrequency: values.wateringFrequency,
     lastWateredDate: values.lastWateredDate,
+    name: values.name,
+    nextWateringDate: values.nextWateringDate,
+    notes: values.notes,
+    species: values.species,
+    trackWatering: values.trackWatering,
+    userId,
+    wateringFrequency: values.wateringFrequency,
   });
 } catch (error) {
   console.error('Failed to add plant:', error);
@@ -94,26 +76,18 @@ try {
 
 ## Edge Cases
 
-### Missing optional fields
+### Caller-owned defaults and calculations
 
-If `species`, `notes`, `wateringFrequency`, or `lastWateredDate` are omitted, defaults are applied so the created document has a consistent shape.
+This service does not apply defaults or compute watering dates. The caller must provide final values for `nextWateringDate`, `trackWatering`, `notes`, and other fields.
 
-### `wateringFrequency` provided without `lastWateredDate`
+### `lastWateredDate` controls care-entry creation
 
-`inferredWateringFrequency` is set from `wateringFrequency`, but `nextWateringDate` remains `null` and `trackWatering` remains `false`.
-
-### `lastWateredDate` provided without `wateringFrequency`
-
-`lastWateredDate` is stored, but no next watering date is calculated and watering tracking is not enabled.
-An initial `water` care entry is still created.
-
-### Both watering inputs provided
-
-When both values are truthy, `nextWateringDate` is calculated using `calculateNextWateringDate` and `trackWatering` is enabled.
+If `lastWateredDate` is `null`, no care entry is added.
+If `lastWateredDate` is present, one care entry is batched with `{ type: 'watering', date: lastWateredDate }`.
 
 ### Invalid `lastWateredDate`
 
-If `lastWateredDate` is not a valid `Date` object while watering calculation is attempted, date calculation can throw and the service rejects.
+If `lastWateredDate` is an invalid `Date`, Firestore serialization/validation may fail at write time and the promise rejects.
 
 ### Firestore/network/permission errors
 

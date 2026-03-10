@@ -14,210 +14,151 @@ vi.mock('@services/firebase', () => ({
 }));
 
 describe('addPlant', () => {
-  let batchMock: { set: Mock; commit: Mock };
-
   beforeEach(() => {
     vi.clearAllMocks();
-
-    batchMock = {
-      set: vi.fn(),
-      commit: vi.fn().mockResolvedValue(undefined),
-    };
-
-    (writeBatch as Mock).mockReturnValue(batchMock);
-
-    (collection as Mock).mockImplementation((_dbArg, path: string) => ({
-      path,
-    }));
-
-    (doc as Mock).mockImplementation((collectionRef: { path: string }) => ({
-      id: 'new-plant-id',
-      path: `${collectionRef.path}/new-plant-id`,
-    }));
   });
 
-  it('creates a plant with required fields and default values', () => {
-    const plantData = {
-      name: 'Aloe Vera',
-      userId: 'test-user',
-    };
+  it('creates a plant and matching watering care entry when lastWateredDate is provided', async () => {
+    const plantRef = { id: 'plant-1' };
+    const careEntryRef = { id: 'care-1' };
+    const set = vi.fn();
+    const commit = vi.fn().mockResolvedValue(undefined);
+    const batch = { commit, set };
 
-    return expect(addPlant(plantData)).resolves.toEqual(
-      expect.objectContaining({
-        name: plantData.name,
-        species: '',
-        notes: '',
-        wateringFrequency: 0,
-        lastWateredDate: null,
-        inferredWateringFrequency: 0,
-        secondLastWateredDate: null,
-        nextWateringDate: null,
-        trackWatering: false,
-      })
-    );
-  });
+    (writeBatch as Mock).mockReturnValue(batch);
+    (collection as Mock)
+      .mockReturnValueOnce({ path: 'users/user-1/plants' })
+      .mockReturnValueOnce({ path: 'users/user-1/plants/plant-1/careEntries' });
+    (doc as Mock)
+      .mockReturnValueOnce(plantRef)
+      .mockReturnValueOnce(careEntryRef);
 
-  it('handles watering frequency without last watered date', () => {
-    const plantData = {
-      name: 'Snake Plant',
-      userId: 'test-user',
+    const lastWateredDate = new Date('2024-01-10');
+
+    await addPlant({
+      lastWateredDate,
+      name: 'Monstera',
+      nextWateringDate: new Date('2024-01-17'),
+      notes: 'South window',
+      species: 'Monstera deliciosa',
+      trackWatering: true,
+      userId: 'user-1',
       wateringFrequency: 7,
-    };
-
-    return expect(addPlant(plantData)).resolves.toEqual(
-      expect.objectContaining({
-        name: plantData.name,
-        species: '',
-        notes: '',
-        wateringFrequency: 7,
-        lastWateredDate: null,
-        inferredWateringFrequency: 7,
-        secondLastWateredDate: null,
-        nextWateringDate: null,
-        trackWatering: false,
-      })
-    );
-  });
-
-  it('calculates next watering date when watering frequency and last watered date are provided', () => {
-    const plantData = {
-      name: 'Spider Plant',
-      userId: 'test-user',
-      wateringFrequency: 3,
-      lastWateredDate: new Date('2024-01-01'),
-    };
-
-    const expectedNextWateringDate = new Date('2024-01-04');
-
-    return expect(addPlant(plantData)).resolves.toEqual(
-      expect.objectContaining({
-        name: plantData.name,
-        wateringFrequency: 3,
-        lastWateredDate: plantData.lastWateredDate,
-        inferredWateringFrequency: 3,
-        nextWateringDate: expectedNextWateringDate,
-        trackWatering: true,
-      })
-    );
-  });
-
-  it('writes plant and care entry atomically in one batch commit when lastWateredDate exists', async () => {
-    const plantData = {
-      name: 'Parlor Palm',
-      userId: 'test-user',
-      lastWateredDate: new Date('2024-02-01'),
-    };
-
-    await addPlant(plantData);
+    });
 
     expect(writeBatch).toHaveBeenCalledWith(db);
-    expect(collection).toHaveBeenNthCalledWith(
+    expect(collection).toHaveBeenNthCalledWith(1, db, 'users/user-1/plants');
+    expect(doc).toHaveBeenNthCalledWith(1, { path: 'users/user-1/plants' });
+
+    expect(set).toHaveBeenNthCalledWith(
       1,
-      db,
-      `users/${plantData.userId}/plants`
+      plantRef,
+      expect.objectContaining({
+        inferredWateringFrequency: 7,
+        lastWateredDate,
+        name: 'Monstera',
+        nextWateringDate: new Date('2024-01-17'),
+        notes: 'South window',
+        species: 'Monstera deliciosa',
+        trackWatering: true,
+        wateringFrequency: 7,
+      })
     );
+
+    expect(set).toHaveBeenNthCalledWith(2, careEntryRef, {
+      date: lastWateredDate,
+      careType: 'water',
+    });
     expect(collection).toHaveBeenNthCalledWith(
       2,
       db,
-      `users/${plantData.userId}/plants/new-plant-id/careEntries`
+      'users/user-1/plants/plant-1/careEntries'
     );
-
-    expect(batchMock.set).toHaveBeenCalledTimes(2);
-
-    const [, careEntryDoc] = batchMock.set.mock.calls[1];
-    expect(careEntryDoc).toEqual(
-      expect.objectContaining({
-        careType: 'water',
-        date: plantData.lastWateredDate,
-        notes: '',
-      })
-    );
-
-    expect(batchMock.commit).toHaveBeenCalledTimes(1);
+    expect(doc).toHaveBeenNthCalledWith(2, {
+      path: 'users/user-1/plants/plant-1/careEntries',
+    });
+    expect(commit).toHaveBeenCalledTimes(1);
   });
 
-  it('writes only plant in batch when lastWateredDate is not provided', async () => {
-    const plantData = {
-      name: 'Jade Plant',
-      userId: 'test-user',
-    };
+  it('creates only the plant document when lastWateredDate is null', async () => {
+    const plantRef = { id: 'plant-2' };
+    const set = vi.fn();
+    const commit = vi.fn().mockResolvedValue(undefined);
+    const batch = { commit, set };
 
-    await addPlant(plantData);
+    (writeBatch as Mock).mockReturnValue(batch);
+    (collection as Mock).mockReturnValue({ path: 'users/user-2/plants' });
+    (doc as Mock).mockReturnValue(plantRef);
 
-    expect(batchMock.set).toHaveBeenCalledTimes(1);
-    expect(collection).toHaveBeenCalledTimes(1);
-    expect(batchMock.commit).toHaveBeenCalledTimes(1);
-  });
-
-  it('calls batch.set with fully constructed plant object', async () => {
-    const plantData = {
+    await addPlant({
+      lastWateredDate: null,
       name: 'Pothos',
-      userId: 'test-user',
-      wateringFrequency: 5,
-      lastWateredDate: new Date('2024-01-01'),
-    };
+      nextWateringDate: null,
+      notes: '',
+      species: 'Epipremnum aureum',
+      trackWatering: false,
+      userId: 'user-2',
+      wateringFrequency: 0,
+    });
 
-    await addPlant(plantData);
-
-    const [, plantDoc] = batchMock.set.mock.calls[0];
-    expect(plantDoc).toEqual(
+    expect(collection).toHaveBeenCalledTimes(1);
+    expect(doc).toHaveBeenCalledTimes(1);
+    expect(set).toHaveBeenCalledTimes(1);
+    expect(set).toHaveBeenCalledWith(
+      plantRef,
       expect.objectContaining({
-        name: plantData.name,
-        species: '',
-        notes: '',
-        wateringFrequency: 5,
-        lastWateredDate: plantData.lastWateredDate,
-        inferredWateringFrequency: 5,
-        secondLastWateredDate: null,
-        nextWateringDate: new Date('2024-01-06'),
-        trackWatering: true,
-      })
-    );
-  });
-
-  it('propagates batch commit errors', async () => {
-    const plantData = {
-      name: 'Calathea',
-      userId: 'test-user',
-    };
-
-    const error = new Error('Batch commit failed');
-    batchMock.commit.mockRejectedValue(error);
-
-    await expect(addPlant(plantData)).rejects.toThrow(error);
-  });
-
-  it('handles falsy non-zero-like wateringFrequency values correctly', async () => {
-    const plantData = {
-      name: 'Dracaena',
-      userId: 'test-user',
-      wateringFrequency: undefined,
-      lastWateredDate: new Date('2024-01-01'),
-    };
-
-    await expect(addPlant(plantData)).resolves.toEqual(
-      expect.objectContaining({
-        name: plantData.name,
-        species: '',
-        notes: '',
-        wateringFrequency: 0,
-        lastWateredDate: plantData.lastWateredDate,
         inferredWateringFrequency: 0,
-        secondLastWateredDate: null,
+        lastWateredDate: null,
         nextWateringDate: null,
         trackWatering: false,
       })
     );
+    expect(commit).toHaveBeenCalledTimes(1);
   });
 
-  it('rejects when lastWateredDate is invalid', async () => {
-    const plantData = {
-      name: 'Rubber Plant',
-      userId: 'test-user',
-      wateringFrequency: 7,
-      lastWateredDate: 'invalid-date' as unknown as Date,
+  it('rethrows Firestore errors from commit', async () => {
+    const error = new Error('Commit failed');
+    const batch = { commit: vi.fn().mockRejectedValue(error), set: vi.fn() };
+
+    (writeBatch as Mock).mockReturnValue(batch);
+    (collection as Mock).mockReturnValue({ path: 'users/user-1/plants' });
+    (doc as Mock).mockReturnValue({ id: 'plant-1' });
+
+    await expect(
+      addPlant({
+        lastWateredDate: null,
+        name: 'Snake Plant',
+        nextWateringDate: null,
+        notes: '',
+        species: 'Dracaena trifasciata',
+        trackWatering: true,
+        userId: 'user-1',
+        wateringFrequency: 14,
+      })
+    ).rejects.toThrow(error);
+  });
+
+  it('throws a standard error for non-Error failures', async () => {
+    const batch = {
+      commit: vi.fn().mockRejectedValue('bad failure'),
+      set: vi.fn(),
     };
 
-    await expect(addPlant(plantData)).rejects.toThrow();
+    (writeBatch as Mock).mockReturnValue(batch);
+    (collection as Mock).mockReturnValue({ path: 'users/user-1/plants' });
+    (doc as Mock).mockReturnValue({ id: 'plant-1' });
+
+    await expect(
+      addPlant({
+        lastWateredDate: null,
+        name: 'Ficus',
+        nextWateringDate: null,
+        notes: '',
+        species: 'Ficus elastica',
+        trackWatering: true,
+        userId: 'user-1',
+        wateringFrequency: 10,
+      })
+    ).rejects.toThrow('Unknown error');
   });
 });
