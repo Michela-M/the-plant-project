@@ -8,6 +8,7 @@ export const updatePlant = async (
     name?: string;
     notes?: string;
     species?: string;
+    trackWatering?: boolean;
     wateringFrequency?: number;
     nextWateringDate?: Date | null;
     inferredWateringFrequency?: number | null;
@@ -22,6 +23,7 @@ export const updatePlant = async (
       name?: string;
       notes?: string;
       species?: string;
+      trackWatering?: boolean;
       wateringFrequency?: number;
       nextWateringDate?: Date | null;
       inferredWateringFrequency?: number | null;

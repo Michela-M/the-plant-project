@@ -66,6 +66,20 @@ describe('updatePlant', () => {
     expect(updateDoc).toHaveBeenCalledWith(mockPlantRef, plantData);
   });
 
+  it('supports updating trackWatering', async () => {
+    const mockPlantRef = { id: 'plant-ref' };
+    const plantData = {
+      trackWatering: false,
+    };
+
+    (doc as Mock).mockReturnValue(mockPlantRef);
+    (updateDoc as Mock).mockResolvedValue(undefined);
+
+    await updatePlant('plant-6', plantData, 'user-1');
+
+    expect(updateDoc).toHaveBeenCalledWith(mockPlantRef, plantData);
+  });
+
   it('rethrows Firestore errors as-is when error is an Error instance', async () => {
     const error = new Error('Update failed');
 
