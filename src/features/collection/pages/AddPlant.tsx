@@ -8,6 +8,7 @@ import { addPlant } from '../services/addPlant';
 import { useState } from 'react';
 import { useAuth } from '@context/auth/useAuth';
 import { H1 } from '@components/Typography';
+import { calculateNextWateringDate } from '../utils/wateringUtils';
 
 const addPlantValidationSchema = Yup.object({
   name: Yup.string().required('Name is required'),
@@ -38,15 +39,31 @@ export default function AddPlant() {
     validationSchema: addPlantValidationSchema,
     onSubmit: async (values) => {
       setLoading(true);
+
+      let nextWateringDate: Date | null = null;
+      let trackWatering = false;
+
+      if (values.wateringFrequency && values.lastWateredDate) {
+        nextWateringDate = calculateNextWateringDate({
+          lastWateredDate: new Date(values.lastWateredDate),
+          wateringFrequency: Number(values.wateringFrequency),
+        });
+        trackWatering = true;
+      }
+
       try {
         await addPlant({
-          name: values.name,
-          species: values.species,
-          wateringFrequency: Number(values.wateringFrequency) || 0,
           lastWateredDate: values.lastWateredDate
             ? new Date(values.lastWateredDate)
             : null,
+          name: values.name,
+          nextWateringDate,
           notes: values.notes,
+          species: values.species,
+          trackWatering,
+          wateringFrequency: values.wateringFrequency
+            ? Number(values.wateringFrequency)
+            : 0,
           userId: user?.id || '',
         });
         formik.resetForm();

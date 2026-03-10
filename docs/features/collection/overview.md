@@ -77,7 +77,7 @@ This feature currently includes:
 ### Delete Plant
 
 1. User triggers delete from plant details actions.
-2. `deletePlant` removes the Firestore document.
+2. `deletePlant` removes all `careEntries` documents for the plant, then removes the plant Firestore document.
 3. UI flow then returns user to collection and reflects updated list.
 
 ## Validation Rules
@@ -113,7 +113,10 @@ Fields currently used by UI/services:
 - `name: string`
 - `species: string`
 - `wateringFrequency: number`
+- `inferredWateringFrequency: number | null`
 - `lastWateredDate: Date | null`
+- `secondLastWateredDate: Date | null`
+- `nextWateringDate: Date | null`
 - `notes: string`
 - `creationDate: Date`
 - `imageUrl: string | null`

@@ -62,9 +62,7 @@ describe('getPlantDetails', () => {
     const mockDocSnap = {
       id: '3',
       exists: () => true,
-      data: () => ({
-        name: 'Fern',
-      }),
+      data: () => ({}),
     };
 
     (doc as Mock).mockReturnValue('mockDocRef');
@@ -74,7 +72,7 @@ describe('getPlantDetails', () => {
 
     expect(result).toEqual({
       id: '3',
-      name: 'Fern',
+      name: '',
       species: '',
       wateringFrequency: 0,
       lastWateredDate: null,

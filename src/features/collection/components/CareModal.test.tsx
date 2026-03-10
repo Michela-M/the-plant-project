@@ -6,6 +6,7 @@ import CareModal from './CareModal';
 const {
   mockGetAllPlants,
   mockAddCareEntry,
+  mockUpdateWateringDates,
   mockShowError,
   mockShowSuccess,
   mockUseAuth,
@@ -15,6 +16,7 @@ const {
 } = vi.hoisted(() => ({
   mockGetAllPlants: vi.fn(),
   mockAddCareEntry: vi.fn(),
+  mockUpdateWateringDates: vi.fn(),
   mockShowError: vi.fn(),
   mockShowSuccess: vi.fn(),
   mockUseAuth: vi.fn(),
@@ -29,6 +31,10 @@ vi.mock('@features/collection/services/getAllPlants', () => ({
 
 vi.mock('@features/collection/services/addCareEntry', () => ({
   addCareEntry: mockAddCareEntry,
+}));
+
+vi.mock('../utils/updateWateringDates', () => ({
+  default: mockUpdateWateringDates,
 }));
 
 vi.mock('@context/toast/useToast', () => ({
@@ -72,6 +78,12 @@ describe('CareModal', () => {
     );
 
     mockAddCareEntry.mockResolvedValue(undefined);
+    mockUpdateWateringDates.mockResolvedValue({
+      inferredWateringFrequency: 0,
+      lastWateredDate: new Date('2026-03-01T12:00:00.000Z'),
+      secondLastWateredDate: null,
+      nextWateringDate: null,
+    });
 
     Object.defineProperty(window, 'location', {
       configurable: true,
@@ -127,6 +139,13 @@ describe('CareModal', () => {
     await user.click(screen.getByRole('button', { name: 'Create' }));
 
     await waitFor(() => {
+      expect(mockUpdateWateringDates).toHaveBeenCalledWith(
+        'plant-1',
+        'user-1',
+        {
+          date: new Date('2026-03-01T12:00:00.000Z'),
+        }
+      );
       expect(mockAddCareEntry).toHaveBeenCalledWith({
         date: new Date('2026-03-01T12:00:00.000Z'),
         careType: 'water',
@@ -134,6 +153,10 @@ describe('CareModal', () => {
         otherCareType: '',
         plantId: 'plant-1',
         userId: 'user-1',
+        inferredWateringFrequency: 0,
+        lastWateredDate: new Date('2026-03-01T12:00:00.000Z'),
+        secondLastWateredDate: null,
+        nextWateringDate: null,
       });
     });
 
@@ -154,6 +177,13 @@ describe('CareModal', () => {
     await user.click(screen.getByRole('button', { name: 'Create' }));
 
     await waitFor(() => {
+      expect(mockUpdateWateringDates).toHaveBeenCalledWith(
+        'plant-99',
+        'user-1',
+        {
+          date: new Date('2026-03-01T12:00:00.000Z'),
+        }
+      );
       expect(mockAddCareEntry).toHaveBeenCalledWith(
         expect.objectContaining({
           plantId: 'plant-99',

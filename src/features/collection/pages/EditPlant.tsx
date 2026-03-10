@@ -16,6 +16,7 @@ import ImagePicker from '@components/ImagePicker';
 import { useToast } from '@context/toast/useToast';
 import Spinner from '@components/Spinner';
 import { useAuth } from '@context/auth/useAuth';
+import updateWateringDates from '../utils/updateWateringDates';
 
 const editPlantValidationSchema = Yup.object({
   name: Yup.string().required('Name is required'),
@@ -93,12 +94,20 @@ export default function EditPlant() {
       if (!id) return;
 
       try {
-        let imageUrl = plantDetails?.imageUrl || undefined;
+        let imageUrl = plantDetails?.imageUrl || '';
 
         // Upload only if user selected a new file
         if (file) {
           imageUrl = await uploadPlantImage(file, id, user?.id || '');
         }
+
+        const wateringUpdateData = await updateWateringDates(
+          id,
+          user?.id || '',
+          {
+            wateringFreq: Number(values.wateringFrequency),
+          }
+        );
 
         await updatePlant(
           id,
@@ -108,6 +117,7 @@ export default function EditPlant() {
             wateringFrequency: Number(values.wateringFrequency),
             notes: values.notes,
             imageUrl,
+            ...wateringUpdateData,
           },
           user?.id || ''
         );

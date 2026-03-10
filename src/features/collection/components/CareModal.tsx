@@ -12,6 +12,7 @@ import { useToast } from '@context/toast/useToast';
 import { useAuth } from '@context/auth/useAuth';
 import Spinner from '@components/Spinner';
 import { addCareEntry } from '@features/collection/services/addCareEntry';
+import updateWateringDates from '../utils/updateWateringDates';
 
 type PlantOption = {
   id: string;
@@ -98,6 +99,13 @@ export default function CareModal({
           return;
         }
 
+        const wateringUpdateData =
+          values.careType === 'water'
+            ? await updateWateringDates(selectedPlantId, user?.id || '', {
+                date: careDate,
+              })
+            : {};
+
         await addCareEntry({
           date: careDate,
           careType: values.careType,
@@ -105,6 +113,7 @@ export default function CareModal({
           otherCareType: values.otherCareType,
           plantId: selectedPlantId,
           userId: user?.id || '',
+          ...wateringUpdateData,
         });
         setShowCareModal(false);
         showSuccess('Care entry added successfully');
