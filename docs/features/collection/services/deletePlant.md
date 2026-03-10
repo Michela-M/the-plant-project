@@ -4,7 +4,14 @@
 
 `deletePlant` deletes a single plant document from the signed-in user’s Firestore path:
 `users/{userId}/plants/{plantId}`.
-It returns the promise from Firestore so callers can await completion or handle errors.
+Before deleting the plant document, it deletes all documents in the plant's `careEntries` subcollection:
+`users/{userId}/plants/{plantId}/careEntries`.
+
+Deletion order:
+
+1. Read `careEntries` subcollection.
+2. If entries exist, delete them in a Firestore batch.
+3. Delete the plant document.
 
 ## Parameters
 
@@ -15,9 +22,9 @@ It returns the promise from Firestore so callers can await completion or handle 
 
 ## Return Value
 
-| Type            | Description                                                         |
-| --------------- | ------------------------------------------------------------------- |
-| `Promise<void>` | Resolves when the document is deleted. Rejects on Firestore errors. |
+| Type            | Description                                                                                          |
+| --------------- | ---------------------------------------------------------------------------------------------------- |
+| `Promise<void>` | Resolves when care entries (if any) and the plant document are deleted. Rejects on Firestore errors. |
 
 ## Usage
 
@@ -32,6 +39,10 @@ await deletePlant('abc123', 'user-123');
 ### Document does not exist
 
 `deleteDoc` does not throw if the document is already missing; callers can still treat completion as success.
+
+### No care entries
+
+If the `careEntries` subcollection is empty, the service skips batch deletion and deletes only the plant document.
 
 ### Firestore errors
 
