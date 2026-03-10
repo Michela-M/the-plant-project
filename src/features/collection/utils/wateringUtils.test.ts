@@ -54,6 +54,16 @@ describe('wateringUtils - calculateWateringFrequency', () => {
   });
 });
 
+it('should calculate elapsed days from timestamps exactly', () => {
+  const firstDate = new Date('2024-06-01T00:00:00.000Z');
+  const secondDate = new Date('2024-06-04T00:00:00.000Z');
+  const result = calculateWateringFrequency({
+    firstDate,
+    secondDate,
+  });
+  expect(result).toBe(3);
+});
+
 describe('wateringUtils - calculateNextWateringDate', () => {
   it('should calculate the next watering date based on last watered date and frequency', () => {
     const lastWateredDate = new Date('2024-06-01');

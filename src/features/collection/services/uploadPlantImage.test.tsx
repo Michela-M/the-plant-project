@@ -55,4 +55,20 @@ describe('uploadPlantImage', () => {
       'File too large (max 5MB)'
     );
   });
+
+  it('should handle file names without extension', async () => {
+    const file = new File(['dummy content'], 'example', {
+      type: 'image/png',
+    });
+    const id = '123';
+    const userId = 'currentUserId';
+    const mockRef = {};
+    (ref as Mock).mockReturnValue(mockRef);
+    (uploadBytes as Mock).mockResolvedValue({ ref: mockRef });
+    (getDownloadURL as Mock).mockResolvedValue('mocked-url');
+
+    const result = await uploadPlantImage(file, id, userId);
+
+    expect(result).toBe('mocked-url');
+  });
 });
