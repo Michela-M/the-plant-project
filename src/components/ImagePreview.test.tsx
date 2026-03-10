@@ -48,8 +48,34 @@ describe('ImagePreview', () => {
 
     const button = screen.getByRole('button', { name: /sample image/i });
     await userEvent.click(button);
-    const backdrop = screen.getByRole('dialog');
+    const closeButtons = screen.getAllByRole('button', {
+      name: /close image preview/i,
+    });
+    const backdrop = closeButtons[0];
     await userEvent.click(backdrop);
+    expect(screen.queryByRole('dialog')).not.toBeInTheDocument();
+  });
+
+  it('closes the modal when the enlarged image is clicked', async () => {
+    render(
+      <ImagePreview
+        url="https://example.com/snake.jpg"
+        alt="Sample Image"
+        description="This is a sample image thumbnail."
+      />
+    );
+
+    const thumbnailButton = screen.getByRole('button', {
+      name: /sample image/i,
+    });
+    await userEvent.click(thumbnailButton);
+
+    const closeButtons = screen.getAllByRole('button', {
+      name: /close image preview/i,
+    });
+    const imageCloseButton = closeButtons[1];
+
+    await userEvent.click(imageCloseButton);
     expect(screen.queryByRole('dialog')).not.toBeInTheDocument();
   });
 

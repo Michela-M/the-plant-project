@@ -36,17 +36,32 @@ export default function ImagePreview({
 
       {isOpen &&
         createPortal(
-          <div
-            className="fixed inset-0 bg-black/80 flex items-center justify-center z-50 cursor-zoom-out"
-            onClick={() => setIsOpen(false)}
-            role="dialog"
-            aria-modal="true"
-          >
-            <img
-              src={url}
-              alt={alt + ' (enlarged)'}
-              className="max-w-full max-h-full object-contain"
+          <div className="fixed inset-0 z-50 flex items-center justify-center">
+            <button
+              type="button"
+              aria-label="Close image preview"
+              className="absolute inset-0 bg-black/80 cursor-zoom-out"
+              onClick={() => setIsOpen(false)}
             />
+            <div
+              role="dialog"
+              aria-modal="true"
+              aria-label="Image preview"
+              className="relative z-10"
+            >
+              <button
+                type="button"
+                aria-label="Close image preview"
+                className="block cursor-zoom-out max-w-[100vw] max-h-screen"
+                onClick={() => setIsOpen(false)}
+              >
+                <img
+                  src={url}
+                  alt={alt + ' (enlarged)'}
+                  className="block max-w-[100vw] max-h-screen object-contain"
+                />
+              </button>
+            </div>
           </div>,
           document.body
         )}
