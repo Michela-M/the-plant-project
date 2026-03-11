@@ -48,7 +48,11 @@ export default function MyCollection() {
     <div className="w-1/2 mx-auto py-8 flex flex-col gap-4">
       <div className="flex justify-between items-center">
         <H1>My Collection</H1>
-        <Button label="Add Plant" onClick={() => navigate('/add-plant')} />
+        <Button
+          label="Add Plant"
+          ariaLabel="Add Plant"
+          onClick={() => navigate('/add-plant')}
+        />
       </div>
       {plants.length === 0 && (
         <p className="text-stone-500">No plants yet. Add your first one!</p>

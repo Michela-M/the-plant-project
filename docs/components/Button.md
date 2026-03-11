@@ -6,17 +6,18 @@
 
 ## Props
 
-| Prop        | Type                              | Required | Default     | Description                                |
-| ----------- | --------------------------------- | -------- | ----------- | ------------------------------------------ |
-| `label`     | `string`                          | yes      | —           | Text displayed inside the button           |
-| `icon`      | `ReactNode`                       | no       | —           | Optional icon displayed after the label    |
-| `variant`   | `'filled' / 'outlined' / 'ghost'` | no       | `'filled'`  | Visual style of the button                 |
-| `tone`      | `'primary' / 'destructive'`       | no       | `'primary'` | Color tone of the button                   |
-| `type`      | `'button' / 'submit' / 'reset'`   | no       | `'button'`  | Native button type                         |
-| `size`      | `'sm' / 'md'`                     | no       | `'md'`      | Button size                                |
-| `loading`   | `boolean`                         | no       | `false`     | Shows spinner and disables interaction     |
-| `onClick`   | `() => void`                      | no       | —           | Click handler                              |
-| `fullWidth` | `boolean`                         | no       | `false`     | If true, button takes full container width |
+| Prop        | Type                              | Required | Default     | Description                                 |
+| ----------- | --------------------------------- | -------- | ----------- | ------------------------------------------- |
+| `label`     | `string`                          | yes      | —           | Text displayed inside the button            |
+| `icon`      | `ReactNode`                       | no       | —           | Optional icon displayed after the label     |
+| `variant`   | `'filled' / 'outlined' / 'ghost'` | no       | `'filled'`  | Visual style of the button                  |
+| `tone`      | `'primary' / 'destructive'`       | no       | `'primary'` | Color tone of the button                    |
+| `type`      | `'button' / 'submit' / 'reset'`   | no       | `'button'`  | Native button type                          |
+| `size`      | `'sm' / 'md'`                     | no       | `'md'`      | Button size                                 |
+| `loading`   | `boolean`                         | no       | `false`     | Shows spinner and disables interaction      |
+| `onClick`   | `() => void`                      | no       | —           | Click handler                               |
+| `fullWidth` | `boolean`                         | no       | `false`     | If true, button takes full container width  |
+| `ariaLabel` | `string`                          | no       | `label`     | Accessible name override for screen readers |
 
 ## Example Usage
 
@@ -41,6 +42,10 @@
 <Button label="Save" loading={true} />
 ```
 
+```jsx
+<Button label="Save" ariaLabel="Save plant" />
+```
+
 # `Icon Button`
 
 ## Purpose
@@ -49,13 +54,15 @@ Icon Buttons are compact action buttons that display an icon instead of text.
 
 ## Props
 
-| Prop      | Type                          | Required | Default    | Description                             |
-| --------- | ----------------------------- | -------- | ---------- | --------------------------------------- |
-| `icon`    | `ReactNode`                   | yes      | —          | Icon element rendered inside the button |
-| `variant` | `'filled'/'outlined'/'ghost'` | no       | `'filled'` | Visual style of the button              |
-| `size`    | `'sm' / 'md'`                 | no       | `'md'`     | Button size                             |
-| `onClick` | `() => void`                  | no       | —          | Click handler                           |
-| `label`   | `string`                      | no       | —          | Aria label                              |
+| Prop      | Type                              | Required | Default     | Description                             |
+| --------- | --------------------------------- | -------- | ----------- | --------------------------------------- |
+| `icon`    | `ReactNode`                       | yes      | —           | Icon element rendered inside the button |
+| `variant` | `'filled' / 'outlined' / 'ghost'` | no       | `'filled'`  | Visual style of the button              |
+| `tone`    | `'primary' / 'destructive'`       | no       | `'primary'` | Color tone of the button                |
+| `size`    | `'sm' / 'md'`                     | no       | `'md'`      | Button size                             |
+| `loading` | `boolean`                         | no       | `false`     | Shows spinner and disables interaction  |
+| `onClick` | `() => void`                      | no       | —           | Click handler                           |
+| `label`   | `string`                          | yes      | —           | Accessible name used for `aria-label`   |
 
 ## Usage Example
 
@@ -65,4 +72,13 @@ Icon Buttons are compact action buttons that display an icon instead of text.
 
 ```jsx
 <IconButton variant="ghost" icon={<EditIcon />} label="Edit" size="sm" />
+```
+
+```jsx
+<IconButton
+  icon={<TrashIcon />}
+  label="Delete plant"
+  tone="destructive"
+  loading={isDeleting}
+/>
 ```

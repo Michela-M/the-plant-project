@@ -53,12 +53,14 @@ export default function ScheduleCard({
         <Button
           size="sm"
           label="Watered"
+          ariaLabel="Watered"
           onClick={() => setShowWaterModal(true)}
           fullWidth
         />
         <Button
           size="sm"
           label="Snooze"
+          ariaLabel="Snooze"
           onClick={() => setShowSnoozeModal(true)}
           variant="outlined"
         />

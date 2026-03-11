@@ -232,10 +232,16 @@ export default function EditPlant() {
       <div className="flex gap-2 justify-end">
         <Button
           label="Cancel"
+          ariaLabel="Cancel"
           variant="outlined"
           onClick={() => navigate(-1)}
         />
-        <Button label="Save" type="submit" loading={loadingSave} />
+        <Button
+          label="Save"
+          ariaLabel="Save"
+          type="submit"
+          loading={loadingSave}
+        />
       </div>
     </form>
   );

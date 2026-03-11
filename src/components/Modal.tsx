@@ -35,6 +35,7 @@ export default function Modal({
         {showTwoButtons && (
           <Button
             label="Cancel"
+            ariaLabel="Cancel"
             variant="outlined"
             onClick={onClose}
             tone={isDestructive ? 'destructive' : undefined}
@@ -42,6 +43,7 @@ export default function Modal({
         )}
         <Button
           label={confirmLabel}
+          ariaLabel={confirmLabel}
           onClick={confirmHandler}
           tone={isDestructive ? 'destructive' : undefined}
         />

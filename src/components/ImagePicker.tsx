@@ -61,6 +61,7 @@ export default function ImagePicker({
 
       <Button
         label="Change picture"
+        ariaLabel="Change picture"
         variant="outlined"
         size="sm"
         onClick={() => {

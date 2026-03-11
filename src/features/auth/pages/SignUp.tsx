@@ -108,6 +108,7 @@ export default function SignUp() {
           />
           <Button
             label="Sign Up"
+            ariaLabel="Sign Up"
             variant="filled"
             type="submit"
             loading={loading}

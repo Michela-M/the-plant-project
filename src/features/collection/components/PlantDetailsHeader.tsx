@@ -80,6 +80,7 @@ export default function PlantDetailsHeader({
         icon={<ChevronLeft />}
         variant="ghost"
         onClick={() => navigate('/collection')}
+        label="Back to collection"
       />
       <div className="w-full">
         {plant?.commonName && (
@@ -91,6 +92,7 @@ export default function PlantDetailsHeader({
         <div className="relative">
           <Button
             label="New"
+            ariaLabel="New"
             icon={<ChevronDown />}
             onClick={() => {
               setShowAddMenu(!showAddMenu);
@@ -118,6 +120,7 @@ export default function PlantDetailsHeader({
               setShowOptionsMenu(!showOptionsMenu);
               setShowAddMenu(false);
             }}
+            label="Open options menu"
           />
           {showOptionsMenu && (
             <Menu>
