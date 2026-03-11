@@ -61,9 +61,10 @@ describe('ScheduleListItem', () => {
       'Watering frequency: 7 days'
     );
 
-    const img = screen.getByAltText('My Monstera image') as HTMLImageElement;
+    const img = screen.getByRole('img') as HTMLImageElement;
     expect(img).toBeInTheDocument();
     expect(img.src).toBe('https://example.com/monstera.jpg');
+    expect(img.alt).toBe('My Monstera image');
   });
 
   it('shows estimated watering frequency when watering frequency is 0', () => {
@@ -115,9 +116,10 @@ describe('ScheduleListItem', () => {
       />
     );
 
-    const img = screen.getByAltText('My Monstera image') as HTMLImageElement;
+    const img = screen.getByRole('img') as HTMLImageElement;
     expect(img).toBeInTheDocument();
     expect(img.src).toContain('/public/images/placeholder.jpg');
+    expect(img.alt).toBe('No photo available for My Monstera');
   });
 
   it('opens options menu and launches WaterModal from menu action', () => {

@@ -17,7 +17,10 @@ The **SpeciesCard** component renders a compact card view of a species for grid-
 
 - Entire card is wrapped in a `Link` to `/species/{id}`.
 - Image fallback URL is used when `imageUrl` is empty.
-- Image alt text is `commonName` or `Plant Image`.
+- Image alt text is generated internally and is not configurable through props.
+- Current alt behavior:
+  - Real image: `{commonName} image`.
+  - Placeholder image: `No photo available for {commonName}`.
 - Includes a ghost `IconButton` with a plus icon.
 - Icon container is hidden by default and shown on hover via `group-hover:opacity-100`.
 - Icon button label is dynamic:

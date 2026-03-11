@@ -13,7 +13,11 @@ export default function SpeciesDetailsSidebar({
     <div className="w-3/8 flex flex-col gap-6">
       <ImagePreview
         url={speciesDetails.image || '/public/images/placeholder.jpg'}
-        alt={`${speciesDetails.commonName} image`}
+        alt={
+          speciesDetails.image
+            ? `${speciesDetails.commonName} image`
+            : `No photo available for ${speciesDetails.commonName}`
+        }
       />
       <div>
         <p>Other names: {speciesDetails.otherNames.join(', ')}</p>

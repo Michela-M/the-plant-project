@@ -72,6 +72,7 @@ This feature currently includes:
 - Dashboard displays a care-guidance note below the header.
 - Species names in schedule components use `Callout` styling with muted text color.
 - Missing plant images fall back to a placeholder URL.
+- Schedule components currently generate image alt text from plant name and use a placeholder fallback message when no image exists.
 - Last watered date displays relative text via `formatRelativeDate`, or `N/A` when missing.
 - Frequency display behavior:
   - Uses `wateringFrequency` when value is greater than `0`.

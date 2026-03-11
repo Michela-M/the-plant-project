@@ -84,8 +84,10 @@ describe('SpeciesDetailsSidebar', () => {
   it('shows placeholder image if no image is provided', () => {
     const speciesWithoutImage = { ...mockSpeciesDetails, image: '' };
     render(<SpeciesDetailsSidebar speciesDetails={speciesWithoutImage} />);
-    const image = screen.getByRole('img', { name: /aloe vera image/i });
-    expect(image).toHaveAttribute('src', '/public/images/placeholder.jpg');
+    const image = screen.getByRole('img') as HTMLImageElement;
+    expect(image).toBeInTheDocument();
+    expect(image.alt).toBe('No photo available for Aloe Vera');
+    expect(image.src).toContain('/public/images/placeholder.jpg');
   });
 
   it('shows "No similar species listed." if similarSpecies array is empty', () => {

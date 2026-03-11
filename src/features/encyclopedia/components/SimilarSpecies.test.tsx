@@ -32,10 +32,11 @@ describe('SimilarSpecies', () => {
 
     expect(screen.getByText('Unknown Family')).toBeInTheDocument();
     expect(screen.getByText('Unknown')).toBeInTheDocument();
-    expect(screen.getByAltText('Plant Image')).toHaveAttribute(
-      'src',
-      '/public/images/placeholder.jpg'
-    );
+
+    const img = screen.getByRole('img') as HTMLImageElement;
+    expect(img).toBeInTheDocument();
+    expect(img.src).toContain('/public/images/placeholder.jpg');
+    expect(img.alt).toBe('No photo available');
   });
 
   it('renders fetched similar species details and tags', async () => {
@@ -80,14 +81,15 @@ describe('SimilarSpecies', () => {
     expect(screen.getByText('Bird of Paradise')).toBeInTheDocument();
     expect(screen.getByText('Pet Friendly')).toBeInTheDocument();
     expect(screen.getByText('Statement Plant')).toBeInTheDocument();
-    expect(screen.getByAltText('Bird of Paradise')).toHaveAttribute(
-      'src',
-      'https://example.com/bop.jpg'
-    );
     expect(screen.getByRole('link')).toHaveAttribute(
       'href',
       '/species/species-2'
     );
+
+    const img = screen.getByRole('img') as HTMLImageElement;
+    expect(img).toBeInTheDocument();
+    expect(img.src).toBe('https://example.com/bop.jpg');
+    expect(img.alt).toBe('Bird of Paradise (Strelitzia reginae) image');
   });
 
   it('shows toast error when fetching species details fails', async () => {

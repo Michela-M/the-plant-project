@@ -51,7 +51,11 @@ export default function ImagePicker({
         <img
           className="aspect-square object-cover w-full"
           src={safeUrl || '/public/images/placeholder.jpg'}
-          alt="Plant preview"
+          alt={
+            safeUrl
+              ? 'Selected image preview'
+              : 'No image selected, showing placeholder'
+          }
         />
       </div>
 

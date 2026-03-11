@@ -32,7 +32,11 @@ export default function SimilarSpecies({ speciesId }: { speciesId: string }) {
         <img
           className="aspect-square overflow-hidden object-cover w-1/4 h-full"
           src={similarSpecies?.image || '/public/images/placeholder.jpg'}
-          alt={similarSpecies?.commonName || 'Plant Image'}
+          alt={
+            similarSpecies?.image
+              ? `${similarSpecies.commonName} (${similarSpecies.scientificName}) image`
+              : `No photo available`
+          }
         />
         <div className="w-3/4">
           <Callout className="text-stone-600">

@@ -27,7 +27,7 @@ export default function SpeciesListItem({
         <img
           className="aspect-square overflow-hidden object-cover w-1/4 h-full"
           src={imageUrl || '/public/images/placeholder.jpg'}
-          alt={commonName || 'Plant Image'}
+          alt={imageUrl ? `${commonName} image` : `No photo available`}
         />
         <div className="w-3/4">
           <div className="flex">

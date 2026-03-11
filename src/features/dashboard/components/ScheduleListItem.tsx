@@ -63,7 +63,7 @@ export default function ScheduleListItem({
         <img
           className="w-32"
           src={imageUrl || '/public/images/placeholder.jpg'}
-          alt={name + ' image'}
+          alt={imageUrl ? `${name} image` : `No photo available for ${name}`}
         />
       </div>
       <div className="flex flex-col grow my-2">

@@ -17,7 +17,11 @@ export default function PlantCard({ plant }: PlantCardProps) {
         <img
           className="aspect-square overflow-hidden object-cover w-full"
           src={plant.imageUrl || '/public/images/placeholder.jpg'}
-          alt={plant.commonName || 'Plant Image'}
+          alt={
+            plant.imageUrl
+              ? `${plant.name} image`
+              : `No photo available for ${plant.name}`
+          }
         />
         <div className="flex">
           <div className="grow">

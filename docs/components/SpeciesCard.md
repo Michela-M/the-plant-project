@@ -12,6 +12,13 @@ The **SpeciesCard** component displays a plant’s core identifying information:
 | `family`     | `string` | no       | Displays “Unknown Family” if missing.                           |
 | `commonName` | `string` | no       | Displays “Unknown” if missing.                                  |
 
+## Accessibility Notes
+
+- In the current implementation, image alt text is generated internally and is not configurable through props.
+- Current alt behavior:
+  - Real image: `{commonName} image`.
+  - Placeholder image: `No photo available`.
+
 ## Example Usage
 
 ```jsx

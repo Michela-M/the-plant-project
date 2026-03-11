@@ -47,7 +47,7 @@ export default function ScheduleCard({
       <img
         className="aspect-square object-cover w-full"
         src={imageUrl || '/public/images/placeholder.jpg'}
-        alt={name + ' image'}
+        alt={imageUrl ? `${name} image` : `No photo available for ${name}`}
       />
       <div className="flex gap-2">
         <Button

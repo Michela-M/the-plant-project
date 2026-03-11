@@ -26,6 +26,14 @@
 - On successful remove, shows toast: `Plant removed from schedule successfully`.
 - On remove failure, shows an error toast with the service error message.
 
+## Accessibility Notes
+
+- In the current implementation, image alt text is generated internally and is not configurable through props.
+- Current behavior:
+  - Real image: `{name} image`.
+  - Placeholder image: `No photo available for {name}`.
+- To change the alt text strategy, update the component implementation.
+
 ## Example Usage
 
 ```tsx

@@ -95,7 +95,11 @@ export default function PlantDetails() {
         <div className="w-3/8 flex flex-col gap-6">
           <ImagePreview
             url={plantDetails?.imageUrl || '/public/images/placeholder.jpg'}
-            alt="Plant image"
+            alt={
+              plantDetails?.imageUrl
+                ? `${plantDetails.name} image`
+                : `No photo available for ${plantDetails.name}`
+            }
           />
           <PlantDetailsSchedule
             plant={{

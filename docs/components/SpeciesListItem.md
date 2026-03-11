@@ -14,6 +14,13 @@
 | `tags`        | `string[]` | yes      | Array of tag labels passed to the Tag component.                                            |
 | `imageUrl`    | `string`   | yes      | URL of the plant image. Falls back to a placeholder if empty.                               |
 
+## Accessibility Notes
+
+- In the current implementation, image alt text is generated internally and is not configurable through props.
+- Current alt behavior:
+  - Real image: `{commonName} image`.
+  - Placeholder image: `No photo available for {commonName}`.
+
 ## Example Usage
 
 ```jsx

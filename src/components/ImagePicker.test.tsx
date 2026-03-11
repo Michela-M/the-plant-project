@@ -7,10 +7,12 @@ describe('ImagePicker', () => {
   it('renders correctly', () => {
     render(<ImagePicker previewUrl={null} onSelect={() => {}} />);
 
-    expect(screen.getByRole('img')).toBeInTheDocument();
+    const img = screen.getByRole('img') as HTMLImageElement;
+    expect(img).toBeInTheDocument();
     expect(
       screen.getByRole('button', { name: /change picture/i })
     ).toBeInTheDocument();
+    expect(img.alt).toBe('No image selected, showing placeholder');
   });
 
   it('displays the preview image when provided', () => {
@@ -19,6 +21,7 @@ describe('ImagePicker', () => {
 
     const img = screen.getByRole('img') as HTMLImageElement;
     expect(img.src).toBe(previewUrl);
+    expect(img.alt).toBe('Selected image preview');
   });
 
   it('calls onSelect when a file is selected', async () => {

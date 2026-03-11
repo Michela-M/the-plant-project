@@ -25,6 +25,14 @@
 - Clicking `Watered` opens `WaterModal` for the current plant id.
 - Clicking `Snooze` opens `SnoozeModal` for the current plant id.
 
+## Accessibility Notes
+
+- In the current implementation, image alt text is generated internally and is not configurable through props.
+- Current behavior:
+  - Real image: `{name} image`.
+  - Placeholder image: `No photo available for {name}`.
+- To change the alt text strategy, update the component implementation.
+
 ## Example Usage
 
 ```tsx
