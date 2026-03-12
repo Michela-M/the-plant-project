@@ -65,12 +65,12 @@ describe('SpeciesDetailsSidebar', () => {
 
   it('renders only applicable characteristic badges', () => {
     render(<SpeciesDetailsSidebar speciesDetails={mockSpeciesDetails} />);
-    expect(screen.getByLabelText('difficulty')).toBeInTheDocument();
-    expect(screen.getByLabelText('toxicity')).toBeInTheDocument();
-    expect(screen.queryByLabelText('maintenance')).not.toBeInTheDocument();
-    expect(screen.queryByLabelText('light')).not.toBeInTheDocument();
-    expect(screen.queryByLabelText('pruning')).not.toBeInTheDocument();
-    expect(screen.queryByLabelText('propagation')).not.toBeInTheDocument();
+    expect(screen.getByTestId('icon-difficulty')).toBeInTheDocument();
+    expect(screen.getByTestId('icon-toxicity')).toBeInTheDocument();
+    expect(screen.queryByTestId('icon-maintenance')).not.toBeInTheDocument();
+    expect(screen.queryByTestId('icon-light')).not.toBeInTheDocument();
+    expect(screen.queryByTestId('icon-pruning')).not.toBeInTheDocument();
+    expect(screen.queryByTestId('icon-propagation')).not.toBeInTheDocument();
   });
 
   it('renders similar species section with SimilarSpecies components', () => {

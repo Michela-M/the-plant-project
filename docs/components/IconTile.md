@@ -8,11 +8,16 @@ The component is purely visual and does not provide interaction on its own.
 
 ## Props
 
-| Prop    | Type                                                                                                      | Required | Default   | Description                                                   |
-| ------- | --------------------------------------------------------------------------------------------------------- | -------- | --------- | ------------------------------------------------------------- |
-| `Icon`  | `React.ElementType`                                                                                       | Yes      | —         | The icon component to render inside the tile                  |
-| `color` | `'black' \| 'red' \| 'orange' \| 'yellow' \| 'lime' \| 'green' \| 'cyan' \| 'blue' \| 'purple' \| 'pink'` | No       | `'black'` | Background color variant for the tile                         |
-| `label` | `string`                                                                                                  | Yes      | —         | Accessible label describing the icon’s meaning (`aria-label`) |
+| Prop    | Type                                                                                                      | Required | Default   | Description                                                     |
+| ------- | --------------------------------------------------------------------------------------------------------- | -------- | --------- | --------------------------------------------------------------- |
+| `Icon`  | `React.ElementType`                                                                                       | Yes      | —         | The icon component to render inside the tile                    |
+| `color` | `'black' \| 'red' \| 'orange' \| 'yellow' \| 'lime' \| 'green' \| 'cyan' \| 'blue' \| 'purple' \| 'pink'` | No       | `'black'` | Background color variant for the tile                           |
+| `label` | `string`                                                                                                  | Yes      | —         | Text used for the tile `title` tooltip and `data-testid` suffix |
+
+## Accessibility
+
+`IconTile` is currently decorative and sets `aria-hidden="true"` on the tile container.
+The `label` is not exposed as an accessible name; it is used for tooltip text (`title`).
 
 ## Example Usage
 
