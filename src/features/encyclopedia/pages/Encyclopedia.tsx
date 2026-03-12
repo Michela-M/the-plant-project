@@ -11,8 +11,8 @@ import { H1 } from '@components/Typography';
 export default function Encyclopedia() {
   const [selectedIndex, setSelectedIndex] = useState(0);
   const icons = [
-    { Icon: LayoutGrid, id: 'grid' },
-    { Icon: LayoutList, id: 'list' },
+    { Icon: LayoutGrid, id: 'grid', label: 'Grid view' },
+    { Icon: LayoutList, id: 'list', label: 'List view' },
   ];
   const [species, setSpecies] = useState<
     {
@@ -58,6 +58,7 @@ export default function Encyclopedia() {
           icons={icons}
           selectedIndex={selectedIndex}
           onChange={setSelectedIndex}
+          groupLabel="Select view"
         />
       </div>
       {species.length === 0 && (
