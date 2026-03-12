@@ -124,6 +124,15 @@ describe('Button', () => {
     );
   });
 
+  it('passes aria-controls to the native button when provided', () => {
+    render(<Button label="Open picker" ariaControls="picker-input" />);
+
+    expect(screen.getByRole('button')).toHaveAttribute(
+      'aria-controls',
+      'picker-input'
+    );
+  });
+
   it('adds keyboard focus-visible styles', () => {
     render(<Button label="Focus" />);
 

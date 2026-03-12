@@ -4,33 +4,53 @@ import ImagePicker from './ImagePicker';
 import userEvent from '@testing-library/user-event';
 
 describe('ImagePicker', () => {
-  it('renders correctly', () => {
-    render(<ImagePicker previewUrl={null} onSelect={() => {}} />);
+  const pickerLabel = 'Plant image';
 
-    const img = screen.getByRole('img') as HTMLImageElement;
+  it('renders correctly', () => {
+    render(
+      <ImagePicker previewUrl={null} onSelect={() => {}} label={pickerLabel} />
+    );
+
+    const img = screen.getByRole('img');
     expect(img).toBeInTheDocument();
     expect(
-      screen.getByRole('button', { name: /change picture/i })
+      screen.getByRole('button', { name: `Upload ${pickerLabel}` })
     ).toBeInTheDocument();
-    expect(img.alt).toBe('No image selected, showing placeholder');
+    expect(img).toHaveAttribute('alt', 'No image selected');
+    expect(screen.getByText(pickerLabel, { selector: 'legend' })).toHaveClass(
+      'sr-only'
+    );
+    expect(screen.getByText('Upload image')).toBeInTheDocument();
   });
 
   it('displays the preview image when provided', () => {
     const previewUrl = 'blob:https://example.com/preview.jpg';
-    render(<ImagePicker previewUrl={previewUrl} onSelect={() => {}} />);
+    render(
+      <ImagePicker
+        previewUrl={previewUrl}
+        onSelect={() => {}}
+        label={pickerLabel}
+      />
+    );
 
-    const img = screen.getByRole('img') as HTMLImageElement;
-    expect(img.src).toBe(previewUrl);
-    expect(img.alt).toBe('Selected image preview');
+    const img = screen.getByRole('img');
+    expect(img).toHaveAttribute('src', previewUrl);
+    expect(img).toHaveAttribute('alt', 'Selected image preview');
   });
 
   it('calls onSelect when a file is selected', async () => {
     const user = userEvent.setup();
     const handleSelect = vi.fn();
 
-    render(<ImagePicker previewUrl={null} onSelect={handleSelect} />);
+    render(
+      <ImagePicker
+        previewUrl={null}
+        onSelect={handleSelect}
+        label={pickerLabel}
+      />
+    );
 
-    const input = screen.getByTestId('file-input') as HTMLInputElement;
+    const input = screen.getByTestId('file-input');
 
     const file = new File(['hello'], 'test.png', { type: 'image/png' });
 
@@ -41,48 +61,71 @@ describe('ImagePicker', () => {
   });
 
   it('displays placeholder image when no previewUrl is provided', () => {
-    render(<ImagePicker previewUrl={null} onSelect={() => {}} />);
+    render(
+      <ImagePicker previewUrl={null} onSelect={() => {}} label={pickerLabel} />
+    );
 
-    const img = screen.getByRole('img') as HTMLImageElement;
-    expect(img.src).toContain('/public/images/placeholder.jpg');
+    const img = screen.getByRole('img');
+    expect(img).toHaveAttribute(
+      'src',
+      expect.stringContaining('/public/images/placeholder.jpg')
+    );
   });
 
   it('triggers file input click when button is clicked', () => {
-    render(<ImagePicker previewUrl={null} onSelect={() => {}} />);
+    render(
+      <ImagePicker previewUrl={null} onSelect={() => {}} label={pickerLabel} />
+    );
 
-    const button = screen.getByRole('button', { name: /change picture/i });
-    const input = screen.getByTestId('file-input') as HTMLInputElement;
+    const button = screen.getByRole('button', {
+      name: `Upload ${pickerLabel}`,
+    });
+    const input = screen.getByTestId('file-input');
 
     // Spy on the click event of the input
     const clickSpy = vi.spyOn(input, 'click');
     button.click();
 
     expect(clickSpy).toHaveBeenCalled();
+    expect(button).toHaveAttribute('aria-controls', input.id);
   });
 
   it('accepts only image files', () => {
-    render(<ImagePicker previewUrl={null} onSelect={() => {}} />);
+    render(
+      <ImagePicker previewUrl={null} onSelect={() => {}} label={pickerLabel} />
+    );
 
-    const input = screen.getByTestId('file-input') as HTMLInputElement;
-    expect(input.accept).toBe('image/png, image/jpeg');
+    const input = screen.getByTestId('file-input');
+    expect(input).toHaveAttribute('accept', 'image/png, image/jpeg');
   });
 
   it('returns null for unsafe URLs', () => {
     const { rerender } = render(
-      <ImagePicker previewUrl="javascript:alert('XSS')" onSelect={() => {}} />
+      <ImagePicker
+        previewUrl="javascript:alert('XSS')"
+        onSelect={() => {}}
+        label={pickerLabel}
+      />
     );
 
-    let img = screen.getByRole('img') as HTMLImageElement;
-    expect(img.src).toContain('/public/images/placeholder.jpg');
+    let img = screen.getByRole('img');
+    expect(img).toHaveAttribute(
+      'src',
+      expect.stringContaining('/public/images/placeholder.jpg')
+    );
 
     // Test another unsafe URL
     rerender(
       <ImagePicker
         previewUrl="data:text/html;base64,PHNjcmlwdD5hbGVydCgnWFNTJyk8L3NjcmlwdD4K"
         onSelect={() => {}}
+        label={pickerLabel}
       />
     );
-    img = screen.getByRole('img') as HTMLImageElement;
-    expect(img.src).toContain('/public/images/placeholder.jpg');
+    img = screen.getByRole('img');
+    expect(img).toHaveAttribute(
+      'src',
+      expect.stringContaining('/public/images/placeholder.jpg')
+    );
   });
 });

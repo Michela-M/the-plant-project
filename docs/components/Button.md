@@ -18,6 +18,7 @@
 | `onClick`   | `() => void`                      | no       | —           | Click handler                               |
 | `fullWidth` | `boolean`                         | no       | `false`     | If true, button takes full container width  |
 | `ariaLabel` | `string`                          | no       | `label`     | Accessible name override for screen readers |
+| `ariaControls` | `string`                       | no       | —           | Sets native `aria-controls` on the button   |
 
 ## Example Usage
 

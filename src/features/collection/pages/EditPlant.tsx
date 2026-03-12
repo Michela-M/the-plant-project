@@ -166,8 +166,9 @@ export default function EditPlant() {
           <ImagePicker
             previewUrl={previewUrl || plantDetails.imageUrl}
             onSelect={handleImagePickerSelect}
+            label="Plant Image"
           />
-          <Callout className="text-red-500">{error}</Callout>
+          <Callout className="text-red-700">{error}</Callout>
         </div>
 
         <div className="w-2/3 flex flex-col gap-2">

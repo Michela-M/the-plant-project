@@ -1,32 +1,34 @@
-import { useRef, useEffect } from 'react';
+import { useRef, useEffect, useState, useId } from 'react';
 import Button from './Button';
-import { useState } from 'react';
+
+const isSafeImageUrl = (url: string | null): string | null => {
+  if (!url) return null;
+  try {
+    const parsed = new URL(url, globalThis.location.origin);
+    const allowedSchemes = ['http:', 'https:', 'blob:'];
+    if (!allowedSchemes.includes(parsed.protocol)) {
+      return null;
+    }
+    return url;
+  } catch {
+    return null;
+  }
+};
 
 export default function ImagePicker({
   previewUrl,
   onSelect,
-}: {
+  label,
+}: Readonly<{
   previewUrl: string | null;
   onSelect: (file: File) => void;
-}) {
+  label: string;
+}>) {
   const inputRef = useRef<HTMLInputElement | null>(null);
   const [loading, setLoading] = useState(false);
   const focusListenerRef = useRef<(() => void) | null>(null);
   const isMountedRef = useRef(true);
-
-  const isSafeImageUrl = (url: string | null): string | null => {
-    if (!url) return null;
-    try {
-      const parsed = new URL(url, window.location.origin);
-      const allowedSchemes = ['http:', 'https:', 'blob:'];
-      if (!allowedSchemes.includes(parsed.protocol)) {
-        return null;
-      }
-      return url;
-    } catch {
-      return null;
-    }
-  };
+  const inputId = useId();
 
   const clearFocusListener = () => {
     if (focusListenerRef.current) {
@@ -46,22 +48,22 @@ export default function ImagePicker({
   }, []);
 
   return (
-    <div className="flex flex-col gap-2">
+    <fieldset aria-busy={loading} className="flex flex-col gap-2">
+      <legend className="sr-only">{label}</legend>
+      <output className="sr-only">
+        {loading ? 'Opening file picker' : ''}
+      </output>
       <div className="aspect-square overflow-hidden object-cover w-full">
         <img
           className="aspect-square object-cover w-full"
           src={safeUrl || '/public/images/placeholder.jpg'}
-          alt={
-            safeUrl
-              ? 'Selected image preview'
-              : 'No image selected, showing placeholder'
-          }
+          alt={safeUrl ? 'Selected image preview' : 'No image selected'}
         />
       </div>
 
       <Button
-        label="Change picture"
-        ariaLabel="Change picture"
+        label="Upload image"
+        ariaLabel={`Upload ${label}`}
         variant="outlined"
         size="sm"
         onClick={() => {
@@ -84,14 +86,16 @@ export default function ImagePicker({
           inputRef.current?.click();
         }}
         loading={loading}
+        ariaControls={inputId}
       />
 
       <input
+        id={inputId}
         ref={inputRef}
         data-testid="file-input"
         type="file"
         accept="image/png, image/jpeg"
-        className="hidden"
+        className="sr-only"
         onChange={(e) => {
           const file = e.target.files?.[0];
           if (file) onSelect(file);
@@ -100,6 +104,6 @@ export default function ImagePicker({
           clearFocusListener();
         }}
       />
-    </div>
+    </fieldset>
   );
 }

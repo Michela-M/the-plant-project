@@ -51,6 +51,7 @@ export default function Button({
   loading = false,
   fullWidth = false,
   ariaLabel,
+  ariaControls,
 }: Readonly<{
   label: string;
   icon?: ReactNode;
@@ -62,6 +63,7 @@ export default function Button({
   loading?: boolean;
   fullWidth?: boolean;
   ariaLabel?: string;
+  ariaControls?: string;
 }>) {
   const spinnerColor = getSpinnerColor(variant, tone);
 
@@ -75,6 +77,7 @@ export default function Button({
       aria-label={
         loading ? `Loading ${ariaLabel ?? label}` : (ariaLabel ?? label)
       }
+      aria-controls={ariaControls}
     >
       {loading && (
         <span className="absolute" aria-hidden="true">
