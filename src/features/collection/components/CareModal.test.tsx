@@ -110,7 +110,7 @@ describe('CareModal', () => {
 
     render(<CareModal setShowCareModal={vi.fn()} />);
 
-    expect(screen.getByText('Loading...')).toBeInTheDocument();
+    expect(screen.getByText('Loading plants...')).toBeInTheDocument();
   });
 
   it('does not fetch plants or show an error while user id is not available', () => {
@@ -123,7 +123,7 @@ describe('CareModal', () => {
 
     render(<CareModal setShowCareModal={vi.fn()} />);
 
-    expect(screen.getByText('Loading...')).toBeInTheDocument();
+    expect(screen.getByText('Loading plants...')).toBeInTheDocument();
     expect(mockGetAllPlants).not.toHaveBeenCalled();
     expect(mockShowError).not.toHaveBeenCalled();
   });

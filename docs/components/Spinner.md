@@ -9,13 +9,16 @@
 
 ### Spinner
 
-`Spinner` accepts no props.
+| Prop    | Type     | Required | Description                                                  |
+| ------- | -------- | -------- | ------------------------------------------------------------ |
+| `label` | `string` | No       | Screen-reader-only loading text. Defaults to `"Loading..."`. |
 
 ### InlineSpinner
 
 | Prop    | Type                                                    | Required | Description                                                          |
 | ------- | ------------------------------------------------------- | -------- | -------------------------------------------------------------------- |
 | `color` | `'stone-50' \| 'green-600' \| 'green-800' \| 'red-800'` | No       | Tailwind text color used for the spinner. Defaults to `"green-800"`. |
+| `label` | `string`                                                | No       | Screen-reader-only loading text. Defaults to `"Loading..."`.         |
 
 ## Example Usage
 
@@ -25,10 +28,10 @@ import Spinner, { InlineSpinner } from '../components/Spinner';
 function Screen() {
   return (
     <div>
-      <Spinner />
+      <Spinner label="Loading dashboard" />
       <button className="inline-flex items-center gap-2">
         Saving
-        <InlineSpinner color="green-600" />
+        <InlineSpinner color="green-600" label="Saving plant" />
       </button>
     </div>
   );

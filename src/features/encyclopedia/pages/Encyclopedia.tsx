@@ -47,7 +47,7 @@ export default function Encyclopedia() {
   }, [showError]);
 
   if (loading) {
-    return <Spinner />;
+    return <Spinner label="Loading species..." />;
   }
 
   return (

@@ -41,7 +41,7 @@ export default function MyCollection() {
   }, [showError, user]);
 
   if (loading) {
-    return <Spinner />;
+    return <Spinner label="Loading plants..." />;
   }
 
   return (

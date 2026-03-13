@@ -49,7 +49,7 @@ export default function PlantDetails() {
   }, [id, showError, user?.id]);
 
   if (loading) {
-    return <Spinner />;
+    return <Spinner label="Loading plant details..." />;
   }
 
   if (!plantDetails) {

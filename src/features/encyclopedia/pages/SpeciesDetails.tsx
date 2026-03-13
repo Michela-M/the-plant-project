@@ -41,7 +41,7 @@ export default function SpeciesDetails() {
   }, [id, showError]);
 
   if (loading) {
-    return <Spinner />;
+    return <Spinner label="Loading species details..." />;
   }
 
   if (!speciesDetails) {

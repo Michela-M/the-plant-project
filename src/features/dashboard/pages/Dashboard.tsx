@@ -42,7 +42,7 @@ export default function Dashboard() {
   const { todayOrOverdue, afterToday } = partitionScheduledPlants(plants);
 
   if (loading) {
-    return <Spinner />;
+    return <Spinner label="Loading dashboard..." />;
   }
 
   return (

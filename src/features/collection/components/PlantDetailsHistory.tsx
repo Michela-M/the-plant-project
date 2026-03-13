@@ -91,7 +91,7 @@ export default function PlantDetailsHistory({ plantId }: { plantId: string }) {
   }, [careHistory]);
 
   if (loading) {
-    return <Spinner />;
+    return <Spinner label="Loading care history..." />;
   }
 
   if (careHistory.length === 0) {

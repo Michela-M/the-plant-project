@@ -147,7 +147,7 @@ export default function EditPlant() {
   };
 
   if (loading) {
-    return <Spinner />;
+    return <Spinner label="Loading plant details..." />;
   }
 
   if (!plantDetails) {
