@@ -12,7 +12,7 @@ const COLOR_MAP = {
 export default function Tag({
   label,
   color = 'grey',
-}: {
+}: Readonly<{
   label: string;
   color?:
     | 'grey'
@@ -23,10 +23,13 @@ export default function Tag({
     | 'blue'
     | 'purple'
     | 'pink';
-}) {
+}>) {
   return (
-    <div className={`text-xs px-2 py-1 rounded-sm ${COLOR_MAP[color]}`}>
+    <span
+      aria-label={`${label}, ${color} tag`}
+      className={`text-xs px-2 py-1 rounded-sm ${COLOR_MAP[color]}`}
+    >
       {label}
-    </div>
+    </span>
   );
 }
