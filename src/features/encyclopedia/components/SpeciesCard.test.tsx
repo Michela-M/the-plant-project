@@ -16,28 +16,17 @@ describe('SpeciesCard component', () => {
       </MemoryRouter>
     );
 
-    const img = screen.getByRole('img') as HTMLImageElement;
+    const img = screen.getByRole('img');
     expect(img).toBeInTheDocument();
-    expect(img.src).toBe('https://example.com/plant.jpg');
-    expect(img.alt).toBe('Snake Plant image');
+    expect(img).toHaveAttribute('src', 'https://example.com/plant.jpg');
+    expect(img).toHaveAttribute('alt', 'Snake Plant image');
 
     expect(screen.getByText('Asparagaceae')).toBeInTheDocument();
     expect(screen.getByText('Snake Plant')).toBeInTheDocument();
+    expect(screen.getAllByRole('link')).toHaveLength(2);
   });
 
-  it('icon button is hidden by default', () => {
-    render(
-      <MemoryRouter>
-        <SpeciesCard family="Asparagaceae" commonName="Snake Plant" id="1" />
-      </MemoryRouter>
-    );
-
-    const button = screen.getByTestId('icon-container');
-
-    expect(button).toHaveClass('opacity-0');
-  });
-
-  it('does not nest icon button inside species link', () => {
+  it('uses the species details route for both links', () => {
     render(
       <MemoryRouter>
         <SpeciesCard family="Asparagaceae" commonName="Snake Plant" id="1" />
@@ -45,12 +34,10 @@ describe('SpeciesCard component', () => {
     );
 
     const links = screen.getAllByRole('link');
-    const addButton = screen.getByRole('button', {
-      name: /add snake plant to collection/i,
-    });
 
+    expect(links).toHaveLength(2);
     links.forEach((link) => {
-      expect(link).not.toContainElement(addButton);
+      expect(link).toHaveAttribute('href', '/species/1');
     });
   });
 
@@ -61,10 +48,10 @@ describe('SpeciesCard component', () => {
       </MemoryRouter>
     );
 
-    const img = screen.getByRole('img') as HTMLImageElement;
+    const img = screen.getByRole('img');
     expect(img).toBeInTheDocument();
-    expect(img.src).toContain('/public/images/placeholder.jpg');
-    expect(img.alt).toBe('No photo available');
+    expect(img).toHaveAttribute('src', '/public/images/placeholder.jpg');
+    expect(img).toHaveAttribute('alt', 'No photo available');
 
     expect(screen.getByText('Unknown Family')).toBeInTheDocument();
     expect(screen.getByText('Unknown')).toBeInTheDocument();

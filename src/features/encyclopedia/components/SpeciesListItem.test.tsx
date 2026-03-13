@@ -25,10 +25,11 @@ describe('SpeciesListItem', () => {
     expect(screen.getByText('low-maintenance')).toBeInTheDocument();
     expect(screen.getByText('air-purifying')).toBeInTheDocument();
 
-    const img = screen.getByRole('img') as HTMLImageElement;
+    const img = screen.getByRole('img');
     expect(img).toBeInTheDocument();
-    expect(img.src).toBe('https://example.com/snake.jpg');
-    expect(img.alt).toBe('Snake Plant image');
+    expect(img).toHaveAttribute('src', 'https://example.com/snake.jpg');
+    expect(img).toHaveAttribute('alt', 'Snake Plant image');
+    expect(screen.getByRole('link')).toHaveAttribute('href', '/species/1');
   });
 
   it('uses fallbacks when props are missing', () => {
@@ -50,29 +51,10 @@ describe('SpeciesListItem', () => {
 
     expect(screen.getByText('A plant with missing data.')).toBeInTheDocument();
 
-    const img = screen.getByRole('img') as HTMLImageElement;
+    const img = screen.getByRole('img');
     expect(img).toBeInTheDocument();
-    expect(img.src).toContain('/public/images/placeholder.jpg');
-    expect(img.alt).toBe('No photo available');
-  });
-
-  it('icon button is hidden by default', () => {
-    render(
-      <MemoryRouter>
-        <SpeciesListItem
-          family="Asparagaceae"
-          commonName="Snake Plant"
-          description="A very resilient plant."
-          tags={['low-maintenance', 'air-purifying']}
-          imageUrl="https://example.com/snake.jpg"
-          id="1"
-        />
-      </MemoryRouter>
-    );
-
-    const button = screen.getByTestId('icon-container');
-
-    expect(button).toHaveClass('opacity-0');
+    expect(img).toHaveAttribute('src', '/public/images/placeholder.jpg');
+    expect(img).toHaveAttribute('alt', 'No photo available');
   });
 
   it('renders the correct number of tags', () => {
@@ -96,7 +78,7 @@ describe('SpeciesListItem', () => {
     });
   });
 
-  it('does not nest icon button inside species link', () => {
+  it('uses the species details route for the item link', () => {
     render(
       <MemoryRouter>
         <SpeciesListItem
@@ -111,10 +93,7 @@ describe('SpeciesListItem', () => {
     );
 
     const link = screen.getByRole('link', { name: /snake plant/i });
-    const addButton = screen.getByRole('button', {
-      name: /add snake plant to collection/i,
-    });
 
-    expect(link).not.toContainElement(addButton);
+    expect(link).toHaveAttribute('href', '/species/1');
   });
 });
