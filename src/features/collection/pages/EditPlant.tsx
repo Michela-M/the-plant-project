@@ -147,7 +147,7 @@ export default function EditPlant() {
   };
 
   if (loading) {
-    return <Spinner />;
+    return <Spinner label="Loading plant details..." />;
   }
 
   if (!plantDetails) {
@@ -166,8 +166,9 @@ export default function EditPlant() {
           <ImagePicker
             previewUrl={previewUrl || plantDetails.imageUrl}
             onSelect={handleImagePickerSelect}
+            label="Plant Image"
           />
-          <Callout className="text-red-500">{error}</Callout>
+          <Callout className="text-red-700">{error}</Callout>
         </div>
 
         <div className="w-2/3 flex flex-col gap-2">
@@ -232,10 +233,16 @@ export default function EditPlant() {
       <div className="flex gap-2 justify-end">
         <Button
           label="Cancel"
+          ariaLabel="Cancel"
           variant="outlined"
           onClick={() => navigate(-1)}
         />
-        <Button label="Save" type="submit" loading={loadingSave} />
+        <Button
+          label="Save"
+          ariaLabel="Save"
+          type="submit"
+          loading={loadingSave}
+        />
       </div>
     </form>
   );

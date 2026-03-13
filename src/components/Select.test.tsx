@@ -26,6 +26,7 @@ describe('Select', () => {
       <Select
         id="plant"
         label="Plant"
+        name="plant"
         options={['Monstera', 'Ficus']}
         onSelect={() => {}}
       />
@@ -45,6 +46,7 @@ describe('Select', () => {
       <Select
         id="plant"
         label="Plant"
+        name="plant"
         options={['Monstera', 'Ficus']}
         onSelect={onSelect}
       />
@@ -60,6 +62,7 @@ describe('Select', () => {
       <Select
         id="plant"
         label="Plant"
+        name="plant"
         options={['Monstera', 'Ficus']}
         value="Monstera"
         onSelect={() => {}}
@@ -78,6 +81,7 @@ describe('Select', () => {
         <Select
           id="plant"
           label="Plant"
+          name="plant"
           options={['Monstera', 'Ficus']}
           onSelect={() => {}}
           onBlur={onBlur}
@@ -97,6 +101,7 @@ describe('Select', () => {
       <Select
         id="plant"
         label="Plant"
+        name="plant"
         options={['Monstera', 'Ficus']}
         onSelect={() => {}}
         error="Plant is required"
@@ -104,6 +109,29 @@ describe('Select', () => {
     );
 
     expect(screen.getByText('Plant is required')).toBeInTheDocument();
+  });
+
+  it('associates the error message with the select for accessibility', () => {
+    render(
+      <Select
+        id="plant"
+        label="Plant"
+        name="plant"
+        options={['Monstera', 'Ficus']}
+        onSelect={() => {}}
+        error="Plant is required"
+      />
+    );
+
+    expect(screen.getByLabelText('Plant')).toHaveAttribute(
+      'aria-invalid',
+      'true'
+    );
+    expect(screen.getByLabelText('Plant')).toHaveAttribute(
+      'aria-describedby',
+      'plant-error'
+    );
+    expect(screen.getByRole('alert')).toHaveAttribute('id', 'plant-error');
   });
 
   it('uses id for htmlFor/id association', () => {

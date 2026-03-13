@@ -41,14 +41,18 @@ export default function MyCollection() {
   }, [showError, user]);
 
   if (loading) {
-    return <Spinner />;
+    return <Spinner label="Loading plants..." />;
   }
 
   return (
     <div className="w-1/2 mx-auto py-8 flex flex-col gap-4">
       <div className="flex justify-between items-center">
         <H1>My Collection</H1>
-        <Button label="Add Plant" onClick={() => navigate('/add-plant')} />
+        <Button
+          label="Add Plant"
+          ariaLabel="Add Plant"
+          onClick={() => navigate('/add-plant')}
+        />
       </div>
       {plants.length === 0 && (
         <p className="text-stone-500">No plants yet. Add your first one!</p>
@@ -61,9 +65,7 @@ export default function MyCollection() {
               id: plant.id,
               name: plant.name,
               commonName: plant.species,
-              imageUrl:
-                plant.imageUrl ||
-                'https://larchcottage.co.uk/wp-content/uploads/2024/05/placeholder.jpg',
+              imageUrl: plant.imageUrl || '/public/images/placeholder.jpg',
             }}
           />
         ))}

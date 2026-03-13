@@ -67,6 +67,17 @@ describe('Button', () => {
     expect(onClick).toHaveBeenCalledTimes(1);
   });
 
+  it('does not call onClick while loading', async () => {
+    const user = userEvent.setup();
+    const onClick = vi.fn();
+
+    render(<Button label="Loading" onClick={onClick} loading={true} />);
+
+    await user.click(screen.getByRole('button'));
+
+    expect(onClick).not.toHaveBeenCalled();
+  });
+
   it('shows spinner when loading is true', () => {
     render(<Button label="Loading" loading={true} />);
 
@@ -94,38 +105,87 @@ describe('Button', () => {
     const button = screen.getByRole('button');
     expect(button.className).not.toContain('w-full');
   });
+
+  it('uses label as aria-label when ariaLabel is not provided', () => {
+    render(<Button label="Water Plant" />);
+
+    expect(screen.getByRole('button')).toHaveAttribute(
+      'aria-label',
+      'Water Plant'
+    );
+  });
+
+  it('uses ariaLabel override when provided', () => {
+    render(<Button label="Water" ariaLabel="Water snake plant" />);
+
+    expect(screen.getByRole('button')).toHaveAttribute(
+      'aria-label',
+      'Water snake plant'
+    );
+  });
+
+  it('passes aria-controls to the native button when provided', () => {
+    render(<Button label="Open picker" ariaControls="picker-input" />);
+
+    expect(screen.getByRole('button')).toHaveAttribute(
+      'aria-controls',
+      'picker-input'
+    );
+  });
+
+  it('adds keyboard focus-visible styles', () => {
+    render(<Button label="Focus" />);
+
+    const button = screen.getByRole('button');
+    expect(button.className).toContain('focus:ring-2');
+    expect(button.className).toContain('focus:ring-offset-2');
+    expect(button.className).toContain('focus-visible:ring-2');
+    expect(button.className).toContain('focus-visible:ring-offset-2');
+  });
+
+  it('uses destructive focus ring color when tone is destructive', () => {
+    render(<Button label="Delete" tone="destructive" />);
+
+    const button = screen.getByRole('button');
+    expect(button.className).toContain('focus:ring-red-700');
+    expect(button.className).toContain('focus-visible:ring-red-700');
+  });
 });
 
 describe('IconButton', () => {
   it('renders the icon', () => {
-    render(<IconButton icon={<span data-testid="icon" />} />);
+    render(
+      <IconButton icon={<span data-testid="icon" />} label="Icon Button" />
+    );
 
     expect(screen.getByTestId('icon')).toBeInTheDocument();
   });
 
   it('uses filled variant by default', () => {
-    render(<IconButton icon={<span />} />);
+    render(<IconButton icon={<span />} label="Icon Button" />);
 
     const button = screen.getByRole('button');
     expect(button.className).toContain('bg-green-800');
   });
 
   it('applies outlined variant classes', () => {
-    render(<IconButton variant="outlined" icon={<span />} />);
+    render(
+      <IconButton variant="outlined" icon={<span />} label="Icon Button" />
+    );
 
     const button = screen.getByRole('button');
     expect(button.className).toContain('border-green-800');
   });
 
   it('applies ghost variant classes', () => {
-    render(<IconButton variant="ghost" icon={<span />} />);
+    render(<IconButton variant="ghost" icon={<span />} label="Icon Button" />);
 
     const button = screen.getByRole('button');
     expect(button.className).toContain('text-green-800');
   });
 
   it('applies small size classes', () => {
-    render(<IconButton size="sm" icon={<span />} />);
+    render(<IconButton size="sm" icon={<span />} label="Icon Button" />);
 
     const button = screen.getByRole('button');
     expect(button.className).toContain('p-1');
@@ -143,10 +203,48 @@ describe('IconButton', () => {
     const user = userEvent.setup();
     const onClick = vi.fn();
 
-    render(<IconButton icon={<span />} onClick={onClick} />);
+    render(
+      <IconButton icon={<span />} onClick={onClick} label="Icon Button" />
+    );
 
     await user.click(screen.getByRole('button'));
 
     expect(onClick).toHaveBeenCalledTimes(1);
+  });
+
+  it('does not call onClick while loading', async () => {
+    const user = userEvent.setup();
+    const onClick = vi.fn();
+
+    render(
+      <IconButton
+        icon={<span />}
+        onClick={onClick}
+        loading={true}
+        label="Icon Button"
+      />
+    );
+
+    await user.click(screen.getByRole('button'));
+
+    expect(onClick).not.toHaveBeenCalled();
+  });
+
+  it('adds keyboard focus-visible styles', () => {
+    render(<IconButton icon={<span />} label="Focus" />);
+
+    const button = screen.getByRole('button');
+    expect(button.className).toContain('focus:ring-2');
+    expect(button.className).toContain('focus:ring-offset-2');
+    expect(button.className).toContain('focus-visible:ring-2');
+    expect(button.className).toContain('focus-visible:ring-offset-2');
+  });
+
+  it('uses destructive focus ring color when tone is destructive', () => {
+    render(<IconButton icon={<span />} label="Delete" tone="destructive" />);
+
+    const button = screen.getByRole('button');
+    expect(button.className).toContain('focus:ring-red-700');
+    expect(button.className).toContain('focus-visible:ring-red-700');
   });
 });

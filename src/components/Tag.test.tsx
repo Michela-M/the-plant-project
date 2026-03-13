@@ -25,4 +25,11 @@ describe('Tag component', () => {
     expect(tag.className).toContain('bg-stone-200');
     expect(tag.className).toContain('text-stone-700');
   });
+
+  it('has an appropriate aria-label for accessibility', () => {
+    render(<Tag label="Pet Friendly" color="green" />);
+
+    const tag = screen.getByLabelText('Pet Friendly, green tag');
+    expect(tag).toBeInTheDocument();
+  });
 });

@@ -17,11 +17,11 @@ Wraps one or more `RadioButton` children and controls the layout direction.
 
 #### Props
 
-| Prop       | Type                         | Required | Default      | Description                                 |
-| ---------- | ---------------------------- | -------- | ------------ | ------------------------------------------- |
-| `label`    | `string`                     | No       | —            | Group label text and accessible group label |
-| `children` | `React.ReactNode`            | Yes      | —            | Radio button elements                       |
-| `layout`   | `'vertical' \| 'horizontal'` | No       | `'vertical'` | Layout direction for the button list        |
+| Prop       | Type                         | Required | Default      | Description                                   |
+| ---------- | ---------------------------- | -------- | ------------ | --------------------------------------------- |
+| `label`    | `string`                     | Yes      | —            | Group label text shown in the fieldset legend |
+| `children` | `React.ReactNode`            | Yes      | —            | Radio button elements                         |
+| `layout`   | `'vertical' \| 'horizontal'` | No       | `'vertical'` | Layout direction for the button list          |
 
 ### `RadioButton`
 
@@ -29,14 +29,13 @@ Renders a single radio input with a label.
 
 #### Props
 
-| Prop       | Type                      | Required | Default         | Description                                            |
-| ---------- | ------------------------- | -------- | --------------- | ------------------------------------------------------ |
-| `label`    | `React.ReactNode`         | Yes      | —               | Visible label for the option                           |
-| `value`    | `string`                  | Yes      | —               | Option value used by `id` and passed to `onChange`     |
-| `checked`  | `boolean`                 | Yes      | —               | Whether this option is currently selected              |
-| `onChange` | `(value: string) => void` | Yes      | —               | Called when the option is selected                     |
-| `name`     | `string`                  | No       | `'radio-group'` | Shared name used to group related radio inputs         |
-| `disabled` | `boolean`                 | No       | `false`         | Disables selection and applies disabled visual styling |
+| Prop       | Type                      | Required | Default | Description                                            |
+| ---------- | ------------------------- | -------- | ------- | ------------------------------------------------------ |
+| `label`    | `React.ReactNode`         | Yes      | —       | Visible label for the option                           |
+| `value`    | `string`                  | Yes      | —       | Option value used by `id` and passed to `onChange`     |
+| `checked`  | `boolean`                 | Yes      | —       | Whether this option is currently selected              |
+| `onChange` | `(value: string) => void` | Yes      | —       | Called when the option is selected                     |
+| `disabled` | `boolean`                 | No       | `false` | Disables selection and applies disabled visual styling |
 
 ## Example Usage
 
@@ -76,5 +75,5 @@ export default function CareTypePicker() {
 
 - This is a controlled component; parent state determines which option is selected.
 - The `value` prop is used for both the input's `id` and passed to the `onChange` callback, so it should be unique within the group.
-- Use the same `name` value across related `RadioButton` components so the browser treats them as a single radio group.
-- The `label` prop on `RadioGroup` is important for accessibility as it provides a group label for screen readers.
+- `RadioGroup` automatically generates and provides a shared radio `name` to all child `RadioButton` components.
+- The `label` prop on `RadioGroup` is required and is rendered in a `<legend>` for group context.

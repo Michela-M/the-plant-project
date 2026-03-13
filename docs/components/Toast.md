@@ -15,8 +15,16 @@ The component:
 
 - Supports four visual types (info, success, warning, error)
 - Auto-dismisses after 4 seconds
+- Pauses auto-dismiss while hovered anywhere over the toast
+- Pauses auto-dismiss while focus is inside the toast (for example, on the close button)
 - Can be manually dismissed via a close button
 - Is controlled externally via open and onClose
+
+## Accessibility Notes
+
+- Uses `role="status"` with `aria-live="polite"` for `info` and `success` toasts.
+- Uses `role="alert"` with `aria-live="assertive"` for `warning` and `error` toasts.
+- Includes a screen-reader-only prefix announcing the toast type before the message.
 
 ## Props
 

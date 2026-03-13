@@ -23,9 +23,16 @@ The **SimilarSpecies** component renders a linked preview card for one related s
   - image placeholder URL
   - `Unknown Family`
   - `Unknown`
-  - alt text `Plant Image`
+  - placeholder alt text generated from fetched data: `No photo available`
 - On fetch failure, shows toast error via `showError`.
 - Entire card is wrapped in a route link to `/species/{speciesId}`.
+
+## Accessibility Notes
+
+- Image alt text is generated internally and is not configurable through props.
+- Current alt behavior:
+  - Real image: `{commonName} ({scientificName}) image`.
+  - Placeholder image: `No photo available`.
 
 ## Example Usage
 

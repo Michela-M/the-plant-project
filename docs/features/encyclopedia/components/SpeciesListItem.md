@@ -19,7 +19,10 @@ The **SpeciesListItem** component renders a horizontal list-row view of a specie
 
 - Entire row is wrapped in a `Link` to `/species/{id}`.
 - Image fallback URL is used when `imageUrl` is empty.
-- Image alt text is `commonName` or `Plant Image`.
+- Image alt text is generated internally and is not configurable through props.
+- Current alt behavior:
+  - Real image: `{commonName} image`.
+  - Placeholder image: `No photo available`.
 - Description is rendered only when `description` is provided.
 - Tags are rendered in order using `tags.map(...)`.
 - Includes a ghost plus `IconButton` for quick add affordance.

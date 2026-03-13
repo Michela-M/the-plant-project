@@ -22,7 +22,10 @@ The **SpeciesDetailsSidebar** component renders supplementary species informatio
 ## Behavior Notes
 
 - Main image uses `speciesDetails.image` or falls back to a placeholder URL when missing.
-- Image alt text format is `{commonName} image`.
+- Main image alt text is generated internally in this component and passed to `ImagePreview`.
+- Current alt behavior:
+  - Real image: `{commonName} image`.
+  - Placeholder image: `No photo available for {commonName}`.
 - `otherNames` and `type` are rendered as comma-separated strings.
 - Characteristics section renders six `CharacteristicBadge` items:
   - `difficulty`

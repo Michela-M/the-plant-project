@@ -45,8 +45,11 @@ describe('CharacteristicBadge', () => {
     ({ label, value, text, colorClass }) => {
       render(<CharacteristicBadge label={label} value={value} />);
 
+      const iconTile = screen.getByTestId(`icon-${label}`);
       expect(screen.getByText(text)).toBeInTheDocument();
-      expect(screen.getByTestId(`icon-${label}`)).toHaveClass(colorClass);
+      expect(iconTile).toHaveClass(colorClass);
+      expect(iconTile).toHaveAttribute('title', label);
+      expect(iconTile).toHaveAttribute('aria-hidden', 'true');
     }
   );
 

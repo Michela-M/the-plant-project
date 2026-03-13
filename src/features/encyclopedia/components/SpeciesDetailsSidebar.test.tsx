@@ -12,7 +12,9 @@ import { describe, it, expect, vi } from 'vitest';
 
 vi.mock('./SimilarSpecies', () => ({
   default: ({ speciesId }: { speciesId: string }) => (
-    <div data-testid="similar-species-item">Mock similar species {speciesId}</div>
+    <div data-testid="similar-species-item">
+      Mock similar species {speciesId}
+    </div>
   ),
 }));
 
@@ -63,12 +65,12 @@ describe('SpeciesDetailsSidebar', () => {
 
   it('renders only applicable characteristic badges', () => {
     render(<SpeciesDetailsSidebar speciesDetails={mockSpeciesDetails} />);
-    expect(screen.getByLabelText('difficulty')).toBeInTheDocument();
-    expect(screen.getByLabelText('toxicity')).toBeInTheDocument();
-    expect(screen.queryByLabelText('maintenance')).not.toBeInTheDocument();
-    expect(screen.queryByLabelText('light')).not.toBeInTheDocument();
-    expect(screen.queryByLabelText('pruning')).not.toBeInTheDocument();
-    expect(screen.queryByLabelText('propagation')).not.toBeInTheDocument();
+    expect(screen.getByTestId('icon-difficulty')).toBeInTheDocument();
+    expect(screen.getByTestId('icon-toxicity')).toBeInTheDocument();
+    expect(screen.queryByTestId('icon-maintenance')).not.toBeInTheDocument();
+    expect(screen.queryByTestId('icon-light')).not.toBeInTheDocument();
+    expect(screen.queryByTestId('icon-pruning')).not.toBeInTheDocument();
+    expect(screen.queryByTestId('icon-propagation')).not.toBeInTheDocument();
   });
 
   it('renders similar species section with SimilarSpecies components', () => {
@@ -82,11 +84,10 @@ describe('SpeciesDetailsSidebar', () => {
   it('shows placeholder image if no image is provided', () => {
     const speciesWithoutImage = { ...mockSpeciesDetails, image: '' };
     render(<SpeciesDetailsSidebar speciesDetails={speciesWithoutImage} />);
-    const image = screen.getByRole('img', { name: /aloe vera image/i });
-    expect(image).toHaveAttribute(
-      'src',
-      'https://larchcottage.co.uk/wp-content/uploads/2024/05/placeholder.jpg'
-    );
+    const image = screen.getByRole('img') as HTMLImageElement;
+    expect(image).toBeInTheDocument();
+    expect(image.alt).toBe('No photo available for Aloe Vera');
+    expect(image.src).toContain('/public/images/placeholder.jpg');
   });
 
   it('shows "No similar species listed." if similarSpecies array is empty', () => {

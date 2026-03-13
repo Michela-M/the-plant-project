@@ -1,5 +1,6 @@
 import { describe, it, expect, vi } from 'vitest';
 import { render, screen } from '@testing-library/react';
+import userEvent from '@testing-library/user-event';
 import Menu, { MenuItem } from './Menu';
 
 describe('Menu', () => {
@@ -11,38 +12,40 @@ describe('Menu', () => {
     ];
 
     render(
-      <Menu>
+      <Menu label="Test Menu">
         {menuItems.map((item) => (
           <MenuItem key={item.label} label={item.label} onClick={() => {}} />
         ))}
       </Menu>
     );
 
+    expect(screen.getByRole('menu', { name: 'Test Menu' })).toBeInTheDocument();
+
     menuItems.forEach((item) => {
-      const linkElement = screen.getByText(item.label);
-      expect(linkElement).toBeInTheDocument();
-      expect(linkElement).toHaveAttribute('aria-label', item.label);
+      const menuItem = screen.getByRole('menuitem', { name: item.label });
+      expect(menuItem).toBeInTheDocument();
     });
   });
 
-  it('calls onClick handler when menu item is clicked', () => {
+  it('calls onClick handler when menu item is clicked', async () => {
+    const user = userEvent.setup();
     const handleClick = vi.fn();
 
     render(
-      <Menu>
+      <Menu label="Test Menu">
         <MenuItem label="Test Item" onClick={handleClick} />
       </Menu>
     );
 
-    const menuItem = screen.getByText('Test Item');
-    menuItem.click();
+    const menuItem = screen.getByRole('menuitem', { name: 'Test Item' });
+    await user.click(menuItem);
 
     expect(handleClick).toHaveBeenCalled();
   });
 
   it('renders description when provided', () => {
     render(
-      <Menu>
+      <Menu label="Test Menu">
         <MenuItem
           label="Test Item"
           description="This is a test description"
@@ -55,11 +58,12 @@ describe('Menu', () => {
     expect(descriptionElement).toBeInTheDocument();
   });
 
-  it('disables menu item when disabled prop is true', () => {
+  it('applies disabled styles and exposes aria-disabled when disabled prop is true', async () => {
+    const user = userEvent.setup();
     const handleClick = vi.fn();
 
     render(
-      <Menu>
+      <Menu label="Test Menu">
         <MenuItem
           label="Disabled Item"
           description="Disabled item description"
@@ -69,22 +73,27 @@ describe('Menu', () => {
       </Menu>
     );
 
-    const menuItem = screen.getByText('Disabled Item');
+    const menuItem = screen.getByRole('menuitem', {
+      name: /disabled item/i,
+    });
     const descriptionElement = screen.getByText('Disabled item description');
-    expect(menuItem).toBeDisabled();
+    expect(menuItem).toHaveAttribute('aria-disabled', 'true');
+    expect(menuItem).toHaveClass('cursor-not-allowed', 'text-stone-400');
     expect(descriptionElement).toHaveClass('text-stone-400');
-    menuItem.click();
-    expect(handleClick).not.toHaveBeenCalled();
+
+    await user.click(menuItem);
+    expect(handleClick).toHaveBeenCalled();
   });
 
   it('applies danger class when danger prop is true', () => {
     render(
-      <Menu>
+      <Menu label="Test Menu">
         <MenuItem label="Danger Item" danger onClick={() => {}} />
       </Menu>
     );
 
-    const menuItem = screen.getByText('Danger Item');
+    const menuItem = screen.getByRole('menuitem', { name: /danger item/i });
     expect(menuItem).toHaveClass('text-red-700');
+    expect(screen.getByText('(destructive action)')).toHaveClass('sr-only');
   });
 });

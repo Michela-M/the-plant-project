@@ -11,8 +11,8 @@ import { H1 } from '@components/Typography';
 export default function Encyclopedia() {
   const [selectedIndex, setSelectedIndex] = useState(0);
   const icons = [
-    { Icon: LayoutGrid, id: 'grid' },
-    { Icon: LayoutList, id: 'list' },
+    { Icon: LayoutGrid, id: 'grid', label: 'Grid view' },
+    { Icon: LayoutList, id: 'list', label: 'List view' },
   ];
   const [species, setSpecies] = useState<
     {
@@ -47,7 +47,7 @@ export default function Encyclopedia() {
   }, [showError]);
 
   if (loading) {
-    return <Spinner />;
+    return <Spinner label="Loading species..." />;
   }
 
   return (
@@ -58,6 +58,7 @@ export default function Encyclopedia() {
           icons={icons}
           selectedIndex={selectedIndex}
           onChange={setSelectedIndex}
+          groupLabel="Select view"
         />
       </div>
       {species.length === 0 && (
@@ -70,10 +71,7 @@ export default function Encyclopedia() {
           {species.map((specie) => (
             <SpeciesCard
               key={specie.id}
-              imageUrl={
-                specie.image ??
-                'https://larchcottage.co.uk/wp-content/uploads/2024/05/placeholder.jpg'
-              }
+              imageUrl={specie.image ?? '/public/images/placeholder.jpg'}
               family={specie.family}
               commonName={specie.commonName}
               id={specie.id}
@@ -89,10 +87,7 @@ export default function Encyclopedia() {
               commonName={specie.commonName}
               description={specie.description}
               tags={specie.tags}
-              imageUrl={
-                specie.image ??
-                'https://larchcottage.co.uk/wp-content/uploads/2024/05/placeholder.jpg'
-              }
+              imageUrl={specie.image ?? '/public/images/placeholder.jpg'}
               id={specie.id}
             />
           ))}

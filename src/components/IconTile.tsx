@@ -15,7 +15,7 @@ export default function IconTile({
   Icon,
   color = 'black',
   label,
-}: {
+}: Readonly<{
   Icon: React.ElementType;
   color?:
     | 'black'
@@ -29,12 +29,13 @@ export default function IconTile({
     | 'purple'
     | 'pink';
   label: string;
-}) {
+}>) {
   return (
     <div
       className={`rounded-full w-10 h-10 flex items-center justify-center ${colorMap[color]}`}
       data-testid={`icon-${label}`}
-      aria-label={label}
+      title={label}
+      aria-hidden="true"
     >
       <Icon className="w-6 h-6 text-stone-50" />
     </div>

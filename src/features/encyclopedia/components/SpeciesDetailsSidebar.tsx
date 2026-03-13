@@ -12,11 +12,12 @@ export default function SpeciesDetailsSidebar({
   return (
     <div className="w-3/8 flex flex-col gap-6">
       <ImagePreview
-        url={
-          speciesDetails.image ||
-          'https://larchcottage.co.uk/wp-content/uploads/2024/05/placeholder.jpg'
+        url={speciesDetails.image || '/public/images/placeholder.jpg'}
+        alt={
+          speciesDetails.image
+            ? `${speciesDetails.commonName} image`
+            : `No photo available for ${speciesDetails.commonName}`
         }
-        alt={`${speciesDetails.commonName} image`}
       />
       <div>
         <p>Other names: {speciesDetails.otherNames.join(', ')}</p>

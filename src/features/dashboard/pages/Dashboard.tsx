@@ -42,14 +42,18 @@ export default function Dashboard() {
   const { todayOrOverdue, afterToday } = partitionScheduledPlants(plants);
 
   if (loading) {
-    return <Spinner />;
+    return <Spinner label="Loading dashboard..." />;
   }
 
   return (
     <div className="w-3/4 mx-auto py-8 flex flex-col gap-4">
       <div className="flex justify-between items-center">
         <H1>Care Dashboard</H1>
-        <Button onClick={() => setShowCareModal(true)} label="New entry" />
+        <Button
+          onClick={() => setShowCareModal(true)}
+          label="New entry"
+          ariaLabel="New entry"
+        />
       </div>
       <p>
         These care reminders are general guidelines based on typical plant

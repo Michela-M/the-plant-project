@@ -18,6 +18,7 @@ export default function Navigation() {
         {user ? (
           <Button
             label="Logout"
+            ariaLabel="Logout"
             onClick={async () => {
               try {
                 await logout();
@@ -29,9 +30,14 @@ export default function Navigation() {
           />
         ) : (
           <div className="flex gap-2">
-            <Button label="Login" onClick={() => navigate('/login')} />
+            <Button
+              label="Login"
+              ariaLabel="Login"
+              onClick={() => navigate('/login')}
+            />
             <Button
               label="Sign Up"
+              ariaLabel="Sign Up"
               variant="outlined"
               onClick={() => navigate('/signup')}
             />

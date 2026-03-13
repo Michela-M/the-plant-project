@@ -16,10 +16,11 @@ describe('SpeciesCard component', () => {
       </MemoryRouter>
     );
 
-    expect(screen.getByAltText('Snake Plant')).toHaveAttribute(
-      'src',
-      'https://example.com/plant.jpg'
-    );
+    const img = screen.getByRole('img') as HTMLImageElement;
+    expect(img).toBeInTheDocument();
+    expect(img.src).toBe('https://example.com/plant.jpg');
+    expect(img.alt).toBe('Snake Plant image');
+
     expect(screen.getByText('Asparagaceae')).toBeInTheDocument();
     expect(screen.getByText('Snake Plant')).toBeInTheDocument();
   });
@@ -60,10 +61,11 @@ describe('SpeciesCard component', () => {
       </MemoryRouter>
     );
 
-    expect(screen.getByAltText('Plant Image')).toHaveAttribute(
-      'src',
-      'https://larchcottage.co.uk/wp-content/uploads/2024/05/placeholder.jpg'
-    );
+    const img = screen.getByRole('img') as HTMLImageElement;
+    expect(img).toBeInTheDocument();
+    expect(img.src).toContain('/public/images/placeholder.jpg');
+    expect(img.alt).toBe('No photo available');
+
     expect(screen.getByText('Unknown Family')).toBeInTheDocument();
     expect(screen.getByText('Unknown')).toBeInTheDocument();
   });

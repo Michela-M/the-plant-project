@@ -25,8 +25,10 @@ describe('SpeciesListItem', () => {
     expect(screen.getByText('low-maintenance')).toBeInTheDocument();
     expect(screen.getByText('air-purifying')).toBeInTheDocument();
 
-    const img = screen.getByAltText('Snake Plant');
-    expect(img).toHaveAttribute('src', 'https://example.com/snake.jpg');
+    const img = screen.getByRole('img') as HTMLImageElement;
+    expect(img).toBeInTheDocument();
+    expect(img.src).toBe('https://example.com/snake.jpg');
+    expect(img.alt).toBe('Snake Plant image');
   });
 
   it('uses fallbacks when props are missing', () => {
@@ -48,11 +50,10 @@ describe('SpeciesListItem', () => {
 
     expect(screen.getByText('A plant with missing data.')).toBeInTheDocument();
 
-    const img = screen.getByAltText('Plant Image');
-    expect(img).toHaveAttribute(
-      'src',
-      'https://larchcottage.co.uk/wp-content/uploads/2024/05/placeholder.jpg'
-    );
+    const img = screen.getByRole('img') as HTMLImageElement;
+    expect(img).toBeInTheDocument();
+    expect(img.src).toContain('/public/images/placeholder.jpg');
+    expect(img.alt).toBe('No photo available');
   });
 
   it('icon button is hidden by default', () => {

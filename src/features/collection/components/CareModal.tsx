@@ -135,7 +135,7 @@ export default function CareModal({
       onConfirm={formik.handleSubmit}
     >
       {loadingPlants ? (
-        <Spinner />
+        <Spinner label="Loading plants..." />
       ) : (
         <div className="flex flex-col gap-4">
           <TextField
@@ -186,6 +186,7 @@ export default function CareModal({
                   ? formik.errors.otherCareType
                   : undefined
               }
+              ariaLabel="Other care type"
             />
           )}
           {!plantId && (

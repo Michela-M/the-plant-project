@@ -23,6 +23,11 @@ Use it for confirmation flows, acknowledgements, and non-blocking informational 
 - `destructive`: shows Cancel and Confirm buttons with error tone.
 - `acknowledgement`: shows a single OK button.
 
+### Accessibility notes
+
+- Uses native `<dialog>` semantics for modal rendering.
+- The top-right close control is an icon button with accessible label `Close modal`.
+
 ## Example Usage
 
 ```tsx

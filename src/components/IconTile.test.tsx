@@ -29,10 +29,12 @@ describe('IconTile', () => {
     expect(container).toHaveClass('bg-stone-950');
   });
 
-  it('has the correct aria-label', () => {
+  it('uses label for title and is hidden from assistive technology', () => {
     render(<IconTile Icon={() => <span />} color="blue" label="test-label" />);
 
-    const container = screen.getByLabelText('test-label');
+    const container = screen.getByTestId('icon-test-label');
+    expect(container).toHaveAttribute('title', 'test-label');
+    expect(container).toHaveAttribute('aria-hidden', 'true');
     expect(container).toBeInTheDocument();
   });
 });

@@ -61,9 +61,10 @@ describe('ScheduleListItem', () => {
       'Watering frequency: 7 days'
     );
 
-    const img = screen.getByAltText('My Monstera image') as HTMLImageElement;
+    const img = screen.getByRole('img');
     expect(img).toBeInTheDocument();
-    expect(img.src).toBe('https://example.com/monstera.jpg');
+    expect(img).toHaveAttribute('src', 'https://example.com/monstera.jpg');
+    expect(img).toHaveAttribute('alt', 'My Monstera image');
   });
 
   it('shows estimated watering frequency when watering frequency is 0', () => {
@@ -115,11 +116,13 @@ describe('ScheduleListItem', () => {
       />
     );
 
-    const img = screen.getByAltText('My Monstera image') as HTMLImageElement;
+    const img = screen.getByRole('img');
     expect(img).toBeInTheDocument();
-    expect(img.src).toBe(
-      'https://larchcottage.co.uk/wp-content/uploads/2024/05/placeholder.jpg'
+    expect(img).toHaveAttribute(
+      'src',
+      expect.stringContaining('/public/images/placeholder.jpg')
     );
+    expect(img).toHaveAttribute('alt', 'No photo available for My Monstera');
   });
 
   it('opens options menu and launches WaterModal from menu action', () => {
@@ -137,19 +140,19 @@ describe('ScheduleListItem', () => {
     fireEvent.click(screen.getByRole('button', { name: 'Options' }));
 
     expect(
-      screen.getByRole('button', { name: 'Plant watered' })
+      screen.getByRole('menuitem', { name: 'Plant watered' })
     ).toBeInTheDocument();
     expect(
-      screen.getByRole('button', { name: 'Remove from schedule' })
+      screen.getByRole('menuitem', { name: 'Remove from schedule' })
     ).toBeInTheDocument();
 
-    fireEvent.click(screen.getByRole('button', { name: 'Plant watered' }));
+    fireEvent.click(screen.getByRole('menuitem', { name: 'Plant watered' }));
 
     expect(screen.getByTestId('water-modal')).toHaveTextContent(
       'WaterModal for plant-123'
     );
     expect(
-      screen.queryByRole('button', { name: 'Plant watered' })
+      screen.queryByRole('menuitem', { name: 'Plant watered' })
     ).not.toBeInTheDocument();
   });
 
@@ -167,7 +170,7 @@ describe('ScheduleListItem', () => {
 
     fireEvent.click(screen.getByRole('button', { name: 'Options' }));
     fireEvent.click(
-      screen.getByRole('button', { name: 'Remove from schedule' })
+      screen.getByRole('menuitem', { name: 'Remove from schedule' })
     );
 
     await waitFor(() => {
@@ -182,7 +185,7 @@ describe('ScheduleListItem', () => {
     });
 
     expect(
-      screen.queryByRole('button', { name: 'Remove from schedule' })
+      screen.queryByRole('menuitem', { name: 'Remove from schedule' })
     ).not.toBeInTheDocument();
   });
 
@@ -202,7 +205,7 @@ describe('ScheduleListItem', () => {
 
     fireEvent.click(screen.getByRole('button', { name: 'Options' }));
     fireEvent.click(
-      screen.getByRole('button', { name: 'Remove from schedule' })
+      screen.getByRole('menuitem', { name: 'Remove from schedule' })
     );
 
     await waitFor(() => {

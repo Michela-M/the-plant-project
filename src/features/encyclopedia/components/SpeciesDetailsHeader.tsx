@@ -29,8 +29,17 @@ export default function SpeciesDetailsHeader({
         </H1>
       </div>
       <div className="flex gap-2 justify-end shrink-0">
-        <Button label="Add to Collection" onClick={() => {}} />
-        <Button label="Quick Add" onClick={() => {}} variant="outlined" />
+        <Button
+          label="Add to Collection"
+          ariaLabel="Add to Collection"
+          onClick={() => {}}
+        />
+        <Button
+          label="Quick Add"
+          ariaLabel="Quick Add"
+          onClick={() => {}}
+          variant="outlined"
+        />
       </div>
     </div>
   );

@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react';
-import { Link, useParams } from 'react-router-dom';
+import { useParams } from 'react-router-dom';
+import Link from '@components/Link';
 import { getPlantDetails } from '../services/getPlantDetails';
 import PlantDetailsHeader from '../components/PlantDetailsHeader';
 import ImagePreview from '@components/ImagePreview';
@@ -48,19 +49,14 @@ export default function PlantDetails() {
   }, [id, showError, user?.id]);
 
   if (loading) {
-    return <Spinner />;
+    return <Spinner label="Loading plant details..." />;
   }
 
   if (!plantDetails) {
     return (
-      <div className="w-2/3 mx-auto py-8">
+      <div className="w-2/3 mx-auto py-8 flex flex-col items-center gap-2">
         <p className="text-center text-stone-500">Plant not found.</p>
-        <Link
-          to="/collection"
-          className="text-green-700 hover:underline block text-center mt-4"
-        >
-          Back to Collection
-        </Link>
+        <Link href="/collection">Back to Collection</Link>
       </div>
     );
   }
@@ -94,11 +90,12 @@ export default function PlantDetails() {
         </div>
         <div className="w-3/8 flex flex-col gap-6">
           <ImagePreview
-            url={
-              plantDetails?.imageUrl ||
-              'https://larchcottage.co.uk/wp-content/uploads/2024/05/placeholder.jpg'
+            url={plantDetails?.imageUrl || '/public/images/placeholder.jpg'}
+            alt={
+              plantDetails?.imageUrl
+                ? `${plantDetails.name} image`
+                : `No photo available for ${plantDetails.name}`
             }
-            alt="Plant image"
           />
           <PlantDetailsSchedule
             plant={{

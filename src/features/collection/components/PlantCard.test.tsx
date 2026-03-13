@@ -18,10 +18,11 @@ describe('PlantCard component', () => {
       </MemoryRouter>
     );
 
-    expect(screen.getByAltText('Snake Plant')).toHaveAttribute(
-      'src',
-      'https://example.com/plant.jpg'
-    );
+    const img = screen.getByRole('img') as HTMLImageElement;
+    expect(img).toBeInTheDocument();
+    expect(img.src).toBe('https://example.com/plant.jpg');
+    expect(img.alt).toBe('Sansevieria trifasciata image');
+
     expect(screen.getByText('Snake Plant')).toBeInTheDocument();
     expect(screen.getByText('Sansevieria trifasciata')).toBeInTheDocument();
   });
@@ -38,10 +39,12 @@ describe('PlantCard component', () => {
       </MemoryRouter>
     );
 
-    expect(screen.getByAltText('Plant Image')).toHaveAttribute(
-      'src',
-      'https://larchcottage.co.uk/wp-content/uploads/2024/05/placeholder.jpg'
-    );
+    const img = screen.getByAltText(
+      'No photo available for Sansevieria trifasciata'
+    ) as HTMLImageElement;
+    expect(img).toHaveAttribute('src', '/public/images/placeholder.jpg');
+    expect(img.alt).toBe('No photo available for Sansevieria trifasciata');
+
     expect(screen.getByText('Sansevieria trifasciata')).toBeInTheDocument();
   });
 

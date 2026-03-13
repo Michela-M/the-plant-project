@@ -1,7 +1,7 @@
 import { render, screen } from '@testing-library/react';
 import { describe, expect, it, vi } from 'vitest';
-import TextField from './TextField';
 import userEvent from '@testing-library/user-event';
+import TextField from './TextField';
 
 describe('TextField', () => {
   it('renders label, placeholder and helper text', () => {
@@ -13,6 +13,12 @@ describe('TextField', () => {
         name="name"
       />
     );
+
+    expect(screen.getByLabelText('Name')).toBeInTheDocument();
+    expect(screen.getByPlaceholderText('Enter your name')).toBeInTheDocument();
+    expect(
+      screen.getByText("We'll never share your name.")
+    ).toBeInTheDocument();
   });
 
   it('renders label as placeholder if placeholder is not provided', () => {
@@ -24,9 +30,27 @@ describe('TextField', () => {
   });
 
   it('renders default placeholder when neither label nor placeholder is provided', () => {
-    render(<TextField name="name" />);
+    render(<TextField name="name" ariaLabel="Name" />);
 
-    expect(screen.getByPlaceholderText('Enter text')).toBeInTheDocument();
+    expect(screen.getByPlaceholderText('Name')).toBeInTheDocument();
+  });
+
+  it('connects helper text with aria-describedby', () => {
+    render(
+      <TextField
+        label="Name"
+        name="name"
+        helperText="We'll never share your name."
+      />
+    );
+
+    const input = screen.getByLabelText('Name');
+    const helper = screen.getByText("We'll never share your name.");
+
+    expect(input).toHaveAttribute(
+      'aria-describedby',
+      helper.getAttribute('id')
+    );
   });
 
   it("renders as disabled when the 'disabled' prop is true", () => {
@@ -40,7 +64,7 @@ describe('TextField', () => {
       />
     );
 
-    const input = screen.getByLabelText('Name') as HTMLInputElement;
+    const input = screen.getByLabelText('Name');
     expect(input).toBeDisabled();
   });
 
@@ -89,9 +113,7 @@ describe('TextField', () => {
       />
     );
 
-    const textarea = screen.getByLabelText(
-      'Description'
-    ) as HTMLTextAreaElement;
+    const textarea = screen.getByLabelText('Description');
     expect(textarea).toBeInTheDocument();
     expect(textarea.tagName).toBe('TEXTAREA');
   });
@@ -109,7 +131,7 @@ describe('TextField', () => {
       />
     );
 
-    const input = screen.getByLabelText('Name') as HTMLInputElement;
+    const input = screen.getByLabelText('Name');
     await user.type(input, 'John Doe');
 
     expect(handleChange).toHaveBeenCalledTimes(8); // 8 characters typed
@@ -128,7 +150,7 @@ describe('TextField', () => {
       />
     );
 
-    const input = screen.getByLabelText('Name') as HTMLInputElement;
+    const input = screen.getByLabelText('Name');
     await user.click(input); // focus
     await user.click(document.body); // blur
 
@@ -145,7 +167,11 @@ describe('TextField', () => {
       />
     );
 
-    expect(screen.getByText('Name is required')).toBeInTheDocument();
+    const input = screen.getByLabelText('Name');
+    const error = screen.getByRole('alert');
+
+    expect(error).toHaveTextContent('Name is required');
+    expect(input).toHaveAttribute('aria-invalid', 'true');
   });
 
   it('applies correct styles when disabled', () => {
@@ -158,7 +184,7 @@ describe('TextField', () => {
       />
     );
 
-    const input = screen.getByLabelText('Name') as HTMLInputElement;
+    const input = screen.getByLabelText('Name');
     expect(input).toHaveClass(
       'cursor-not-allowed bg-stone-200 border-stone-300'
     );
@@ -175,6 +201,9 @@ describe('TextField', () => {
       />
     );
 
+    const input = screen.getByRole('textbox', { name: /Name/ });
+
     expect(screen.getByText('*')).toBeInTheDocument();
+    expect(input).toHaveAttribute('aria-required', 'true');
   });
 });

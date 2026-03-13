@@ -1,6 +1,11 @@
 import type { ReactNode } from 'react';
 import { InlineSpinner } from './Spinner';
 
+type ButtonVariant = 'filled' | 'outlined' | 'ghost';
+type ButtonTone = 'primary' | 'destructive';
+type ButtonSize = 'sm' | 'md';
+type ButtonType = 'button' | 'submit' | 'reset';
+
 const variantClasses = {
   primary: {
     filled:
@@ -20,6 +25,21 @@ const variantClasses = {
   },
 };
 
+const focusClasses = {
+  primary:
+    'focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-700 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-green-700',
+  destructive:
+    'focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-700 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-red-700',
+};
+
+function getSpinnerColor(variant: ButtonVariant, tone: ButtonTone) {
+  if (variant === 'filled') {
+    return 'stone-50';
+  }
+
+  return tone === 'primary' ? 'green-800' : 'red-800';
+}
+
 export default function Button({
   label,
   icon,
@@ -30,42 +50,51 @@ export default function Button({
   size = 'md',
   loading = false,
   fullWidth = false,
-}: {
+  ariaLabel,
+  ariaControls,
+}: Readonly<{
   label: string;
   icon?: ReactNode;
-  variant?: 'filled' | 'outlined' | 'ghost';
-  tone?: 'primary' | 'destructive';
+  variant?: ButtonVariant;
+  tone?: ButtonTone;
   onClick?: () => void;
-  type?: 'button' | 'submit' | 'reset';
-  size?: 'sm' | 'md';
+  type?: ButtonType;
+  size?: ButtonSize;
   loading?: boolean;
   fullWidth?: boolean;
-}) {
+  ariaLabel?: string;
+  ariaControls?: string;
+}>) {
+  const spinnerColor = getSpinnerColor(variant, tone);
+
   return (
     <button
       type={type}
-      onClick={onClick}
-      className={`relative flex items-center justify-center ${variantClasses[tone][variant]} ${size === 'sm' ? 'text-sm px-2 py-1 rounded-sm border gap-1' : 'text-md px-3 py-2 rounded-md border-2 gap-2'} ${fullWidth ? 'w-full' : ''}`}
+      onClick={loading ? undefined : onClick}
+      className={`relative flex items-center justify-center ${variantClasses[tone][variant]} ${focusClasses[tone]} ${size === 'sm' ? 'text-sm px-2 py-1 rounded-sm border gap-1' : 'px-3 py-2 rounded-md border-2 gap-2'} ${fullWidth ? 'w-full' : ''}`}
       disabled={loading}
       aria-busy={loading}
+      aria-label={
+        loading ? `Loading ${ariaLabel ?? label}` : (ariaLabel ?? label)
+      }
+      aria-controls={ariaControls}
     >
       {loading && (
-        <span className="absolute">
-          <InlineSpinner
-            color={
-              variant === 'filled'
-                ? 'stone-50'
-                : tone === 'primary'
-                  ? 'green-800'
-                  : 'red-800'
-            }
-          />
+        <span className="absolute" aria-hidden="true">
+          <InlineSpinner color={spinnerColor} />
         </span>
       )}
-      <span className={loading ? 'opacity-0' : 'opacity-100'}> {label} </span>
+      <span
+        className={loading ? 'opacity-0' : 'opacity-100'}
+        aria-hidden={loading}
+      >
+        {' '}
+        {label}{' '}
+      </span>
       {icon && (
         <span
           className={`flex items-center justify-center ${size === 'sm' ? 'w-4 h-4' : 'w-5 h-5'} ${loading ? 'opacity-0' : 'opacity-100'}`}
+          aria-hidden={loading}
         >
           {icon}
         </span>
@@ -81,30 +110,32 @@ export function IconButton({
   label,
   size = 'md',
   loading = false,
-}: {
+  tone = 'primary',
+}: Readonly<{
   icon: ReactNode;
-  variant?: 'filled' | 'outlined' | 'ghost';
+  variant?: ButtonVariant;
   onClick?: () => void;
-  label?: string;
-  size?: 'sm' | 'md';
+  label: string;
+  size?: ButtonSize;
   loading?: boolean;
-}) {
+  tone?: ButtonTone;
+}>) {
+  const spinnerColor = getSpinnerColor(variant, tone);
+
   return (
     <button
       type="button"
       onClick={loading ? undefined : onClick}
       disabled={loading}
       aria-busy={loading}
-      className={`${variantClasses['primary'][variant]} ${size === 'sm' ? 'p-1 rounded-sm border' : 'p-2 rounded-md border-2'}`}
-      aria-label={label}
+      className={`${variantClasses[tone][variant]} ${focusClasses[tone]} ${size === 'sm' ? 'p-1 rounded-sm border' : 'p-2 rounded-md border-2'}`}
+      aria-label={loading ? `Loading ${label}` : label}
     >
       {loading ? (
         <span
           className={`flex items-center justify-center ${size === 'sm' ? 'w-5 h-5' : 'w-6 h-6'}`}
         >
-          <InlineSpinner
-            color={variant === 'filled' ? 'stone-50' : 'green-800'}
-          />
+          <InlineSpinner color={spinnerColor} aria-hidden="true" />
         </span>
       ) : (
         <span

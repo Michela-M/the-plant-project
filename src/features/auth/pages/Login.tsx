@@ -105,6 +105,7 @@ export default function Login() {
           />
           <Button
             label="Log In"
+            ariaLabel="Log In"
             variant="filled"
             type="submit"
             loading={loading}

@@ -7,21 +7,24 @@ export default function Select({
   value = '',
   error,
   onBlur,
-}: {
+}: Readonly<{
   options: string[];
   onSelect: (option: string) => void;
   label: string;
-  name?: string;
+  name: string;
   id: string;
   value?: string;
   error?: string;
   onBlur?: (event: React.FocusEvent<HTMLSelectElement>) => void;
-}) {
+}>) {
   return (
     <div className="flex flex-col w-full">
       <label htmlFor={id} className="mb-1">
         {label}
       </label>
+      <p id={`${id}-hint`} className="sr-only">
+        Select one of the available options
+      </p>
       <select
         id={id}
         name={name}
@@ -29,6 +32,8 @@ export default function Select({
         value={value}
         onChange={(e) => onSelect(e.target.value)}
         onBlur={onBlur}
+        aria-describedby={error ? `${id}-error` : ''}
+        aria-invalid={!!error}
       >
         <option value="" disabled>
           Select an option
@@ -39,7 +44,15 @@ export default function Select({
           </option>
         ))}
       </select>
-      {error && <p className="text-xs pt-1 text-red-700">{error}</p>}
+      {error && (
+        <p
+          id={`${id}-error`}
+          className="text-xs pt-1 text-red-700"
+          role="alert"
+        >
+          {error}
+        </p>
+      )}
     </div>
   );
 }

@@ -26,11 +26,8 @@ export default function SpeciesListItem({
       <Link to={speciesPath} className="flex flex-row gap-2 grow">
         <img
           className="aspect-square overflow-hidden object-cover w-1/4 h-full"
-          src={
-            imageUrl ||
-            'https://larchcottage.co.uk/wp-content/uploads/2024/05/placeholder.jpg'
-          }
-          alt={commonName || 'Plant Image'}
+          src={imageUrl || '/public/images/placeholder.jpg'}
+          alt={imageUrl ? `${commonName} image` : `No photo available`}
         />
         <div className="w-3/4">
           <div className="flex">

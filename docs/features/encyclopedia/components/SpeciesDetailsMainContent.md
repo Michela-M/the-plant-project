@@ -37,7 +37,9 @@ The **SpeciesDetailsMainContent** component renders the long-form informational 
 - Section images are optional and only render when `content.images.length > 0`.
 - When images exist, each image is rendered through `ImagePreview` with:
   - `url` from `img.url`
-  - `alt` and `description` from `img.description`
+  - `alt` from `img.description`
+  - `description` from `img.description`
+- Note: this means alt text and caption are currently identical unless component code is changed.
 
 ## Example Usage
 

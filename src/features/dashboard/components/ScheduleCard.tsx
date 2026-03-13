@@ -46,22 +46,21 @@ export default function ScheduleCard({
 
       <img
         className="aspect-square object-cover w-full"
-        src={
-          imageUrl ||
-          'https://larchcottage.co.uk/wp-content/uploads/2024/05/placeholder.jpg'
-        }
-        alt={name + ' image'}
+        src={imageUrl || '/public/images/placeholder.jpg'}
+        alt={imageUrl ? `${name} image` : `No photo available for ${name}`}
       />
       <div className="flex gap-2">
         <Button
           size="sm"
           label="Watered"
+          ariaLabel="Watered"
           onClick={() => setShowWaterModal(true)}
           fullWidth
         />
         <Button
           size="sm"
           label="Snooze"
+          ariaLabel="Snooze"
           onClick={() => setShowSnoozeModal(true)}
           variant="outlined"
         />

@@ -39,7 +39,10 @@ export default function ScheduleListItem({
 
   const handleRemoveFromSchedule = async () => {
     if (!user?.id) {
-      showError('Error removing plant from schedule', 'You must be signed in to modify your schedule.');
+      showError(
+        'Error removing plant from schedule',
+        'You must be signed in to modify your schedule.'
+      );
       return;
     }
 
@@ -59,11 +62,8 @@ export default function ScheduleListItem({
       <div className="aspect-square overflow-hidden object-cover">
         <img
           className="w-32"
-          src={
-            imageUrl ||
-            'https://larchcottage.co.uk/wp-content/uploads/2024/05/placeholder.jpg'
-          }
-          alt={name + ' image'}
+          src={imageUrl || '/public/images/placeholder.jpg'}
+          alt={imageUrl ? `${name} image` : `No photo available for ${name}`}
         />
       </div>
       <div className="flex flex-col grow my-2">
@@ -90,7 +90,7 @@ export default function ScheduleListItem({
           onClick={() => setShowMenu(!showMenu)}
         />
         {showMenu && (
-          <Menu>
+          <Menu label="Plant Options">
             <MenuItem
               label="Plant watered"
               onClick={() => {

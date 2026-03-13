@@ -149,10 +149,16 @@ export default function AddPlant() {
         <div className="flex justify-end gap-2">
           <Button
             label="Cancel"
+            ariaLabel="Cancel"
             variant="outlined"
             onClick={() => navigate('/collection')}
           />
-          <Button label="Add Plant" type="submit" loading={loading} />
+          <Button
+            label="Add Plant"
+            ariaLabel="Add Plant"
+            type="submit"
+            loading={loading}
+          />
         </div>
       </form>
     </div>
