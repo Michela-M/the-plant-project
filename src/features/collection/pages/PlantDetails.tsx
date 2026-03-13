@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react';
-import { Link, useParams } from 'react-router-dom';
+import { useParams } from 'react-router-dom';
+import Link from '@components/Link';
 import { getPlantDetails } from '../services/getPlantDetails';
 import PlantDetailsHeader from '../components/PlantDetailsHeader';
 import ImagePreview from '@components/ImagePreview';
@@ -53,14 +54,9 @@ export default function PlantDetails() {
 
   if (!plantDetails) {
     return (
-      <div className="w-2/3 mx-auto py-8">
+      <div className="w-2/3 mx-auto py-8 flex flex-col items-center gap-2">
         <p className="text-center text-stone-500">Plant not found.</p>
-        <Link
-          to="/collection"
-          className="text-green-700 hover:underline block text-center mt-4"
-        >
-          Back to Collection
-        </Link>
+        <Link href="/collection">Back to Collection</Link>
       </div>
     );
   }

@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react';
-import { Link, useParams } from 'react-router-dom';
+import { useParams } from 'react-router-dom';
+import Link from '@components/Link';
 import { getSpeciesDetails } from '../services/getSpeciesDetails';
 import { useToast } from '@context/toast/useToast';
 import Spinner from '@components/Spinner';
@@ -45,14 +46,9 @@ export default function SpeciesDetails() {
 
   if (!speciesDetails) {
     return (
-      <div className="w-2/3 mx-auto py-8">
+      <div className="w-2/3 mx-auto py-8 flex flex-col items-center gap-2">
         <p className="text-center text-stone-500">Species not found.</p>
-        <Link
-          to="/encyclopedia"
-          className="text-green-700 hover:underline block text-center mt-4"
-        >
-          Back to Encyclopedia
-        </Link>
+        <Link href="/encyclopedia">Back to Encyclopedia</Link>
       </div>
     );
   }
