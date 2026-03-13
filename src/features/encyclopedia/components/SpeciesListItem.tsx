@@ -1,6 +1,4 @@
 import Tag from '@components/Tag';
-import { IconButton } from '@components/Button';
-import { CirclePlus } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { Callout } from '@components/Typography';
 
@@ -11,14 +9,14 @@ export default function SpeciesListItem({
   tags,
   imageUrl,
   id,
-}: {
+}: Readonly<{
   family: string;
   commonName: string;
   description?: string;
   tags: string[];
   imageUrl: string;
   id: string;
-}) {
+}>) {
   const speciesPath = `/species/${id}`;
 
   return (
@@ -48,20 +46,6 @@ export default function SpeciesListItem({
           </div>
         </div>
       </Link>
-      <div
-        className="opacity-0 group-hover:opacity-100"
-        data-testid="icon-container"
-      >
-        <IconButton
-          variant="ghost"
-          icon={<CirclePlus />}
-          label={
-            commonName
-              ? `Add ${commonName} to collection`
-              : 'Add plant to collection'
-          }
-        />
-      </div>
     </div>
   );
 }

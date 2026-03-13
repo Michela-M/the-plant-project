@@ -1,5 +1,3 @@
-import { CirclePlus } from 'lucide-react';
-import { IconButton } from '@components/Button';
 import { Link } from 'react-router-dom';
 import { Callout } from '@components/Typography';
 
@@ -8,12 +6,12 @@ export default function SpeciesCard({
   family,
   commonName,
   id,
-}: {
+}: Readonly<{
   imageUrl?: string;
   family?: string;
   commonName?: string;
   id: string;
-}) {
+}>) {
   const speciesPath = `/species/${id}`;
 
   return (
@@ -33,21 +31,6 @@ export default function SpeciesCard({
           </Callout>
           <p>{commonName || 'Unknown'}</p>
         </Link>
-        <div
-          className="opacity-0 group-hover:opacity-100 py-2"
-          data-testid="icon-container"
-        >
-          <IconButton
-            variant="ghost"
-            icon={<CirclePlus />}
-            size="sm"
-            label={
-              commonName
-                ? `Add ${commonName} to collection`
-                : 'Add plant to collection'
-            }
-          />
-        </div>
       </div>
     </div>
   );

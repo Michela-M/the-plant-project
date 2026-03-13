@@ -10,16 +10,17 @@
 | ------------- | ---------- | -------- | ------------------------------------------------------------------------------------------- |
 | `family`      | `string`   | yes      | Botanical family name. Falls back to "Unknown family" if empty.                             |
 | `commonName`  | `string`   | yes      | Common plant name. Falls back to "Unknown" if empty.                                        |
-| `description` | `string`   | yes      | Short text describing the species. Only displays 2 lines, no matter the length of the text. |
+| `description` | `string`   | no       | Short text describing the species. Only displays 2 lines, no matter the length of the text. |
 | `tags`        | `string[]` | yes      | Array of tag labels passed to the Tag component.                                            |
 | `imageUrl`    | `string`   | yes      | URL of the plant image. Falls back to a placeholder if empty.                               |
+| `id`          | `string`   | yes      | Used to build the species details link at `/species/:id`.                                   |
 
 ## Accessibility Notes
 
 - In the current implementation, image alt text is generated internally and is not configurable through props.
 - Current alt behavior:
   - Real image: `{commonName} image`.
-  - Placeholder image: `No photo available for {commonName}`.
+  - Placeholder image: `No photo available`.
 
 ## Example Usage
 
@@ -30,5 +31,6 @@
   description="A hardy, upright succulent known for its resilience."
   tags={['low-maintenance', 'air-purifying', 'drought-tolerant']}
   imageUrl="https://example.com/snake.jpg"
+  id="snake-plant"
 />
 ```
