@@ -16,9 +16,13 @@ The component supports keyboard accessibility, Escape-to-close behavior, optiona
 ## Interaction Details
 
 - Click the thumbnail to open the modal.
-- Click the dark backdrop or the enlarged image to close the modal.
+- Click the dark backdrop or the enlarged image close control to close the modal.
 - Press Escape to close the modal.
+- The dialog contains two explicit close buttons:
+  - `Close image preview backdrop` for backdrop click behavior.
+  - `Close image preview` for the enlarged image close behavior.
 - The enlarged image is constrained to the viewport using `max-w` and `max-h` so tall/wide images remain fully visible.
+- Enlarged image alt text is derived as `{alt} (enlarged)`.
 - Alt-text guidance:
   - Keep `alt` concise and focused on what is visually present.
   - Use `description` for longer explanatory or instructional text.

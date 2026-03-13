@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useRef } from 'react';
 import { createPortal } from 'react-dom';
 import { Callout } from './Typography';
 
@@ -6,24 +6,54 @@ export default function ImagePreview({
   url,
   alt,
   description,
-}: {
+}: Readonly<{
   url: string;
   alt: string;
   description?: string;
-}) {
-  const [isOpen, setIsOpen] = useState(false);
+}>) {
+  const dialogRef = useRef<HTMLDialogElement | null>(null);
+
+  const open = () => {
+    if (!dialogRef.current) return;
+
+    try {
+      dialogRef.current.showModal();
+    } catch {
+      // Fallbackk for browsers that don't support the dialog element
+    }
+
+    dialogRef.current.setAttribute('open', '');
+  };
+
+  const close = () => {
+    if (!dialogRef.current) return;
+
+    try {
+      dialogRef.current.close();
+    } catch {
+      // Fallback for browsers that don't support the dialog element
+    }
+
+    dialogRef.current.removeAttribute('open');
+  };
 
   useEffect(() => {
-    const handleEsc = (e: KeyboardEvent) => {
-      if (e.key === 'Escape') setIsOpen(false);
+    const handleEscape = (event: KeyboardEvent) => {
+      if (event.key === 'Escape' && dialogRef.current?.hasAttribute('open')) {
+        close();
+      }
     };
-    window.addEventListener('keydown', handleEsc);
-    return () => window.removeEventListener('keydown', handleEsc);
+
+    globalThis.addEventListener('keydown', handleEscape);
+
+    return () => {
+      globalThis.removeEventListener('keydown', handleEscape);
+    };
   }, []);
 
   return (
     <div className="flex flex-col items-center">
-      <button onClick={() => setIsOpen(true)} type="button">
+      <button onClick={open} type="button">
         <img
           src={url}
           alt={alt}
@@ -33,38 +63,34 @@ export default function ImagePreview({
       {description && (
         <Callout className="text-gray-500 mt-2">{description}</Callout>
       )}
-
-      {isOpen &&
-        createPortal(
-          <div className="fixed inset-0 z-50 flex items-center justify-center">
-            <button
-              type="button"
-              aria-label="Close image preview"
-              className="absolute inset-0 bg-black/80 cursor-zoom-out"
-              onClick={() => setIsOpen(false)}
+      {createPortal(
+        <dialog
+          ref={dialogRef}
+          aria-label="Image preview"
+          onCancel={close}
+          className="bg-transparent p-0 m-auto max-w-[100vw] max-h-screen backdrop:bg-black/80 backdrop:cursor-zoom-out"
+        >
+          <button
+            type="button"
+            aria-label="Close image preview backdrop"
+            className="fixed inset-0 cursor-zoom-out"
+            onClick={close}
+          />
+          <button
+            type="button"
+            aria-label="Close image preview"
+            className="cursor-zoom-out block relative"
+            onClick={close}
+          >
+            <img
+              src={url}
+              alt={`${alt} (enlarged)`}
+              className="block max-w-[100vw] max-h-screen object-contain"
             />
-            <div
-              role="dialog"
-              aria-modal="true"
-              aria-label="Image preview"
-              className="relative z-10"
-            >
-              <button
-                type="button"
-                aria-label="Close image preview"
-                className="block cursor-zoom-out max-w-[100vw] max-h-screen"
-                onClick={() => setIsOpen(false)}
-              >
-                <img
-                  src={url}
-                  alt={alt + ' (enlarged)'}
-                  className="block max-w-[100vw] max-h-screen object-contain"
-                />
-              </button>
-            </div>
-          </div>,
-          document.body
-        )}
+          </button>
+        </dialog>,
+        document.body
+      )}
     </div>
   );
 }
