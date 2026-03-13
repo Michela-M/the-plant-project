@@ -9,6 +9,7 @@ The component is designed to provide consistent styling and behavior across form
 `TextField` provides:
 
 - A labeled input or textarea with proper accessibility attributes
+- Support for accessible unlabeled inputs via `ariaLabel`
 - Visual states for normal, error, and disabled modes
 - Optional helper text or error messaging
 - Optional trailing icon support
@@ -19,12 +20,11 @@ It is intended as a foundational form component for your UI.
 
 ## Props
 
-## Props
-
 | Prop          | Type                                                                      | Required | Default  | Description                                                                          |
 | ------------- | ------------------------------------------------------------------------- | -------- | -------- | ------------------------------------------------------------------------------------ |
-| `label`       | `string`                                                                  | No       | —        | Label displayed above the input                                                      |
-| `placeholder` | `string`                                                                  | No       | —        | Placeholder text; falls back to `label` or `"Enter text"`                            |
+| `label`       | `string`                                                                  | No\*     | —        | Label displayed above the input. Required when `ariaLabel` is not provided           |
+| `ariaLabel`   | `string`                                                                  | No\*     | —        | Accessible name for the field when no visible label is rendered                      |
+| `placeholder` | `string`                                                                  | No       | —        | Placeholder text; falls back to `label`, `ariaLabel`, or `"Enter text"`              |
 | `helperText`  | `string`                                                                  | No       | —        | Helper text displayed below the input when no error is present                       |
 | `disabled`    | `boolean`                                                                 | No       | `false`  | Disables the input and applies disabled styles                                       |
 | `icon`        | `React.ReactNode`                                                         | No       | —        | Icon displayed inside the input on the right                                         |
@@ -35,6 +35,15 @@ It is intended as a foundational form component for your UI.
 | `error`       | `string`                                                                  | No       | —        | Error message; when provided, the input is marked invalid and styled accordingly     |
 | `name`        | `string`                                                                  | No       | —        | Input name and `id`, used to associate the label                                     |
 | `required`    | `boolean`                                                                 | No       | —        | Displays a red asterisk next to the label when `true`                                |
+
+\* Provide either `label` or `ariaLabel`.
+
+## Accessibility Notes
+
+- `label` uses `htmlFor` to associate with the underlying control when present.
+- `helperText` and `error` are connected to the input through `aria-describedby`.
+- `error` sets `aria-invalid="true"` and renders with `role="alert"`.
+- `required` sets `aria-required="true"` and displays a visual asterisk in the label.
 
 ## Example Usage
 
@@ -95,7 +104,7 @@ It is intended as a foundational form component for your UI.
 
 ### With trailing icon
 
-```jsx
+```tsx
 import { Search } from 'lucide-react';
 
 <TextField
@@ -106,4 +115,16 @@ import { Search } from 'lucide-react';
   value={query}
   onChange={(e) => setQuery(e.target.value)}
 />;
+```
+
+### Without visible label
+
+```tsx
+<TextField
+  ariaLabel="Plant nickname"
+  name="nickname"
+  placeholder="Enter a nickname"
+  value={nickname}
+  onChange={(e) => setNickname(e.target.value)}
+/>
 ```

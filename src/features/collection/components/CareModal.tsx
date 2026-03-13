@@ -186,6 +186,7 @@ export default function CareModal({
                   ? formik.errors.otherCareType
                   : undefined
               }
+              aria-label="Other care type"
             />
           )}
           {!plantId && (

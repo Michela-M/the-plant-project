@@ -1,7 +1,7 @@
 import clsx from 'clsx';
+import { useId } from 'react';
 
-type TextFieldProps = {
-  label?: string;
+type BaseTextFieldProps = {
   placeholder?: string;
   helperText?: string;
   disabled?: boolean;
@@ -19,8 +19,19 @@ type TextFieldProps = {
   required?: boolean;
 };
 
+type TextFieldProps =
+  | (BaseTextFieldProps & {
+      label: string;
+      ariaLabel?: never;
+    })
+  | (BaseTextFieldProps & {
+      label?: never;
+      ariaLabel: string;
+    });
+
 export default function TextField({
   label,
+  ariaLabel,
   placeholder,
   helperText,
   disabled = false,
@@ -32,8 +43,14 @@ export default function TextField({
   error,
   name,
   required,
-}: TextFieldProps) {
+}: Readonly<TextFieldProps>) {
   const hasError = Boolean(error);
+
+  const generatedId = useId();
+  const inputId = name ?? generatedId;
+  const descriptionId = `${inputId}-description`;
+
+  const accessibleLabel = label ?? ariaLabel;
 
   const inputClasses = clsx(
     'px-3 py-2 rounded-md w-full border placeholder-stone-400 transition-colors',
@@ -67,7 +84,7 @@ export default function TextField({
   return (
     <div className="flex flex-col w-full">
       {label && (
-        <label htmlFor={name} className={labelClasses} aria-required={required}>
+        <label htmlFor={inputId} className={labelClasses}>
           {label}
           {required && <span className="text-red-700">*</span>}
         </label>
@@ -76,7 +93,7 @@ export default function TextField({
       <div className="relative w-full">
         {type === 'textarea' ? (
           <textarea
-            id={name}
+            id={inputId}
             name={name}
             placeholder={placeholder || label || 'Enter text'}
             disabled={disabled}
@@ -89,15 +106,18 @@ export default function TextField({
           />
         ) : (
           <input
-            id={name}
+            id={inputId}
             name={name}
             type={type}
-            placeholder={placeholder || label || 'Enter text'}
+            aria-label={label ? undefined : ariaLabel}
+            placeholder={placeholder ?? accessibleLabel ?? 'Enter text'}
             disabled={disabled}
             value={value}
             onChange={onChange}
             onBlur={onBlur}
+            aria-describedby={helperText || error ? descriptionId : undefined}
             aria-invalid={hasError}
+            aria-required={required}
             className={inputClasses}
           />
         )}
@@ -110,7 +130,13 @@ export default function TextField({
       </div>
 
       {(helperText || error) && (
-        <p className={helperClasses}>{error || helperText}</p>
+        <p
+          id={descriptionId}
+          className={helperClasses}
+          role={hasError ? 'alert' : undefined}
+        >
+          {error || helperText}
+        </p>
       )}
     </div>
   );
