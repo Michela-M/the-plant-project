@@ -53,7 +53,11 @@ export default function ImagePreview({
 
   return (
     <div className="flex flex-col items-center">
-      <button onClick={open} type="button">
+      <button
+        onClick={open}
+        type="button"
+        className="focus-visible:outline-2 focus-visible:outline-green-800 rounded-md"
+      >
         <img
           src={url}
           alt={alt}
