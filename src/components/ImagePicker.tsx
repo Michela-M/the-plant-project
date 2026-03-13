@@ -9,7 +9,7 @@ const isSafeImageUrl = (url: string | null): string | null => {
     if (!allowedSchemes.includes(parsed.protocol)) {
       return null;
     }
-    return url;
+    return parsed.href;
   } catch {
     return null;
   }
