@@ -100,7 +100,7 @@ export default function PlantDetailsHeader({
             }}
           />
           {showAddMenu && (
-            <Menu>
+            <Menu label="New Menu">
               <MenuItem
                 label="Care"
                 onClick={() => {
@@ -123,7 +123,7 @@ export default function PlantDetailsHeader({
             label="Open options menu"
           />
           {showOptionsMenu && (
-            <Menu>
+            <Menu label="Options Menu">
               <MenuItem
                 label="Edit"
                 onClick={() => {

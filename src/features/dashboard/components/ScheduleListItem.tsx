@@ -90,7 +90,7 @@ export default function ScheduleListItem({
           onClick={() => setShowMenu(!showMenu)}
         />
         {showMenu && (
-          <Menu>
+          <Menu label="Plant Options">
             <MenuItem
               label="Plant watered"
               onClick={() => {

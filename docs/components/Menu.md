@@ -12,6 +12,7 @@ The component is purely presentational and expects `MenuItem` children.
 
 | Prop       | Type            | Required | Description                                                            |
 | ---------- | --------------- | -------- | ---------------------------------------------------------------------- |
+| `label`    | string          | Yes      | Accessible name applied to the menu container via `aria-label`.        |
 | `children` | React.ReactNode | Yes      | One or more `MenuItem` components to render inside the menu container. |
 
 ## Example Usage
@@ -32,18 +33,25 @@ It supports:
 
 ## Props
 
-| Prop          | Type       | Required | Description                                               |
-| ------------- | ---------- | -------- | --------------------------------------------------------- |
-| `label`       | string     | Yes      | Primary text displayed for the menu item.                 |
-| `description` | string     | No       | Optional secondary text shown below the label.            |
-| `onClick`     | () => void | No       | Callback fired when the item is clicked.                  |
-| `disabled`    | boolean    | No       | Disables the item and prevents interaction.               |
-| `danger`      | boolean    | No       | Styles the item as a destructive action (e.g., red text). |
+| Prop          | Type       | Required | Description                                                     |
+| ------------- | ---------- | -------- | --------------------------------------------------------------- |
+| `label`       | string     | Yes      | Primary text displayed for the menu item.                       |
+| `description` | string     | No       | Optional secondary text shown below the label.                  |
+| `onClick`     | () => void | No       | Callback fired when the item is clicked.                        |
+| `disabled`    | boolean    | No       | Applies disabled visual styles and sets `aria-disabled="true"`. |
+| `danger`      | boolean    | No       | Styles the item as a destructive action (e.g., red text).       |
+
+## Accessibility Notes
+
+- `Menu` renders with `role="menu"` and uses the required `label` prop for `aria-label`.
+- `MenuItem` renders as a native `button` with `role="menuitem"`.
+- `danger` adds screen-reader-only context: `(destructive action)`.
+- `disabled` currently communicates disabled state with styles and `aria-disabled`, but still invokes `onClick` if provided.
 
 ## Example Usage
 
 ```jsx
-<Menu>
+<Menu label="Plant actions">
   <MenuItem
     label="Rename"
     description="Change the item’s display name"
