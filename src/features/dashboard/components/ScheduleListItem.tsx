@@ -62,7 +62,7 @@ export default function ScheduleListItem({
       <div className="aspect-square overflow-hidden object-cover">
         <img
           className="w-32"
-          src={imageUrl || '/public/images/placeholder.jpg'}
+          src={imageUrl || '/src/assets/images/placeholder.jpg'}
           alt={imageUrl ? `${name} image` : `No photo available for ${name}`}
         />
       </div>

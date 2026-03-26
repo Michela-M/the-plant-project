@@ -87,7 +87,7 @@ describe('SpeciesDetailsSidebar', () => {
     const image = screen.getByRole('img') as HTMLImageElement;
     expect(image).toBeInTheDocument();
     expect(image.alt).toBe('No photo available for Aloe Vera');
-    expect(image.src).toContain('/public/images/placeholder.jpg');
+    expect(image.src).toContain('/src/assets/images/placeholder.jpg');
   });
 
   it('shows "No similar species listed." if similarSpecies array is empty', () => {

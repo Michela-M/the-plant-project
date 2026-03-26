@@ -68,7 +68,7 @@ describe('ImagePicker', () => {
     const img = screen.getByRole('img');
     expect(img).toHaveAttribute(
       'src',
-      expect.stringContaining('/public/images/placeholder.jpg')
+      expect.stringContaining('/src/assets/images/placeholder.jpg')
     );
   });
 
@@ -111,7 +111,7 @@ describe('ImagePicker', () => {
     let img = screen.getByRole('img');
     expect(img).toHaveAttribute(
       'src',
-      expect.stringContaining('/public/images/placeholder.jpg')
+      expect.stringContaining('/src/assets/images/placeholder.jpg')
     );
 
     // Test another unsafe URL
@@ -125,7 +125,7 @@ describe('ImagePicker', () => {
     img = screen.getByRole('img');
     expect(img).toHaveAttribute(
       'src',
-      expect.stringContaining('/public/images/placeholder.jpg')
+      expect.stringContaining('/src/assets/images/placeholder.jpg')
     );
   });
 });

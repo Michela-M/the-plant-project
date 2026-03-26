@@ -19,7 +19,7 @@ export default function SpeciesCard({
       <Link to={speciesPath}>
         <img
           className="aspect-square overflow-hidden object-cover w-full"
-          src={imageUrl || '/public/images/placeholder.jpg'}
+          src={imageUrl || '/src/assets/images/placeholder.jpg'}
           alt={imageUrl ? `${commonName} image` : `No photo available`}
         />
       </Link>

@@ -65,7 +65,7 @@ export default function MyCollection() {
               id: plant.id,
               name: plant.name,
               commonName: plant.species,
-              imageUrl: plant.imageUrl || '/public/images/placeholder.jpg',
+              imageUrl: plant.imageUrl || '/src/assets/images/placeholder.jpg',
             }}
           />
         ))}

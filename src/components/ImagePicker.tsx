@@ -56,7 +56,7 @@ export default function ImagePicker({
       <div className="aspect-square overflow-hidden object-cover w-full">
         <img
           className="aspect-square object-cover w-full"
-          src={safeUrl || '/public/images/placeholder.jpg'}
+          src={safeUrl || '/src/assets/images/placeholder.jpg'}
           alt={safeUrl ? 'Selected image preview' : 'No image selected'}
         />
       </div>

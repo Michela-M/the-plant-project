@@ -53,7 +53,7 @@ describe('SpeciesListItem', () => {
 
     const img = screen.getByRole('img');
     expect(img).toBeInTheDocument();
-    expect(img).toHaveAttribute('src', '/public/images/placeholder.jpg');
+    expect(img).toHaveAttribute('src', '/src/assets/images/placeholder.jpg');
     expect(img).toHaveAttribute('alt', 'No photo available');
   });
 
