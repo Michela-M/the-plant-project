@@ -29,7 +29,7 @@ export default function Encyclopedia() {
   const { showError } = useToast();
   const [searchQuery, setSearchQuery] = useState('');
 
-  let normalizedQuery = searchQuery.trim().toLowerCase();
+  const normalizedQuery = searchQuery.trim().toLowerCase();
   const filteredSpecies = species.filter((specie) => {
     const matchesCommonName = specie.commonName
       .toLowerCase()

@@ -24,7 +24,7 @@ export default function MyCollection() {
   const { user } = useAuth();
   const [searchQuery, setSearchQuery] = useState('');
 
-  let normalizedQuery = searchQuery.trim().toLowerCase();
+  const normalizedQuery = searchQuery.trim().toLowerCase();
   const filteredPlants = plants.filter((plant) => {
     const matchesName = plant.name.toLowerCase().includes(normalizedQuery);
     const matchesSpecies = plant.species
