@@ -10,8 +10,7 @@ It includes a list/grid browsing page and a dedicated species details page, both
 This feature currently includes:
 
 - Encyclopedia landing page and route
-- View mode toggle between grid and list layouts
-- Firestore-driven species loading for browse view
+- View mode toggle between grid and list layouts- Search bar to filter species by common name or family- Firestore-driven species loading for browse view
 - Species details route and page (`/species/:id`)
 - Details page layout with header, main care content, and sidebar
 - Characteristic badges and similar-species preview cards
@@ -40,6 +39,13 @@ This feature currently includes:
 2. Selecting grid icon displays `SpeciesCard` items.
 3. Selecting list icon displays `SpeciesListItem` items.
 
+### Search Species
+
+1. User types in the search bar below the header.
+2. Search filters species in real-time by `commonName` or `family` (case-insensitive substring match).
+3. Results update instantly in the current view mode (grid or list).
+4. Clearing the search shows all species again.
+
 ### Open Species Details
 
 1. User clicks a species card or list item.
@@ -59,7 +65,8 @@ This feature currently includes:
 ## Display Behavior
 
 - Browse page shows `Spinner` while species are loading.
-- Browse page shows `No species found. Please check back later.` when the list is empty.
+- Browse page shows `No species found. Please check back later.` when the database is empty and no search is active.
+- Browse page shows `No species found. Try adjusting your search.` when a search query returns no matches.
 - Species cards/list rows link to `/species/:id`.
 - Browse item fallbacks:
   - Missing image falls back to placeholder URL.
@@ -96,7 +103,7 @@ This feature currently includes:
 
 ## Current Limitations
 
-- Search, filtering, pagination, and advanced sorting are not implemented.
+- Filtering, pagination, and advanced sorting are not implemented.
 - “Add to collection” actions in encyclopedia browse components are UI-only.
 - Species details page buttons (`Add to Collection`, `Quick Add`) are currently placeholder actions.
 - Similar-species cards trigger individual detail fetches (no batching/caching layer).
