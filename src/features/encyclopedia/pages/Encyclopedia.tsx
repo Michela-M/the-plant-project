@@ -37,6 +37,7 @@ export default function Encyclopedia() {
     const matchesFamily = specie.family.toLowerCase().includes(normalizedQuery);
     return matchesCommonName || matchesFamily;
   });
+  const hasSearch = normalizedQuery.length > 0;
 
   useEffect(() => {
     const fetchSpecies = async () => {
@@ -78,12 +79,12 @@ export default function Encyclopedia() {
         value={searchQuery}
         onChange={(e) => setSearchQuery(e.target.value)}
       />
-      {filteredSpecies.length === 0 && searchQuery && (
+      {filteredSpecies.length === 0 && hasSearch && (
         <p className="text-stone-500">
           No species found. Try adjusting your search.
         </p>
       )}
-      {species.length === 0 && !searchQuery && (
+      {species.length === 0 && !hasSearch && (
         <p className="text-stone-500">
           No species found. Please check back later.
         </p>

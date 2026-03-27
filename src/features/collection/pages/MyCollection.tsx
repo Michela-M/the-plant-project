@@ -32,6 +32,7 @@ export default function MyCollection() {
       .includes(normalizedQuery);
     return matchesName || matchesSpecies;
   });
+  const hasSearch = normalizedQuery.length > 0;
 
   useEffect(() => {
     const fetchPlants = async () => {
@@ -71,13 +72,13 @@ export default function MyCollection() {
         value={searchQuery}
         onChange={(e) => setSearchQuery(e.target.value)}
       />
-      {filteredPlants.length === 0 && searchQuery && (
+      {filteredPlants.length === 0 && hasSearch && (
         <p className="text-stone-500">
           No plants found. Try adjusting your search or add new plants to your
           collection.
         </p>
       )}
-      {plants.length === 0 && !searchQuery && (
+      {plants.length === 0 && !hasSearch && (
         <p className="text-stone-500">
           You haven't added any plants yet. Use "Add Plant" to start your
           collection.
