@@ -79,7 +79,8 @@ export default function MyCollection() {
       )}
       {plants.length === 0 && !searchQuery && (
         <p className="text-stone-500">
-          No plants found. Please check back later.
+          You haven't added any plants yet. Use "Add Plant" to start your
+          collection.
         </p>
       )}
       <div className="grid grid-cols-3 gap-4">

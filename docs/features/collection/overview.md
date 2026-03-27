@@ -43,8 +43,8 @@ This feature currently includes:
 2. Search filters plants in real-time by `name` or `species` (case-insensitive substring match).
 3. Results update instantly.
 4. Empty-state messages distinguish between:
-   - `No plants found. Please check back later.` when the collection is empty.
-   - `No plants found. Try adjusting your search or add new plants to your collection.` when a search query returns no matches.
+   - `You haven't added any plants yet. Use "Add Plant" to start your collection.` when the collection is empty.
+   - `No plants match your search. Try adjusting your query or add a new plant to your collection.` when a search query returns no matches.
 5. Clearing the search shows all plants again.
 
 ### Add Plant
