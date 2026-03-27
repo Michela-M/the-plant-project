@@ -31,7 +31,7 @@ export default function SimilarSpecies({ speciesId }: { speciesId: string }) {
       <div className="flex flex-row gap-2 group pt-2">
         <img
           className="aspect-square overflow-hidden object-cover w-1/4 h-full"
-          src={similarSpecies?.image || '/public/images/placeholder.jpg'}
+          src={similarSpecies?.image || '/images/placeholder.jpg'}
           alt={
             similarSpecies?.image
               ? `${similarSpecies.commonName} (${similarSpecies.scientificName}) image`

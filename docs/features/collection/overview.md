@@ -35,7 +35,17 @@ This feature currently includes:
 1. `MyCollection` loads all plants using `getAllPlants`.
 2. A spinner is shown while loading.
 3. Plants are rendered as cards ordered by newest first.
-4. If no plants exist, an empty-state message is shown.
+4. Empty-state message shown if collection is empty.
+
+### Search Plants
+
+1. User types in the search bar on the collection page.
+2. Search filters plants in real-time by `name` or `species` (case-insensitive substring match).
+3. Results update instantly.
+4. Empty-state messages distinguish between:
+   - `You haven't added any plants yet. Use "Add Plant" to start your collection.` when the collection is empty.
+   - `No plants match your search. Try adjusting your query or add a new plant to your collection.` when a search query returns no matches.
+5. Clearing the search shows all plants again.
 
 ### Add Plant
 

@@ -90,7 +90,7 @@ export default function PlantDetails() {
         </div>
         <div className="w-3/8 flex flex-col gap-6">
           <ImagePreview
-            url={plantDetails?.imageUrl || '/public/images/placeholder.jpg'}
+            url={plantDetails?.imageUrl || '/images/placeholder.jpg'}
             alt={
               plantDetails?.imageUrl
                 ? `${plantDetails.name} image`

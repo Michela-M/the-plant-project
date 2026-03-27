@@ -7,6 +7,7 @@ import { useToast } from '@context/toast/useToast';
 import Spinner from '@components/Spinner';
 import { useAuth } from '@context/auth/useAuth';
 import { H1 } from '@components/Typography';
+import TextField from '@components/TextField';
 
 export default function MyCollection() {
   const [plants, setPlants] = useState<
@@ -21,6 +22,17 @@ export default function MyCollection() {
   const navigate = useNavigate();
   const [loading, setLoading] = useState(true);
   const { user } = useAuth();
+  const [searchQuery, setSearchQuery] = useState('');
+
+  const normalizedQuery = searchQuery.trim().toLowerCase();
+  const filteredPlants = plants.filter((plant) => {
+    const matchesName = plant.name.toLowerCase().includes(normalizedQuery);
+    const matchesSpecies = plant.species
+      .toLowerCase()
+      .includes(normalizedQuery);
+    return matchesName || matchesSpecies;
+  });
+  const hasSearch = normalizedQuery.length > 0;
 
   useEffect(() => {
     const fetchPlants = async () => {
@@ -54,18 +66,33 @@ export default function MyCollection() {
           onClick={() => navigate('/add-plant')}
         />
       </div>
-      {plants.length === 0 && (
-        <p className="text-stone-500">No plants yet. Add your first one!</p>
+      <TextField
+        placeholder="Search plants..."
+        ariaLabel="Search"
+        value={searchQuery}
+        onChange={(e) => setSearchQuery(e.target.value)}
+      />
+      {filteredPlants.length === 0 && hasSearch && (
+        <p className="text-stone-500">
+          No plants found. Try adjusting your search or add new plants to your
+          collection.
+        </p>
+      )}
+      {plants.length === 0 && !hasSearch && (
+        <p className="text-stone-500">
+          You haven't added any plants yet. Use "Add Plant" to start your
+          collection.
+        </p>
       )}
       <div className="grid grid-cols-3 gap-4">
-        {plants.map((plant) => (
+        {filteredPlants.map((plant) => (
           <PlantCard
             key={plant.id}
             plant={{
               id: plant.id,
               name: plant.name,
               commonName: plant.species,
-              imageUrl: plant.imageUrl || '/public/images/placeholder.jpg',
+              imageUrl: plant.imageUrl || '/images/placeholder.jpg',
             }}
           />
         ))}

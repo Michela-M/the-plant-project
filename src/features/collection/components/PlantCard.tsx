@@ -16,7 +16,7 @@ export default function PlantCard({ plant }: PlantCardProps) {
       <div>
         <img
           className="aspect-square overflow-hidden object-cover w-full"
-          src={plant.imageUrl || '/public/images/placeholder.jpg'}
+          src={plant.imageUrl || '/images/placeholder.jpg'}
           alt={
             plant.imageUrl
               ? `${plant.name} image`

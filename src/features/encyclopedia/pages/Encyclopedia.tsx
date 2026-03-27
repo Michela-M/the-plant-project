@@ -7,6 +7,7 @@ import { getAllSpecies } from '../services/getAllSpecies';
 import { useToast } from '@context/toast/useToast';
 import Spinner from '@components/Spinner';
 import { H1 } from '@components/Typography';
+import TextField from '@components/TextField';
 
 export default function Encyclopedia() {
   const [selectedIndex, setSelectedIndex] = useState(0);
@@ -26,6 +27,17 @@ export default function Encyclopedia() {
   >([]);
   const [loading, setLoading] = useState(true);
   const { showError } = useToast();
+  const [searchQuery, setSearchQuery] = useState('');
+
+  const normalizedQuery = searchQuery.trim().toLowerCase();
+  const filteredSpecies = species.filter((specie) => {
+    const matchesCommonName = specie.commonName
+      .toLowerCase()
+      .includes(normalizedQuery);
+    const matchesFamily = specie.family.toLowerCase().includes(normalizedQuery);
+    return matchesCommonName || matchesFamily;
+  });
+  const hasSearch = normalizedQuery.length > 0;
 
   useEffect(() => {
     const fetchSpecies = async () => {
@@ -61,17 +73,28 @@ export default function Encyclopedia() {
           groupLabel="Select view"
         />
       </div>
-      {species.length === 0 && (
+      <TextField
+        placeholder="Search species..."
+        ariaLabel="Search"
+        value={searchQuery}
+        onChange={(e) => setSearchQuery(e.target.value)}
+      />
+      {filteredSpecies.length === 0 && hasSearch && (
+        <p className="text-stone-500">
+          No species found. Try adjusting your search.
+        </p>
+      )}
+      {species.length === 0 && !hasSearch && (
         <p className="text-stone-500">
           No species found. Please check back later.
         </p>
       )}
       {selectedIndex === 0 ? (
         <div className="grid grid-cols-3 gap-4">
-          {species.map((specie) => (
+          {filteredSpecies.map((specie) => (
             <SpeciesCard
               key={specie.id}
-              imageUrl={specie.image ?? '/public/images/placeholder.jpg'}
+              imageUrl={specie.image ?? '/images/placeholder.jpg'}
               family={specie.family}
               commonName={specie.commonName}
               id={specie.id}
@@ -80,14 +103,14 @@ export default function Encyclopedia() {
         </div>
       ) : (
         <div className="flex flex-col gap-4">
-          {species.map((specie) => (
+          {filteredSpecies.map((specie) => (
             <SpeciesListItem
               key={specie.id}
               family={specie.family}
               commonName={specie.commonName}
               description={specie.description}
               tags={specie.tags}
-              imageUrl={specie.image ?? '/public/images/placeholder.jpg'}
+              imageUrl={specie.image ?? '/images/placeholder.jpg'}
               id={specie.id}
             />
           ))}
