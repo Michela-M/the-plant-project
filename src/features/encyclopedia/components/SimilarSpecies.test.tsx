@@ -35,7 +35,7 @@ describe('SimilarSpecies', () => {
 
     const img = screen.getByRole('img') as HTMLImageElement;
     expect(img).toBeInTheDocument();
-    expect(img.src).toContain('/src/assets/images/placeholder.jpg');
+    expect(img.src).toContain('/images/placeholder.jpg');
     expect(img.alt).toBe('No photo available');
   });
 

@@ -42,7 +42,7 @@ describe('PlantCard component', () => {
     const img = screen.getByAltText(
       'No photo available for Sansevieria trifasciata'
     ) as HTMLImageElement;
-    expect(img).toHaveAttribute('src', '/src/assets/images/placeholder.jpg');
+    expect(img).toHaveAttribute('src', '/images/placeholder.jpg');
     expect(img.alt).toBe('No photo available for Sansevieria trifasciata');
 
     expect(screen.getByText('Sansevieria trifasciata')).toBeInTheDocument();

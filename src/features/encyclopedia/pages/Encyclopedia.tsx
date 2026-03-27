@@ -93,7 +93,7 @@ export default function Encyclopedia() {
           {filteredSpecies.map((specie) => (
             <SpeciesCard
               key={specie.id}
-              imageUrl={specie.image ?? '/src/assets/images/placeholder.jpg'}
+              imageUrl={specie.image ?? '/images/placeholder.jpg'}
               family={specie.family}
               commonName={specie.commonName}
               id={specie.id}
@@ -109,7 +109,7 @@ export default function Encyclopedia() {
               commonName={specie.commonName}
               description={specie.description}
               tags={specie.tags}
-              imageUrl={specie.image ?? '/src/assets/images/placeholder.jpg'}
+              imageUrl={specie.image ?? '/images/placeholder.jpg'}
               id={specie.id}
             />
           ))}

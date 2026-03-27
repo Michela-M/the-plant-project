@@ -24,7 +24,7 @@ export default function SpeciesListItem({
       <Link to={speciesPath} className="flex flex-row gap-2 grow">
         <img
           className="aspect-square overflow-hidden object-cover w-1/4 h-full"
-          src={imageUrl || '/src/assets/images/placeholder.jpg'}
+          src={imageUrl || '/images/placeholder.jpg'}
           alt={imageUrl ? `${commonName} image` : `No photo available`}
         />
         <div className="w-3/4">

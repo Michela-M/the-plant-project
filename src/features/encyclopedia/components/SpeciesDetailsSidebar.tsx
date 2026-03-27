@@ -12,7 +12,7 @@ export default function SpeciesDetailsSidebar({
   return (
     <div className="w-3/8 flex flex-col gap-6">
       <ImagePreview
-        url={speciesDetails.image || '/src/assets/images/placeholder.jpg'}
+        url={speciesDetails.image || '/images/placeholder.jpg'}
         alt={
           speciesDetails.image
             ? `${speciesDetails.commonName} image`

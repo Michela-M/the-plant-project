@@ -120,7 +120,7 @@ describe('ScheduleListItem', () => {
     expect(img).toBeInTheDocument();
     expect(img).toHaveAttribute(
       'src',
-      expect.stringContaining('/src/assets/images/placeholder.jpg')
+      expect.stringContaining('/images/placeholder.jpg')
     );
     expect(img).toHaveAttribute('alt', 'No photo available for My Monstera');
   });
