@@ -10,7 +10,9 @@ It includes a list/grid browsing page and a dedicated species details page, both
 This feature currently includes:
 
 - Encyclopedia landing page and route
-- View mode toggle between grid and list layouts- Search bar to filter species by common name or family- Firestore-driven species loading for browse view
+- View mode toggle between grid and list layouts
+- Search bar to filter species by common name or family
+- Firestore-driven species loading for browse view
 - Species details route and page (`/species/:id`)
 - Details page layout with header, main care content, and sidebar
 - Characteristic badges and similar-species preview cards
