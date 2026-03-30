@@ -28,7 +28,7 @@ export const getScheduledPlants = async (userId: string) => {
       id: doc.id,
       imageUrl: data.imageUrl ?? null,
       name: data.name ?? 'Unnamed Plant',
-      species: data.speciesName ?? '',
+      species: data.speciesName ?? data.species ?? '',
       wateringFrequency: data.wateringFrequency ?? null,
       nextWateringDate: data.nextWateringDate?.toDate?.() ?? null,
       lastWateredDate: data.lastWateredDate?.toDate?.() ?? null,
