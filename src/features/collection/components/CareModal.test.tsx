@@ -96,13 +96,12 @@ describe('CareModal', () => {
     render(<CareModal setShowCareModal={vi.fn()} />);
 
     expect(mockGetAllPlants).toHaveBeenCalledWith('user-1');
-    expect(await screen.findByLabelText('Select plant')).toBeInTheDocument();
-    expect(
-      screen.getByRole('option', { name: 'Monstera' })
-    ).toBeInTheDocument();
-    expect(
-      screen.getByRole('option', { name: 'Snake Plant' })
-    ).toBeInTheDocument();
+    const combo = await screen.findByRole('combobox', { name: 'Select plant' });
+    expect(combo).toBeInTheDocument();
+    // Open dropdown and check options
+    await userEvent.click(combo);
+    expect(screen.getByText('Monstera')).toBeInTheDocument();
+    expect(screen.getByText('Snake Plant')).toBeInTheDocument();
   });
 
   it('shows a loading spinner while plants are being fetched', () => {
@@ -134,8 +133,9 @@ describe('CareModal', () => {
 
     render(<CareModal setShowCareModal={setShowCareModal} />);
 
-    await screen.findByLabelText('Select plant');
-    await user.selectOptions(screen.getByLabelText('Select plant'), 'Monstera');
+    const combo = await screen.findByRole('combobox', { name: 'Select plant' });
+    await user.click(combo);
+    await user.click(screen.getByText('Monstera'));
     await user.click(screen.getByRole('button', { name: 'Create' }));
 
     await waitFor(() => {

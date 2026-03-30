@@ -13,6 +13,7 @@ import { useAuth } from '@context/auth/useAuth';
 import Spinner from '@components/Spinner';
 import { addCareEntry } from '@features/collection/services/addCareEntry';
 import updateWateringDates from '../utils/updateWateringDates';
+import ComboBox from '@components/ComboBox';
 
 type PlantOption = {
   id: string;
@@ -66,7 +67,12 @@ export default function CareModal({
       try {
         const plantsData = await getAllPlants(user.id);
         setPlants(
-          plantsData.map((plant) => ({ id: plant.id, name: plant.name }))
+          plantsData.map((plant) => ({
+            id: plant.id,
+            name: plant.name,
+            description: plant.species,
+            image: plant.imageUrl || '/images/placeholder.jpg',
+          }))
         );
       } catch (error) {
         showError(
@@ -147,6 +153,21 @@ export default function CareModal({
             onBlur={formik.handleBlur}
             error={formik.touched.date ? formik.errors.date : undefined}
           />
+          {!plantId && (
+            <ComboBox
+              label="Select plant"
+              placeholder="Select plant"
+              options={plants}
+              value={formik.values.plant}
+              onChange={(option) => formik.setFieldValue('plant', option)}
+              onBlur={() => formik.setFieldTouched('plant', true)}
+              onSelectionChange={(selection) => {
+                formik.setFieldValue('species', selection.name);
+                formik.setFieldValue('speciesId', selection.id ?? '');
+              }}
+              readOnly
+            />
+          )}
           <RadioGroup label="Care type" layout="horizontal">
             <RadioButton
               label="Water"
@@ -187,18 +208,6 @@ export default function CareModal({
                   : undefined
               }
               ariaLabel="Other care type"
-            />
-          )}
-          {!plantId && (
-            <Select
-              id="plant"
-              label="Select plant"
-              name="plant"
-              options={plants.map((plant) => plant.name)}
-              value={formik.values.plant}
-              onSelect={(option) => formik.setFieldValue('plant', option)}
-              onBlur={formik.handleBlur}
-              error={formik.touched.plant ? formik.errors.plant : undefined}
             />
           )}
           <TextField
