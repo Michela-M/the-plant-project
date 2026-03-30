@@ -40,7 +40,7 @@ export default function AddPlant() {
             id: species.id,
             name: species.commonName,
             description: species.family,
-            image: species.image,
+            image: species.image || '/images/placeholder.jpg',
           }))
         );
       } catch (error) {
