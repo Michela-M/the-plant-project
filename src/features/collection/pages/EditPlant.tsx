@@ -17,10 +17,12 @@ import { useToast } from '@context/toast/useToast';
 import Spinner from '@components/Spinner';
 import { useAuth } from '@context/auth/useAuth';
 import updateWateringDates from '../utils/updateWateringDates';
+import ComboBox, { type ComboBoxOption } from '@components/ComboBox';
+import { getAllSpecies } from '@features/encyclopedia/services/getAllSpecies';
 
 const editPlantValidationSchema = Yup.object({
   name: Yup.string().required('Name is required'),
-  species: Yup.string(),
+  speciesName: Yup.string(),
   wateringFrequency: Yup.number()
     .typeError('Must be a number')
     .min(0, 'Must be at least 0'),
@@ -30,7 +32,8 @@ const editPlantValidationSchema = Yup.object({
 type PlantDetails = {
   id: string;
   name: string;
-  species: string;
+  speciesName: string;
+  speciesId: string | null;
   wateringFrequency: number;
   notes: string;
   creationDate: Date | null;
@@ -49,6 +52,30 @@ export default function EditPlant() {
   const [loading, setLoading] = useState(true);
   const [loadingSave, setLoadingSave] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [speciesOptions, setSpeciesOptions] = useState<ComboBoxOption[]>([]);
+
+  useEffect(() => {
+    const fetchSpecies = async () => {
+      try {
+        const speciesData = await getAllSpecies();
+        setSpeciesOptions(
+          speciesData.map((species) => ({
+            id: species.id,
+            name: species.commonName,
+            description: species.family,
+            image: species.image,
+          }))
+        );
+      } catch (error) {
+        showError(
+          'Error loading species',
+          error instanceof Error ? error.message : 'Unknown error'
+        );
+      }
+    };
+
+    fetchSpecies();
+  }, [showError]);
 
   useEffect(() => {
     async function fetchPlant() {
@@ -83,7 +110,8 @@ export default function EditPlant() {
     enableReinitialize: true,
     initialValues: {
       name: plantDetails?.name || '',
-      species: plantDetails?.species || '',
+      speciesName: plantDetails?.speciesName || '',
+      speciesId: plantDetails?.speciesId || '',
       wateringFrequency: plantDetails?.wateringFrequency?.toString() || '',
       notes: plantDetails?.notes || '',
     },
@@ -113,7 +141,8 @@ export default function EditPlant() {
           id,
           {
             name: values.name,
-            species: values.species,
+            speciesName: values.speciesName.trim(),
+            speciesId: values.speciesId || null,
             wateringFrequency: Number(values.wateringFrequency),
             notes: values.notes,
             imageUrl,
@@ -186,17 +215,17 @@ export default function EditPlant() {
             }
           />
 
-          <TextField
+          <ComboBox
             label="Species"
-            value={formik.values.species}
-            onChange={formik.handleChange}
-            onBlur={formik.handleBlur}
-            name="species"
-            error={
-              formik.touched.species && formik.errors.species
-                ? String(formik.errors.species)
-                : ''
-            }
+            options={speciesOptions}
+            placeholder="Species"
+            value={formik.values.speciesName}
+            onChange={(value) => formik.setFieldValue('speciesName', value)}
+            onBlur={() => formik.setFieldTouched('speciesName', true)}
+            onSelectionChange={(selection) => {
+              formik.setFieldValue('speciesName', selection.name);
+              formik.setFieldValue('speciesId', selection.id ?? '');
+            }}
           />
 
           <TextField
