@@ -22,6 +22,7 @@ type ComboBoxProps = Readonly<{
   onChange?: (value: string) => void;
   onBlur?: () => void;
   onSelectionChange?: (selection: ComboBoxSelection) => void;
+  readOnly?: boolean;
 }>;
 
 export default function ComboBox({
@@ -32,6 +33,7 @@ export default function ComboBox({
   onChange,
   onBlur,
   onSelectionChange,
+  readOnly = false,
 }: ComboBoxProps) {
   const [isOpen, setIsOpen] = useState(false);
 
@@ -74,12 +76,22 @@ export default function ComboBox({
             setIsOpen(false);
             onBlur?.();
           }}
-          onChange={(e) => {
-            const next = e.target.value;
-            onChange?.(next);
-            onSelectionChange?.({ id: null, name: next });
-            setIsOpen(true);
-          }}
+          onChange={
+            readOnly
+              ? undefined
+              : (e) => {
+                  const next = e.target.value;
+                  onChange?.(next);
+                  onSelectionChange?.({ id: null, name: next });
+                  setIsOpen(true);
+                }
+          }
+          readOnly={readOnly}
+          style={
+            readOnly
+              ? { cursor: 'pointer', backgroundColor: '#fafaf9' }
+              : undefined
+          }
         />
         {value && (
           <div className="absolute inset-y-0 right-2 flex items-center">

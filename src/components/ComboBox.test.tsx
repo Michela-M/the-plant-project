@@ -121,4 +121,46 @@ describe('ComboBox', () => {
     expect(screen.getByText('Option Two')).toBeInTheDocument();
     expect(screen.queryByText('Something Else')).not.toBeInTheDocument();
   });
+
+  it('renders options with descriptions and images', async () => {
+    const optionsWithDetails: ComboBoxOption[] = [
+      {
+        id: '1',
+        name: 'Option One',
+        description: 'This is the first option',
+        image: 'https://via.placeholder.com/40',
+      },
+    ];
+
+    render(<ComboBox options={optionsWithDetails} />);
+
+    const input = screen.getByRole('combobox');
+    await userEvent.type(input, 'Option One');
+
+    expect(screen.getByText('This is the first option')).toBeInTheDocument();
+    expect(screen.getByRole('img', { name: 'Option One' })).toHaveAttribute(
+      'src',
+      'https://via.placeholder.com/40'
+    );
+  });
+
+  it('does not allow interaction when readOnly is true', async () => {
+    const handleChange = vi.fn();
+    const handleSelectionChange = vi.fn();
+
+    render(
+      <ComboBox
+        options={options}
+        onChange={handleChange}
+        onSelectionChange={handleSelectionChange}
+        readOnly
+      />
+    );
+
+    const input = screen.getByRole('combobox');
+    await userEvent.type(input, 'Option One');
+
+    expect(handleChange).not.toHaveBeenCalled();
+    expect(handleSelectionChange).not.toHaveBeenCalled();
+  });
 });
