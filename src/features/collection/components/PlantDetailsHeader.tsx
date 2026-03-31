@@ -1,11 +1,8 @@
-import { IconButton } from '@components/Button';
-import { ChevronLeft } from 'lucide-react';
-import Button from '@components/Button';
-import { ChevronDown } from 'lucide-react';
-import { EllipsisVertical } from 'lucide-react';
+import Button, { IconButton } from '@components/Button';
+import { ChevronLeft, ChevronDown, EllipsisVertical } from 'lucide-react';
 import { useState } from 'react';
 import Menu, { MenuItem } from '@components/Menu';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, Link } from 'react-router-dom';
 import Modal from '@components/Modal';
 import deletePlant from '../services/deletePlant';
 import { useToast } from '@context/toast/useToast';
@@ -17,15 +14,16 @@ import { updatePlant } from '../services/updatePlant';
 export default function PlantDetailsHeader({
   plant,
   onTrackWateringChange,
-}: {
+}: Readonly<{
   plant: {
     id: string;
     name: string;
     commonName?: string;
+    commonNameId?: string;
     trackWatering: boolean;
   };
   onTrackWateringChange?: (trackWatering: boolean) => void;
-}) {
+}>) {
   const navigate = useNavigate();
   const { user } = useAuth();
 
@@ -84,7 +82,15 @@ export default function PlantDetailsHeader({
       />
       <div className="w-full">
         {plant?.commonName && (
-          <H3 className="text-gray-500">{plant.commonName}</H3>
+          <H3 className="text-gray-500">
+            {plant.commonNameId ? (
+              <Link to={`/species/${plant.commonNameId}`} className="underline">
+                {plant.commonName}
+              </Link>
+            ) : (
+              plant.commonName
+            )}
+          </H3>
         )}
         <H1>{plant?.name}</H1>
       </div>

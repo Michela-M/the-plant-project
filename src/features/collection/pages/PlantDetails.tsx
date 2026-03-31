@@ -69,6 +69,7 @@ export default function PlantDetails() {
           id: plantDetails?.id || '',
           name: plantDetails?.name || '',
           commonName: plantDetails?.speciesName || '',
+          commonNameId: plantDetails?.speciesId || undefined,
           trackWatering: plantDetails?.trackWatering || false,
         }}
         onTrackWateringChange={(trackWatering) => {
