@@ -70,7 +70,7 @@ export default function CareModal({
           plantsData.map((plant) => ({
             id: plant.id,
             name: plant.name,
-            description: plant.species,
+            description: plant.speciesName,
             image: plant.imageUrl || '/images/placeholder.jpg',
           }))
         );

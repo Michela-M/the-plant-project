@@ -21,7 +21,8 @@ describe('updatePlant', () => {
     const mockPlantRef = { id: 'plant-ref' };
     const plantData = {
       name: 'Monstera',
-      species: 'Monstera deliciosa',
+      speciesName: 'Monstera deliciosa',
+      speciesId: 'species-123',
       notes: 'Rotate weekly',
       wateringFrequency: 7,
       lastWateredDate: new Date('2026-03-10T12:00:00.000Z'),

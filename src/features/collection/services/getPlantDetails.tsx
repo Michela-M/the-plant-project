@@ -10,7 +10,8 @@ export const getPlantDetails = async (plantId: string, userId: string) => {
     return {
       id: docSnap.id,
       name: data.name ?? '',
-      species: data.speciesName ?? data.species ?? '',
+      speciesName: data.speciesName ?? '',
+      speciesId: data.speciesId ?? null,
       wateringFrequency: data.wateringFrequency ?? 0,
       lastWateredDate: data.lastWateredDate?.toDate?.() ?? null,
       notes: data.notes ?? '',

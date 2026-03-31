@@ -23,7 +23,8 @@ describe('getPlantDetails', () => {
       exists: () => true,
       data: () => ({
         name: 'Aloe',
-        species: 'Aloe Vera',
+        speciesName: 'Aloe Vera',
+        speciesId: null,
         wateringFrequency: 7,
         lastWateredDate: { toDate: () => new Date('2024-01-01') },
         notes: 'Sunlight',
@@ -45,7 +46,8 @@ describe('getPlantDetails', () => {
     expect(result).toEqual({
       id: '1',
       name: 'Aloe',
-      species: 'Aloe Vera',
+      speciesName: 'Aloe Vera',
+      speciesId: null,
       wateringFrequency: 7,
       lastWateredDate: new Date('2024-01-01'),
       notes: 'Sunlight',
@@ -73,7 +75,8 @@ describe('getPlantDetails', () => {
     expect(result).toEqual({
       id: '3',
       name: '',
-      species: '',
+      speciesName: '',
+      speciesId: null,
       wateringFrequency: 0,
       lastWateredDate: null,
       notes: '',

@@ -35,7 +35,7 @@ Returned item shape:
   id: string;
   imageUrl: string | null;
   name: string;
-  species: string;
+  speciesName: string;
   wateringFrequency: number | null;
   nextWateringDate: Date | null;
   lastWateredDate: Date | null;
@@ -68,7 +68,7 @@ The service normalizes missing fields:
 
 - `imageUrl` → `null`
 - `name` → `"Unnamed Plant"`
-- `species` → `""`
+- `speciesName` → `""`
 - `wateringFrequency` → `null`
 - `nextWateringDate` → `null`
 - `lastWateredDate` → `null`

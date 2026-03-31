@@ -14,7 +14,7 @@ export default function MyCollection() {
     {
       id: string;
       name: string;
-      species: string;
+      speciesName: string;
       imageUrl?: string | null;
     }[]
   >([]);
@@ -27,7 +27,7 @@ export default function MyCollection() {
   const normalizedQuery = searchQuery.trim().toLowerCase();
   const filteredPlants = plants.filter((plant) => {
     const matchesName = plant.name.toLowerCase().includes(normalizedQuery);
-    const matchesSpecies = plant.species
+    const matchesSpecies = plant.speciesName
       .toLowerCase()
       .includes(normalizedQuery);
     return matchesName || matchesSpecies;
@@ -91,7 +91,7 @@ export default function MyCollection() {
             plant={{
               id: plant.id,
               name: plant.name,
-              commonName: plant.species,
+              commonName: plant.speciesName,
               imageUrl: plant.imageUrl || '/images/placeholder.jpg',
             }}
           />

@@ -17,7 +17,8 @@ export default function PlantDetails() {
   const [plantDetails, setPlantDetails] = useState<{
     id: string;
     name: string;
-    species: string;
+    speciesId: string | null;
+    speciesName: string;
     wateringFrequency: number;
     lastWateredDate: Date | null;
     notes: string;
@@ -67,7 +68,7 @@ export default function PlantDetails() {
         plant={{
           id: plantDetails?.id || '',
           name: plantDetails?.name || '',
-          commonName: plantDetails?.species || '',
+          commonName: plantDetails?.speciesName || '',
           trackWatering: plantDetails?.trackWatering || false,
         }}
         onTrackWateringChange={(trackWatering) => {

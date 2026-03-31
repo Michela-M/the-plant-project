@@ -28,7 +28,8 @@ The returned `Plant` object has the following shape:
 {
   id: string;
   name: string;
-  species: string;
+  speciesName: string;
+  speciesId: string | null;
   wateringFrequency: number;
   lastWateredDate: Date | null;
   notes: string;
@@ -72,7 +73,8 @@ The service returns `null` instead of throwing, allowing the UI to handle missin
 All optional fields are normalized:
 
 - `name` → `""`
-- `species` → `""`
+- `speciesName` → `""`
+- `speciesId` → `null`
 - `wateringFrequency` → `0`
 - `lastWateredDate` → `null`
 - `notes` → `""`

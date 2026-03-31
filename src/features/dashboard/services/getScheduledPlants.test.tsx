@@ -41,7 +41,7 @@ describe('getScheduledPlants', () => {
           data: () => ({
             imageUrl: 'https://example.com/monstera.jpg',
             name: 'Monstera',
-            species: 'Monstera deliciosa',
+            speciesName: 'Monstera deliciosa',
             wateringFrequency: 7,
             nextWateringDate: { toDate: () => nextWateringDate },
             lastWateredDate: { toDate: () => lastWateredDate },
