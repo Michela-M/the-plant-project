@@ -8,14 +8,17 @@ import SpeciesDetailsHeader from '../components/SpeciesDetailsHeader';
 import SpeciesDetailsSidebar from '../components/SpeciesDetailsSidebar';
 import SpeciesDetailsMainContent from '../components/SpeciesDetailsMainContent';
 import type { SpeciesDetailsData } from '../types/speciesDetails';
+import { getUserPlants } from '../services/getUserPlants';
+import { useAuth } from '@context/auth/useAuth';
 
 export default function SpeciesDetails() {
   const { id } = useParams();
   const { showError } = useToast();
   const [speciesDetails, setSpeciesDetails] =
     useState<SpeciesDetailsData | null>(null);
-
   const [loading, setLoading] = useState(true);
+  const { user } = useAuth();
+  const [userPlants, setUserPlants] = useState<any[]>([]);
 
   useEffect(() => {
     const fetchSpeciesDetails = async () => {
@@ -27,6 +30,10 @@ export default function SpeciesDetails() {
       try {
         const details = await getSpeciesDetails(id);
         setSpeciesDetails(details);
+        if (user) {
+          const temp = await getUserPlants(user.id, id);
+          setUserPlants(temp);
+        }
       } catch (error) {
         showError(
           'Error loading species details',
@@ -38,7 +45,7 @@ export default function SpeciesDetails() {
     };
 
     fetchSpeciesDetails();
-  }, [id, showError]);
+  }, [id, showError, user?.id]);
 
   if (loading) {
     return <Spinner label="Loading species details..." />;
@@ -62,7 +69,10 @@ export default function SpeciesDetails() {
       />
       <div className="flex gap-6">
         <SpeciesDetailsMainContent speciesDetails={speciesDetails} />
-        <SpeciesDetailsSidebar speciesDetails={speciesDetails} />
+        <SpeciesDetailsSidebar
+          speciesDetails={speciesDetails}
+          userPlants={userPlants}
+        />
       </div>
     </div>
   );
