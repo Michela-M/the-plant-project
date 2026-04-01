@@ -1,5 +1,12 @@
 import ImagePreview from '@components/ImagePreview';
 import type { SpeciesDetailsData } from '../types/speciesDetails';
+
+export type UserPlant = {
+  id: string;
+  imageUrl: string | null;
+  name: string;
+  speciesName: string;
+};
 import SimilarSpecies from './SimilarSpecies';
 import CharacteristicBadge from './CharacteristicBadge';
 import { Callout, H3 } from '@components/Typography';
@@ -10,7 +17,7 @@ export default function SpeciesDetailsSidebar({
   userPlants,
 }: Readonly<{
   speciesDetails: SpeciesDetailsData;
-  userPlants: any[];
+  userPlants: UserPlant[];
 }>) {
   return (
     <div className="w-3/8 flex flex-col gap-6">

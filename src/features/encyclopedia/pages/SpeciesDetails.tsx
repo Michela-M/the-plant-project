@@ -5,7 +5,9 @@ import { getSpeciesDetails } from '../services/getSpeciesDetails';
 import { useToast } from '@context/toast/useToast';
 import Spinner from '@components/Spinner';
 import SpeciesDetailsHeader from '../components/SpeciesDetailsHeader';
-import SpeciesDetailsSidebar from '../components/SpeciesDetailsSidebar';
+import SpeciesDetailsSidebar, {
+  type UserPlant,
+} from '../components/SpeciesDetailsSidebar';
 import SpeciesDetailsMainContent from '../components/SpeciesDetailsMainContent';
 import type { SpeciesDetailsData } from '../types/speciesDetails';
 import { getUserPlants } from '../services/getUserPlants';
@@ -18,7 +20,7 @@ export default function SpeciesDetails() {
     useState<SpeciesDetailsData | null>(null);
   const [loading, setLoading] = useState(true);
   const { user } = useAuth();
-  const [userPlants, setUserPlants] = useState<any[]>([]);
+  const [userPlants, setUserPlants] = useState<UserPlant[]>([]);
 
   useEffect(() => {
     const fetchSpeciesDetails = async () => {
@@ -45,7 +47,7 @@ export default function SpeciesDetails() {
     };
 
     fetchSpeciesDetails();
-  }, [id, showError, user?.id]);
+  }, [id, showError, user]);
 
   if (loading) {
     return <Spinner label="Loading species details..." />;

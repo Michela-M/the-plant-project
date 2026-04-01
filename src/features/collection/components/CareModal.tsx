@@ -1,6 +1,5 @@
 import Modal from '@components/Modal';
 import RadioGroup, { RadioButton } from '@components/Radio';
-import Select from '@components/Select';
 import TextField from '@components/TextField';
 import * as Yup from 'yup';
 import { useFormik } from 'formik';
