@@ -1,7 +1,8 @@
-import { render, screen } from '@testing-library/react';
 import { describe, expect, it, vi } from 'vitest';
+import { render, screen } from '@testing-library/react';
+import ComboBox from './index';
+import type { ComboBoxOption } from './types';
 import userEvent from '@testing-library/user-event';
-import ComboBox, { type ComboBoxOption } from './ComboBox';
 import { useState } from 'react';
 
 const options: ComboBoxOption[] = [
@@ -22,6 +23,9 @@ describe('ComboBox', () => {
 
     expect(screen.getByLabelText('Test Label')).toBeInTheDocument();
     expect(screen.getByPlaceholderText('Select an option')).toBeInTheDocument();
+
+    // Initially, the toggle button should be visible since value is empty
+    expect(screen.getByLabelText('Toggle options')).toBeInTheDocument();
   });
 
   it('filters options based on input value', async () => {
@@ -40,8 +44,8 @@ describe('ComboBox', () => {
   });
 
   it('calls onChange and onSelectionChange when an option is selected', async () => {
-    const handleChange = vi.fn();
-    const handleSelectionChange = vi.fn();
+    const handleChange = vi.fn(),
+      handleSelectionChange = vi.fn();
 
     render(
       <ComboBox
@@ -63,8 +67,8 @@ describe('ComboBox', () => {
   });
 
   it('calls onChange and onSelectionChange with empty values when cleared', async () => {
-    const handleChange = vi.fn();
-    const handleSelectionChange = vi.fn();
+    const handleChange = vi.fn(),
+      handleSelectionChange = vi.fn();
 
     render(
       <ComboBox
@@ -85,6 +89,17 @@ describe('ComboBox', () => {
       id: null,
       name: '',
     });
+  });
+
+  it('opens the dropdown when the chevron button is clicked', async () => {
+    render(<ComboBox options={options} />);
+
+    const toggleButton = screen.getByLabelText('Toggle options');
+    await userEvent.click(toggleButton);
+
+    expect(screen.getByText('Option One')).toBeInTheDocument();
+    expect(screen.getByText('Option Two')).toBeInTheDocument();
+    expect(screen.getByText('Something Else')).toBeInTheDocument();
   });
 
   it('closes the dropdown when an option is selected', async () => {
@@ -144,9 +159,9 @@ describe('ComboBox', () => {
     );
   });
 
-  it('does not allow interaction when readOnly is true', async () => {
-    const handleChange = vi.fn();
-    const handleSelectionChange = vi.fn();
+  it("doesn't allow typing when readOnly is true but still allows selection", async () => {
+    const handleChange = vi.fn(),
+      handleSelectionChange = vi.fn();
 
     render(
       <ComboBox
@@ -160,7 +175,17 @@ describe('ComboBox', () => {
     const input = screen.getByRole('combobox');
     await userEvent.type(input, 'Option One');
 
+    // Value should not change when typing
     expect(handleChange).not.toHaveBeenCalled();
-    expect(handleSelectionChange).not.toHaveBeenCalled();
+
+    // But user can still open dropdown and select an option
+    await userEvent.click(screen.getByLabelText('Toggle options'));
+    await userEvent.click(screen.getByText('Option One'));
+
+    expect(handleChange).toHaveBeenCalledWith('Option One');
+    expect(handleSelectionChange).toHaveBeenCalledWith({
+      id: '1',
+      name: 'Option One',
+    });
   });
 });
