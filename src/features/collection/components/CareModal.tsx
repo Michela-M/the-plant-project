@@ -22,10 +22,10 @@ type PlantOption = {
 export default function CareModal({
   setShowCareModal,
   plantId,
-}: {
+}: Readonly<{
   setShowCareModal: (show: boolean) => void;
   plantId?: string;
-}) {
+}>) {
   const [plants, setPlants] = useState<PlantOption[]>([]);
   const [loadingPlants, setLoadingPlants] = useState(!plantId);
   const { showError, showSuccess } = useToast();
@@ -158,11 +158,10 @@ export default function CareModal({
               placeholder="Select plant"
               options={plants}
               value={formik.values.plant}
-              onChange={(option) => formik.setFieldValue('plant', option)}
               onBlur={() => formik.setFieldTouched('plant', true)}
               onSelectionChange={(selection) => {
-                formik.setFieldValue('species', selection.name);
-                formik.setFieldValue('speciesId', selection.id ?? '');
+                formik.setFieldValue('plant', selection.name);
+                formik.setFieldTouched('plant', true);
               }}
               readOnly
             />

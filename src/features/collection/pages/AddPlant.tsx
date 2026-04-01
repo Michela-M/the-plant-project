@@ -9,7 +9,8 @@ import { useEffect, useState } from 'react';
 import { useAuth } from '@context/auth/useAuth';
 import { H1 } from '@components/Typography';
 import { calculateNextWateringDate } from '../utils/wateringUtils';
-import ComboBox, { type ComboBoxOption } from '@components/ComboBox';
+import ComboBox from '@components/ComboBox';
+import type { ComboBoxOption } from '@components/ComboBox/types';
 import { getAllSpecies } from '@features/encyclopedia/services/getAllSpecies';
 
 const addPlantValidationSchema = Yup.object({

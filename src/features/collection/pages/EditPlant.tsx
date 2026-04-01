@@ -17,7 +17,8 @@ import { useToast } from '@context/toast/useToast';
 import Spinner from '@components/Spinner';
 import { useAuth } from '@context/auth/useAuth';
 import updateWateringDates from '../utils/updateWateringDates';
-import ComboBox, { type ComboBoxOption } from '@components/ComboBox';
+import ComboBox from '@components/ComboBox';
+import type { ComboBoxOption } from '@components/ComboBox/types';
 import { getAllSpecies } from '@features/encyclopedia/services/getAllSpecies';
 
 const editPlantValidationSchema = Yup.object({
