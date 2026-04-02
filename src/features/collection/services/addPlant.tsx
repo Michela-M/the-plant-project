@@ -6,7 +6,8 @@ export const addPlant = async (plantData: {
   name: string;
   nextWateringDate: Date | null;
   notes: string;
-  species: string;
+  speciesId: string | null;
+  speciesName: string;
   trackWatering: boolean;
   wateringFrequency: number;
   userId: string;
@@ -14,7 +15,8 @@ export const addPlant = async (plantData: {
   try {
     const {
       name,
-      species,
+      speciesId,
+      speciesName,
       notes,
       wateringFrequency,
       lastWateredDate,
@@ -26,7 +28,8 @@ export const addPlant = async (plantData: {
     const plantDoc = {
       creationDate,
       name,
-      species,
+      speciesId,
+      speciesName,
       notes,
       wateringFrequency,
       lastWateredDate,

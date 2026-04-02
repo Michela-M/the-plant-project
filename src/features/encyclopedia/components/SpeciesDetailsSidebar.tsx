@@ -1,14 +1,24 @@
 import ImagePreview from '@components/ImagePreview';
 import type { SpeciesDetailsData } from '../types/speciesDetails';
+
+export type UserPlant = {
+  id: string;
+  imageUrl: string | null;
+  name: string;
+  speciesName: string;
+};
 import SimilarSpecies from './SimilarSpecies';
 import CharacteristicBadge from './CharacteristicBadge';
-import { H3 } from '@components/Typography';
+import { Callout, H3 } from '@components/Typography';
+import { Link } from 'react-router-dom';
 
 export default function SpeciesDetailsSidebar({
   speciesDetails,
-}: {
+  userPlants,
+}: Readonly<{
   speciesDetails: SpeciesDetailsData;
-}) {
+  userPlants: UserPlant[];
+}>) {
   return (
     <div className="w-3/8 flex flex-col gap-6">
       <ImagePreview
@@ -62,6 +72,32 @@ export default function SpeciesDetailsSidebar({
           <p>No similar species listed.</p>
         )}
       </div>
+      {userPlants.length > 0 && (
+        <div>
+          <H3>Your Plants</H3>
+          {userPlants.map((plant) => (
+            <Link to={`/plants/${plant.id}`} key={plant.id}>
+              <div className="flex flex-row gap-2 group pt-2">
+                <img
+                  className="aspect-square overflow-hidden object-cover w-1/4 h-full"
+                  src={plant.imageUrl || '/images/placeholder.jpg'}
+                  alt={
+                    plant.imageUrl
+                      ? `${plant.name} (${plant.speciesName}) image`
+                      : `No photo available`
+                  }
+                />
+                <div className="w-3/4">
+                  <Callout className="text-stone-600">
+                    {plant.speciesName}
+                  </Callout>
+                  <p>{plant.name}</p>
+                </div>
+              </div>
+            </Link>
+          ))}
+        </div>
+      )}
     </div>
   );
 }

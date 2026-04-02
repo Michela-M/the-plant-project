@@ -32,7 +32,7 @@ describe('getAllPlants', () => {
         data: () => ({
           imageUrl: 'https://example.com/aloe.jpg',
           name: 'Aloe',
-          species: 'Aloe Vera',
+          speciesName: 'Aloe Vera',
         }),
         id: '1',
       },
@@ -54,7 +54,7 @@ describe('getAllPlants', () => {
       {
         id: '1',
         name: 'Aloe',
-        species: 'Aloe Vera',
+        speciesName: 'Aloe Vera',
         imageUrl: 'https://example.com/aloe.jpg',
       },
     ]);
@@ -100,7 +100,7 @@ describe('getAllPlants', () => {
       {
         id: '123',
         name: 'Unnamed Plant',
-        species: '',
+        speciesName: '',
         imageUrl: null,
       },
     ]);

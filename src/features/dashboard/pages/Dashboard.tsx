@@ -1,17 +1,17 @@
+import Button from '@components/Button';
+import Spinner from '@components/Spinner';
+import { H1 } from '@components/Typography';
+import { useAuth } from '@context/auth/useAuth';
+import { useToast } from '@context/toast/useToast';
 import { useEffect, useState } from 'react';
+import CareModal from '../../collection/components/CareModal';
+import TodayCareSection from '../components/TodayCareSection';
+import UpcomingCareSection from '../components/UpcomingCareSection';
 import {
   getScheduledPlants,
   type ScheduledPlant,
 } from '../services/getScheduledPlants';
 import { partitionScheduledPlants } from '../services/partitionScheduledPlants';
-import { useToast } from '@context/toast/useToast';
-import { useAuth } from '@context/auth/useAuth';
-import Spinner from '@components/Spinner';
-import Button from '@components/Button';
-import TodayCareSection from '../components/TodayCareSection';
-import UpcomingCareSection from '../components/UpcomingCareSection';
-import { H1 } from '@components/Typography';
-import CareModal from '../../collection/components/CareModal';
 
 export default function Dashboard() {
   const [plants, setPlants] = useState<ScheduledPlant[]>([]);

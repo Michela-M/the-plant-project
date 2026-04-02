@@ -1,6 +1,6 @@
-import { afterEach, beforeEach, describe, it, expect, vi } from 'vitest';
-import UpcomingCareSection from './UpcomingCareSection';
 import { render, screen } from '@testing-library/react';
+import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
+import UpcomingCareSection from './UpcomingCareSection';
 
 vi.mock('./ScheduleListItem', () => ({
   default: ({
@@ -39,7 +39,7 @@ describe('UpcomingCareSection', () => {
       {
         id: 'plant-1',
         name: 'Monstera',
-        species: 'Monstera deliciosa',
+        speciesName: 'Monstera deliciosa',
         nextWateringDate: new Date('2026-03-03T10:00:00'),
         wateringFrequency: 7,
         inferredWateringFrequency: null,
@@ -48,7 +48,7 @@ describe('UpcomingCareSection', () => {
       {
         id: 'plant-2',
         name: 'Snake Plant',
-        species: 'Sansevieria trifasciata',
+        speciesName: 'Sansevieria trifasciata',
         nextWateringDate: new Date('2026-03-03T18:00:00'),
         wateringFrequency: 10,
         inferredWateringFrequency: null,
@@ -57,7 +57,7 @@ describe('UpcomingCareSection', () => {
       {
         id: 'plant-3',
         name: 'Fiddle Leaf Fig',
-        species: 'Ficus lyrata',
+        speciesName: 'Ficus lyrata',
         nextWateringDate: new Date('2026-03-04T12:00:00'),
         wateringFrequency: 5,
         inferredWateringFrequency: null,
@@ -85,7 +85,7 @@ describe('UpcomingCareSection', () => {
       {
         id: 'plant-1',
         name: 'Monstera',
-        species: 'Monstera deliciosa',
+        speciesName: 'Monstera deliciosa',
         nextWateringDate: null,
         wateringFrequency: 7,
         inferredWateringFrequency: null,
@@ -109,7 +109,7 @@ describe('UpcomingCareSection', () => {
       {
         id: 'plant-4',
         name: 'Pothos',
-        species: 'Epipremnum aureum',
+        speciesName: 'Epipremnum aureum',
         nextWateringDate: new Date('2026-03-03T09:00:00'),
         wateringFrequency: null,
         inferredWateringFrequency: undefined,

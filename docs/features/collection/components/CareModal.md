@@ -21,12 +21,13 @@ The **CareModal** component captures and submits a new plant care entry. It supp
 | `date`          | `date`     | yes         | Defaults to today; cannot be in the future.         |
 | `careType`      | `radio`    | yes         | One of `water`, `fertilize`, `repot`, `other`.      |
 | `otherCareType` | `text`     | conditional | Required only when `careType = other`; min 3 chars. |
-| `plant`         | `select`   | conditional | Required only when `plantId` prop is absent.        |
+| `plant`         | `ComboBox` | conditional | Required only when `plantId` prop is absent.        |
 | `notes`         | `textarea` | no          | Optional free text notes.                           |
 
 ## Behavior Notes
 
 - On mount without `plantId`, the component fetches plants via `getAllPlants(user.id)` and shows a spinner while loading.
+- Plant selection uses the `ComboBox` component in `readOnly` mode (user cannot type, only select).
 - On submit, the date is converted with `combineDateWithCurrentTime` and saved through `addCareEntry`.
 - When `careType` is `water`, the component calls `updateWateringDates(selectedPlantId, user.id, { date: careDate })` first and passes those returned fields into `addCareEntry`.
 - A success toast is shown after save and the modal closes.

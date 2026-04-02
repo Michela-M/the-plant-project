@@ -13,7 +13,8 @@ This service does **not** fetch existing plant data or derive watering fields. I
 Fields that may be written by this service (when provided):
 
 - `name`
-- `species`
+- `speciesName`
+- `speciesId`
 - `notes`
 - `imageUrl`
 - `trackWatering`
@@ -33,18 +34,19 @@ Fields that may be written by this service (when provided):
 
 ### `plantData` fields
 
-| Field                       | Type             | Required | Description                        |
-| --------------------------- | ---------------- | -------- | ---------------------------------- |
-| `name`                      | `string`         | No       | Plant name                         |
-| `species`                   | `string`         | No       | Plant species                      |
-| `notes`                     | `string`         | No       | Optional notes                     |
-| `imageUrl`                  | `string`         | No       | Optional image URL                 |
-| `trackWatering`             | `boolean`        | No       | Whether the plant is on schedule   |
-| `wateringFrequency`         | `number`         | No       | Watering interval in days          |
-| `nextWateringDate`          | `Date \| null`   | No       | Next scheduled watering date       |
-| `inferredWateringFrequency` | `number \| null` | No       | Inferred watering interval in days |
-| `lastWateredDate`           | `Date \| null`   | No       | Most recent watered date           |
-| `secondLastWateredDate`     | `Date \| null`   | No       | Second most recent watered date    |
+| Field                       | Type               | Required | Description                        |
+| --------------------------- | ------------------ | -------- | ---------------------------------- |
+| `name`                      | `string`           | No       | Plant name                         |
+| `speciesName`               | `string`           | No       | Plant species name                 |
+| `speciesId`                 | `string` \| `null` | No       | Plant species ID (nullable)        |
+| `notes`                     | `string`           | No       | Optional notes                     |
+| `imageUrl`                  | `string`           | No       | Optional image URL                 |
+| `trackWatering`             | `boolean`          | No       | Whether the plant is on schedule   |
+| `wateringFrequency`         | `number`           | No       | Watering interval in days          |
+| `nextWateringDate`          | `Date` \| `null`   | No       | Next scheduled watering date       |
+| `inferredWateringFrequency` | `number` \| `null` | No       | Inferred watering interval in days |
+| `lastWateredDate`           | `Date` \| `null`   | No       | Most recent watered date           |
+| `secondLastWateredDate`     | `Date` \| `null`   | No       | Second most recent watered date    |
 
 ## Return Value
 
@@ -62,7 +64,8 @@ await updatePlant(
   'plant-123',
   {
     name: 'Monstera Deliciosa',
-    species: 'Monstera deliciosa',
+    speciesName: 'Monstera deliciosa',
+    speciesId: 'species-abc123',
     notes: 'Rotate weekly for even growth',
     imageUrl: 'https://example.com/plant.jpg',
     wateringFrequency: 7,

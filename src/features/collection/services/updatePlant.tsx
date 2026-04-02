@@ -7,7 +7,8 @@ export const updatePlant = async (
     imageUrl?: string;
     name?: string;
     notes?: string;
-    species?: string;
+    speciesName?: string;
+    speciesId?: string | null;
     trackWatering?: boolean;
     wateringFrequency?: number;
     nextWateringDate?: Date | null;
@@ -24,7 +25,8 @@ export const updatePlant = async (
       imageUrl?: string;
       name?: string;
       notes?: string;
-      species?: string;
+      speciesName?: string;
+      speciesId?: string | null;
       trackWatering?: boolean;
       wateringFrequency?: number;
       nextWateringDate?: Date | null;

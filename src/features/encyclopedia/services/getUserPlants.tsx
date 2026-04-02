@@ -1,10 +1,10 @@
-import { collection, getDocs, orderBy, query } from 'firebase/firestore';
+import { getDocs, collection, where, query } from 'firebase/firestore';
 import { db } from '@services/firebase';
 
-export const getAllPlants = async (userId: string) => {
+export const getUserPlants = async (userId: string, speciesId: string) => {
   const q = query(
     collection(db, `users/${userId}/plants`),
-    orderBy('creationDate', 'desc')
+    where('speciesId', '==', speciesId)
   );
 
   const snapshot = await getDocs(q);

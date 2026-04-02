@@ -1,6 +1,6 @@
-import { describe, it, expect } from 'vitest';
-import TodayCareSection from './TodayCareSection';
 import { render, screen } from '@testing-library/react';
+import { describe, expect, it } from 'vitest';
+import TodayCareSection from './TodayCareSection';
 
 describe('TodayCareSection', () => {
   it('renders a ScheduleCard for each plant passed in', () => {
@@ -8,7 +8,7 @@ describe('TodayCareSection', () => {
       {
         id: 'plant-1',
         name: 'Monstera',
-        species: 'Monstera deliciosa',
+        speciesName: 'Monstera deliciosa',
         wateringFrequency: 7,
         inferredWateringFrequency: null,
         lastWateredDate: new Date('2026-03-01T10:00:00Z'),
@@ -17,7 +17,7 @@ describe('TodayCareSection', () => {
       {
         id: 'plant-2',
         name: 'Fiddle Leaf Fig',
-        species: 'Ficus lyrata',
+        speciesName: 'Ficus lyrata',
         wateringFrequency: 5,
         inferredWateringFrequency: null,
         lastWateredDate: new Date('2026-03-01T12:00:00Z'),

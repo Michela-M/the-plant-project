@@ -1,31 +1,33 @@
+import ComboBox from '@components/ComboBox';
 import Modal from '@components/Modal';
 import RadioGroup, { RadioButton } from '@components/Radio';
-import Select from '@components/Select';
-import TextField from '@components/TextField';
-import * as Yup from 'yup';
-import { useFormik } from 'formik';
-import getLocalDateInputValue from '@utils/getLocalDateInputValue';
-import combineDateWithCurrentTime from '@utils/combineDateWithCurrentTime';
-import { getAllPlants } from '@features/collection/services/getAllPlants';
-import { useEffect, useState } from 'react';
-import { useToast } from '@context/toast/useToast';
-import { useAuth } from '@context/auth/useAuth';
 import Spinner from '@components/Spinner';
+import TextField from '@components/TextField';
+import { useAuth } from '@context/auth/useAuth';
+import { useToast } from '@context/toast/useToast';
 import { addCareEntry } from '@features/collection/services/addCareEntry';
+import { getAllPlants } from '@features/collection/services/getAllPlants';
+import combineDateWithCurrentTime from '@utils/combineDateWithCurrentTime';
+import getLocalDateInputValue from '@utils/getLocalDateInputValue';
+import { useFormik } from 'formik';
+import { useEffect, useState } from 'react';
+import * as Yup from 'yup';
 import updateWateringDates from '../utils/updateWateringDates';
 
 type PlantOption = {
   id: string;
   name: string;
+  description?: string;
+  image?: string;
 };
 
 export default function CareModal({
   setShowCareModal,
   plantId,
-}: {
+}: Readonly<{
   setShowCareModal: (show: boolean) => void;
   plantId?: string;
-}) {
+}>) {
   const [plants, setPlants] = useState<PlantOption[]>([]);
   const [loadingPlants, setLoadingPlants] = useState(!plantId);
   const { showError, showSuccess } = useToast();
@@ -66,7 +68,12 @@ export default function CareModal({
       try {
         const plantsData = await getAllPlants(user.id);
         setPlants(
-          plantsData.map((plant) => ({ id: plant.id, name: plant.name }))
+          plantsData.map((plant) => ({
+            id: plant.id,
+            name: plant.name,
+            description: plant.speciesName,
+            image: plant.imageUrl || '/images/placeholder.jpg',
+          }))
         );
       } catch (error) {
         showError(
@@ -147,6 +154,20 @@ export default function CareModal({
             onBlur={formik.handleBlur}
             error={formik.touched.date ? formik.errors.date : undefined}
           />
+          {!plantId && (
+            <ComboBox
+              label="Select plant"
+              placeholder="Select plant"
+              options={plants}
+              value={formik.values.plant}
+              onBlur={() => formik.setFieldTouched('plant', true)}
+              onSelectionChange={(selection) => {
+                formik.setFieldValue('plant', selection.name);
+                formik.setFieldTouched('plant', true);
+              }}
+              readOnly
+            />
+          )}
           <RadioGroup label="Care type" layout="horizontal">
             <RadioButton
               label="Water"
@@ -187,18 +208,6 @@ export default function CareModal({
                   : undefined
               }
               ariaLabel="Other care type"
-            />
-          )}
-          {!plantId && (
-            <Select
-              id="plant"
-              label="Select plant"
-              name="plant"
-              options={plants.map((plant) => plant.name)}
-              value={formik.values.plant}
-              onSelect={(option) => formik.setFieldValue('plant', option)}
-              onBlur={formik.handleBlur}
-              error={formik.touched.plant ? formik.errors.plant : undefined}
             />
           )}
           <TextField

@@ -1,6 +1,6 @@
-import { beforeEach, describe, expect, it, vi, type Mock } from 'vitest';
-import { collection, getDocs, orderBy, query, where } from 'firebase/firestore';
 import { db } from '@services/firebase';
+import { collection, getDocs, orderBy, query, where } from 'firebase/firestore';
+import { beforeEach, describe, expect, it, vi, type Mock } from 'vitest';
 import { getScheduledPlants } from './getScheduledPlants';
 
 vi.mock('firebase/firestore', () => ({
@@ -41,7 +41,7 @@ describe('getScheduledPlants', () => {
           data: () => ({
             imageUrl: 'https://example.com/monstera.jpg',
             name: 'Monstera',
-            species: 'Monstera deliciosa',
+            speciesName: 'Monstera deliciosa',
             wateringFrequency: 7,
             nextWateringDate: { toDate: () => nextWateringDate },
             lastWateredDate: { toDate: () => lastWateredDate },
@@ -68,7 +68,7 @@ describe('getScheduledPlants', () => {
         id: 'plant-1',
         imageUrl: 'https://example.com/monstera.jpg',
         name: 'Monstera',
-        species: 'Monstera deliciosa',
+        speciesName: 'Monstera deliciosa',
         wateringFrequency: 7,
         nextWateringDate,
         lastWateredDate,
@@ -99,7 +99,7 @@ describe('getScheduledPlants', () => {
         id: 'plant-2',
         imageUrl: null,
         name: 'Unnamed Plant',
-        species: '',
+        speciesName: '',
         wateringFrequency: null,
         nextWateringDate: null,
         lastWateredDate: null,

@@ -5,10 +5,13 @@ import Button from '@components/Button';
 import TextField from '@components/TextField';
 import { useToast } from '@context/toast/useToast';
 import { addPlant } from '../services/addPlant';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useAuth } from '@context/auth/useAuth';
 import { H1 } from '@components/Typography';
 import { calculateNextWateringDate } from '../utils/wateringUtils';
+import ComboBox from '@components/ComboBox';
+import type { ComboBoxOption } from '@components/ComboBox/types';
+import { getAllSpecies } from '@features/encyclopedia/services/getAllSpecies';
 
 const addPlantValidationSchema = Yup.object({
   name: Yup.string().required('Name is required'),
@@ -26,12 +29,37 @@ export default function AddPlant() {
   const navigate = useNavigate();
   const { showSuccess, showError } = useToast();
   const [loading, setLoading] = useState(false);
+  const [speciesOptions, setSpeciesOptions] = useState<ComboBoxOption[]>([]);
   const { user } = useAuth();
+
+  useEffect(() => {
+    const fetchSpecies = async () => {
+      try {
+        const speciesData = await getAllSpecies();
+        setSpeciesOptions(
+          speciesData.map((species) => ({
+            id: species.id,
+            name: species.commonName,
+            description: species.family,
+            image: species.image || '/images/placeholder.jpg',
+          }))
+        );
+      } catch (error) {
+        showError(
+          'Error loading species',
+          error instanceof Error ? error.message : 'Unknown error'
+        );
+      }
+    };
+
+    fetchSpecies();
+  }, [showError]);
 
   const formik = useFormik({
     initialValues: {
       name: '',
       species: '',
+      speciesId: '',
       wateringFrequency: '',
       lastWateredDate: '',
       notes: '',
@@ -59,7 +87,8 @@ export default function AddPlant() {
           name: values.name,
           nextWateringDate,
           notes: values.notes,
-          species: values.species,
+          speciesId: values.speciesId || null,
+          speciesName: values.species.trim(),
           trackWatering,
           wateringFrequency: values.wateringFrequency
             ? Number(values.wateringFrequency)
@@ -95,17 +124,17 @@ export default function AddPlant() {
             formik.touched.name && formik.errors.name ? formik.errors.name : ''
           }
         />
-        <TextField
+        <ComboBox
           label="Species"
+          options={speciesOptions}
+          placeholder="Species"
           value={formik.values.species}
-          onChange={formik.handleChange}
-          onBlur={formik.handleBlur}
-          name="species"
-          error={
-            formik.touched.species && formik.errors.species
-              ? formik.errors.species
-              : ''
-          }
+          onChange={(value) => formik.setFieldValue('species', value)}
+          onBlur={() => formik.setFieldTouched('species', true)}
+          onSelectionChange={(selection) => {
+            formik.setFieldValue('species', selection.name);
+            formik.setFieldValue('speciesId', selection.id ?? '');
+          }}
         />
         <TextField
           label="Watering Frequency (days)"
