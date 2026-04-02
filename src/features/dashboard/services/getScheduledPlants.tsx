@@ -1,11 +1,11 @@
-import { collection, getDocs, query, orderBy, where } from 'firebase/firestore';
 import { db } from '@services/firebase';
+import { collection, getDocs, orderBy, query, where } from 'firebase/firestore';
 
 export type ScheduledPlant = {
   id: string;
   imageUrl?: string | null;
   name: string;
-  species: string;
+  speciesName: string;
   wateringFrequency: number | null;
   nextWateringDate: Date | null;
   lastWateredDate?: Date | null;
@@ -28,7 +28,7 @@ export const getScheduledPlants = async (userId: string) => {
       id: doc.id,
       imageUrl: data.imageUrl ?? null,
       name: data.name ?? 'Unnamed Plant',
-      species: data.speciesName ?? '',
+      speciesName: data.speciesName ?? '',
       wateringFrequency: data.wateringFrequency ?? null,
       nextWateringDate: data.nextWateringDate?.toDate?.() ?? null,
       lastWateredDate: data.lastWateredDate?.toDate?.() ?? null,

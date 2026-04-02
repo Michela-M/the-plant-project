@@ -1,10 +1,10 @@
 import { describe, expect, it } from 'vitest';
-import { partitionScheduledPlants } from './partitionScheduledPlants';
 import type { ScheduledPlant } from './getScheduledPlants';
+import { partitionScheduledPlants } from './partitionScheduledPlants';
 
 const basePlant: Omit<ScheduledPlant, 'id' | 'name' | 'nextWateringDate'> = {
   imageUrl: null,
-  species: 'Monstera deliciosa',
+  speciesName: 'Monstera deliciosa',
   wateringFrequency: 7,
 };
 

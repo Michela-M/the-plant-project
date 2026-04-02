@@ -1,6 +1,6 @@
-import { describe, it, expect, vi, beforeEach } from 'vitest';
 import { render, screen, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
+import { beforeEach, describe, expect, it, vi } from 'vitest';
 import CareModal from './CareModal';
 
 const {
@@ -85,10 +85,10 @@ describe('CareModal', () => {
       nextWateringDate: null,
     });
 
-    Object.defineProperty(window, 'location', {
+    Object.defineProperty(globalThis, 'location', {
       configurable: true,
       writable: true,
-      value: { ...window.location, reload: mockReload },
+      value: { ...globalThis.location, reload: mockReload },
     });
   });
 
@@ -96,10 +96,12 @@ describe('CareModal', () => {
     render(<CareModal setShowCareModal={vi.fn()} />);
 
     expect(mockGetAllPlants).toHaveBeenCalledWith('user-1');
-    const combo = await screen.findByRole('combobox', { name: 'Select plant' });
+    // Find the input by placeholder since the accessible name may not be set
+    const combo = await screen.findByPlaceholderText('Select plant');
     expect(combo).toBeInTheDocument();
     // Open dropdown and check options
-    await userEvent.click(combo);
+    const toggleButton = screen.getByLabelText('Toggle options');
+    await userEvent.click(toggleButton);
     expect(screen.getByText('Monstera')).toBeInTheDocument();
     expect(screen.getByText('Snake Plant')).toBeInTheDocument();
   });
@@ -133,8 +135,9 @@ describe('CareModal', () => {
 
     render(<CareModal setShowCareModal={setShowCareModal} />);
 
-    const combo = await screen.findByRole('combobox', { name: 'Select plant' });
-    await user.click(combo);
+    const combo = await screen.findByPlaceholderText('Select plant');
+    const toggleButton = screen.getByLabelText('Toggle options');
+    await user.click(toggleButton);
     await user.click(screen.getByText('Monstera'));
     await user.click(screen.getByRole('button', { name: 'Create' }));
 

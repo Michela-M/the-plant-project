@@ -1,7 +1,7 @@
-import type { ComboBoxOption, ComboBoxSelection } from './types';
-import { useMemo, useState } from 'react';
+import { useId, useMemo, useState } from 'react';
 import { ComboBoxInput } from './ComboBoxInput';
 import { ComboBoxList } from './ComboBoxList';
+import type { ComboBoxOption, ComboBoxSelection } from './types';
 
 type ComboBoxProps = Readonly<{
   label?: string;
@@ -24,6 +24,7 @@ export default function ComboBox({
   onSelectionChange,
   readOnly = false,
 }: ComboBoxProps) {
+  const listboxId = useId();
   const [isOpen, setIsOpen] = useState(false);
   const filteredOptions = useMemo(
     () =>
@@ -44,7 +45,7 @@ export default function ComboBox({
   return (
     <div className="relative">
       {label && (
-        <label htmlFor="combo-input" className="mb-1 block">
+        <label htmlFor={listboxId} className="mb-1 block">
           {label}
         </label>
       )}
@@ -65,10 +66,18 @@ export default function ComboBox({
         }}
         onToggle={() => setIsOpen((o) => !o)}
         onClear={handleClear}
+        isOpen={isOpen}
+        listboxId={listboxId}
       />
 
       {isOpen && filteredOptions.length > 0 && (
-        <ComboBoxList options={filteredOptions} onSelect={handleSelect} />
+        <ComboBoxList
+          options={filteredOptions}
+          onSelect={handleSelect}
+          selectedId={
+            value ? options.find((o) => o.name === value)?.id : undefined
+          }
+        />
       )}
     </div>
   );

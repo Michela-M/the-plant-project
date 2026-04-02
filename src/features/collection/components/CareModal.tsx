@@ -1,22 +1,24 @@
+import ComboBox from '@components/ComboBox';
 import Modal from '@components/Modal';
 import RadioGroup, { RadioButton } from '@components/Radio';
-import TextField from '@components/TextField';
-import * as Yup from 'yup';
-import { useFormik } from 'formik';
-import getLocalDateInputValue from '@utils/getLocalDateInputValue';
-import combineDateWithCurrentTime from '@utils/combineDateWithCurrentTime';
-import { getAllPlants } from '@features/collection/services/getAllPlants';
-import { useEffect, useState } from 'react';
-import { useToast } from '@context/toast/useToast';
-import { useAuth } from '@context/auth/useAuth';
 import Spinner from '@components/Spinner';
+import TextField from '@components/TextField';
+import { useAuth } from '@context/auth/useAuth';
+import { useToast } from '@context/toast/useToast';
 import { addCareEntry } from '@features/collection/services/addCareEntry';
+import { getAllPlants } from '@features/collection/services/getAllPlants';
+import combineDateWithCurrentTime from '@utils/combineDateWithCurrentTime';
+import getLocalDateInputValue from '@utils/getLocalDateInputValue';
+import { useFormik } from 'formik';
+import { useEffect, useState } from 'react';
+import * as Yup from 'yup';
 import updateWateringDates from '../utils/updateWateringDates';
-import ComboBox from '@components/ComboBox';
 
 type PlantOption = {
   id: string;
   name: string;
+  description?: string;
+  image?: string;
 };
 
 export default function CareModal({

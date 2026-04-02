@@ -27,10 +27,11 @@ A flexible, accessible dropdown input with search and free-typing support. Use f
 ## Usage
 
 ```tsx
-import ComboBox, {
-  type ComboBoxOption,
-  type ComboBoxSelection,
-} from '@components/ComboBox';
+import ComboBox from '@components/ComboBox';
+import type {
+  ComboBoxOption,
+  ComboBoxSelection,
+} from '@components/ComboBox/types';
 
 const options: ComboBoxOption[] = [
   { id: '1', name: 'Apple', image: '/apple.png', description: 'A sweet fruit' },

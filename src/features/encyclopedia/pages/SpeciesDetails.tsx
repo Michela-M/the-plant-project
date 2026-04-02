@@ -1,17 +1,17 @@
+import Link from '@components/Link';
+import Spinner from '@components/Spinner';
+import { useAuth } from '@context/auth/useAuth';
+import { useToast } from '@context/toast/useToast';
 import { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
-import Link from '@components/Link';
-import { getSpeciesDetails } from '../services/getSpeciesDetails';
-import { useToast } from '@context/toast/useToast';
-import Spinner from '@components/Spinner';
 import SpeciesDetailsHeader from '../components/SpeciesDetailsHeader';
+import SpeciesDetailsMainContent from '../components/SpeciesDetailsMainContent';
 import SpeciesDetailsSidebar, {
   type UserPlant,
 } from '../components/SpeciesDetailsSidebar';
-import SpeciesDetailsMainContent from '../components/SpeciesDetailsMainContent';
-import type { SpeciesDetailsData } from '../types/speciesDetails';
+import { getSpeciesDetails } from '../services/getSpeciesDetails';
 import { getUserPlants } from '../services/getUserPlants';
-import { useAuth } from '@context/auth/useAuth';
+import type { SpeciesDetailsData } from '../types/speciesDetails';
 
 export default function SpeciesDetails() {
   const { id } = useParams();
@@ -35,6 +35,8 @@ export default function SpeciesDetails() {
         if (user) {
           const temp = await getUserPlants(user.id, id);
           setUserPlants(temp);
+        } else {
+          setUserPlants([]);
         }
       } catch (error) {
         showError(

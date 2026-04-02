@@ -1,11 +1,13 @@
+import clsx from 'clsx';
 import { ChevronDown, SquareX } from 'lucide-react';
 import { IconButton } from '../Button';
-import clsx from 'clsx';
 
 export function ComboBoxInput({
   value,
   placeholder,
   readOnly,
+  isOpen,
+  listboxId,
   onFocus,
   onBlur,
   onChange,
@@ -15,6 +17,8 @@ export function ComboBoxInput({
   value: string;
   placeholder: string;
   readOnly: boolean;
+  isOpen: boolean;
+  listboxId: string;
   onFocus: () => void;
   onBlur: () => void;
   onChange: (v: string) => void;
@@ -26,8 +30,8 @@ export function ComboBoxInput({
       <input
         id="combo-input"
         role="combobox"
-        aria-expanded={false}
-        aria-controls="combo-listbox"
+        aria-expanded={isOpen}
+        aria-controls={listboxId}
         type="text"
         value={value}
         placeholder={placeholder}
