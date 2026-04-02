@@ -135,7 +135,7 @@ describe('CareModal', () => {
 
     render(<CareModal setShowCareModal={setShowCareModal} />);
 
-    const combo = await screen.findByPlaceholderText('Select plant');
+    await screen.findByPlaceholderText('Select plant');
     const toggleButton = screen.getByLabelText('Toggle options');
     await user.click(toggleButton);
     await user.click(screen.getByText('Monstera'));
