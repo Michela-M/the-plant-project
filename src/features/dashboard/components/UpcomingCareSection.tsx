@@ -1,11 +1,11 @@
 import { H2, H3 } from '@components/Typography';
-import ScheduleListItem from './ScheduleListItem';
 import formatRelativeDate from '@utils/formatRelativeDate';
+import ScheduleListItem from './ScheduleListItem';
 
 type UpcomingPlant = {
   id: string;
   name: string;
-  species: string;
+  speciesName: string;
   nextWateringDate: Date | null;
   wateringFrequency: number | null;
   inferredWateringFrequency?: number | null;
@@ -76,7 +76,7 @@ export default function UpcomingCareSection({
                   key={plant.id}
                   id={plant.id}
                   name={plant.name}
-                  species={plant.species}
+                  species={plant.speciesName}
                   wateringFrequency={plant.wateringFrequency ?? 0}
                   inferredWateringFrequency={
                     plant.inferredWateringFrequency ?? null

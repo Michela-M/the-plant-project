@@ -6,7 +6,7 @@ export default function TodayCareSection({
   plants: {
     id: string;
     name: string;
-    species: string;
+    speciesName: string;
     wateringFrequency: number | null;
     inferredWateringFrequency?: number | null;
     lastWateredDate?: Date | null;
@@ -21,7 +21,7 @@ export default function TodayCareSection({
             key={plant.id}
             id={plant.id}
             name={plant.name}
-            species={plant.species}
+            species={plant.speciesName}
             wateringFrequency={plant.wateringFrequency ?? null}
             inferredWateringFrequency={plant.inferredWateringFrequency ?? null}
             lastWateredDate={plant.lastWateredDate ?? null}
