@@ -76,12 +76,14 @@ export default function CharacteristicBadge({
 }>) {
   type CharacteristicValue = 0 | 1 | 2 | 3;
   const normalizedValue: CharacteristicValue =
-    value >= 0 && value <= 3 ? (value as CharacteristicValue) : 0;
+    Number.isInteger(value) && value >= 0 && value <= 3
+      ? (value as CharacteristicValue)
+      : 0;
 
   const config = CHARACTERISTIC_CONFIG[label][normalizedValue];
 
   // hide non-toxic categories when value = 0
-  if (!config.text && label !== 'toxicity') return null;
+  if (normalizedValue === 0 && label !== 'toxicity') return null;
 
   const colorClass = config.color;
   const text = config.text;

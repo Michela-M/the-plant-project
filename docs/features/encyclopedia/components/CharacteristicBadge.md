@@ -24,7 +24,7 @@ The **CharacteristicBadge** component displays a normalized species characterist
   - `pruning` → `Secateurs`
   - `propagation` → `PlantFlask`
 - Color is passed to `IconTile` and resolves to the corresponding tile background utility class.
-- Default icon is `Star3` and default text is `''` (empty string) if not provided by mapping.
+- If a mapping does not provide an icon, the default icon is `Star3`
 
 ## Example Usage
 
