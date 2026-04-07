@@ -17,13 +17,14 @@ The **CharacteristicBadge** component displays a normalized species characterist
 - For non-toxicity categories, value `0` returns `null` (badge is hidden).
 - For `toxicity`, value `0` still renders as `Non-toxic`.
 - Icon mapping by label:
-  - `difficulty` → `Gauge`
-  - `toxicity` → `Skull`
+  - `difficulty` → `Star1`, `Star2`, `Star3` (mapped to values 1, 2, 3 respectively)
+  - `toxicity` → `Skull` (for toxic) or `Cat` (for non-toxic)
   - `maintenance` → `Wrench`
-  - `light` → `Sun`
+  - `light` → `SunDim`, `SunMedium`, `Sun` (mapped to values 1, 2, 3 respectively)
   - `pruning` → `Secateurs`
   - `propagation` → `PlantFlask`
 - Color is passed to `IconTile` and resolves to the corresponding tile background utility class.
+- Default icon is `Star3` and default text is `''` (empty string) if not provided by mapping.
 
 ## Example Usage
 
