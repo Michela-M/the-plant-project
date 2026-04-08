@@ -52,7 +52,7 @@ This feature currently includes:
 
 1. User clicks a species card or list item.
 2. App navigates to `/species/:id`.
-3. Details page calls `getSpeciesDetails(id)`.
+3. Details page uses the `useSpeciesDetails` hook to fetch species details by ID (the hook internally calls `getSpeciesDetails(id)`).
 4. Page renders:
    - `SpeciesDetailsHeader`
    - `SpeciesDetailsMainContent`
