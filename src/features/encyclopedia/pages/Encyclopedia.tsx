@@ -1,13 +1,14 @@
-import SpeciesCard from '../components/SpeciesCard';
 import ButtonRadio from '@components/ButtonRadio';
+import Spinner from '@components/Spinner';
+import TextField from '@components/TextField';
+import { H1 } from '@components/Typography';
+import { useToast } from '@context/toast/useToast';
 import { LayoutGrid, LayoutList } from 'lucide-react';
 import { useEffect, useState } from 'react';
+import SpeciesCard from '../components/SpeciesCard';
 import SpeciesListItem from '../components/SpeciesListItem';
 import { getAllSpecies } from '../services/getAllSpecies';
-import { useToast } from '@context/toast/useToast';
-import Spinner from '@components/Spinner';
-import { H1 } from '@components/Typography';
-import TextField from '@components/TextField';
+import type { Species } from '../types/species';
 
 export default function Encyclopedia() {
   const [selectedIndex, setSelectedIndex] = useState(0);
@@ -15,16 +16,7 @@ export default function Encyclopedia() {
     { Icon: LayoutGrid, id: 'grid', label: 'Grid view' },
     { Icon: LayoutList, id: 'list', label: 'List view' },
   ];
-  const [species, setSpecies] = useState<
-    {
-      id: string;
-      family: string;
-      commonName: string;
-      description: string;
-      tags: string[];
-      image: string;
-    }[]
-  >([]);
+  const [species, setSpecies] = useState<Species[]>([]);
   const [loading, setLoading] = useState(true);
   const { showError } = useToast();
   const [searchQuery, setSearchQuery] = useState('');
