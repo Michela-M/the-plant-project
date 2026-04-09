@@ -13,11 +13,18 @@ export default function usePlantDetails() {
   const { id } = useParams();
 
   useEffect(() => {
+    if (!id) {
+      setPlantDetails(null);
+      setLoading(false);
+      return;
+    }
+
     async function fetchPlant() {
-      if (!id) return;
+      setLoading(true);
+      setPlantDetails(null);
 
       try {
-        const details = await getPlantDetails(id, user?.id || '');
+        const details = await getPlantDetails(id!, user?.id || '');
         setPlantDetails(details);
       } catch (error) {
         showError(

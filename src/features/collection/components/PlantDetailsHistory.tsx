@@ -7,6 +7,7 @@ import Spinner from '@components/Spinner';
 import { H2, H3, Headline } from '@components/Typography';
 import { useMemo } from 'react';
 import useCareHistory from '../hooks/useCareHistory';
+import type { CareEntry } from '../type/careType';
 
 function getCareTypeIcon(careType: string) {
   switch (careType) {
@@ -42,20 +43,21 @@ export default function PlantDetailsHistory({
   const { careHistory, loading } = useCareHistory(plantId);
 
   const groupedCareHistory = useMemo(() => {
-    return careHistory.reduce<
-      Array<{ title: string; entries: typeof careHistory }>
-    >((groups, entry) => {
-      const title = entry.date.toLocaleDateString();
-      const existingGroup = groups.find((group) => group.title === title);
+    return careHistory.reduce<Array<{ title: string; entries: CareEntry[] }>>(
+      (groups, entry) => {
+        const title = entry.date.toLocaleDateString();
+        const existingGroup = groups.find((group) => group.title === title);
 
-      if (existingGroup) {
-        existingGroup.entries.push(entry);
-      } else {
-        groups.push({ title, entries: [entry] });
-      }
+        if (existingGroup) {
+          existingGroup.entries.push(entry);
+        } else {
+          groups.push({ title, entries: [entry] });
+        }
 
-      return groups;
-    }, []);
+        return groups;
+      },
+      []
+    );
   }, [careHistory]);
 
   if (loading) {
@@ -89,12 +91,7 @@ export default function PlantDetailsHistory({
 function CareEntry({
   entry,
 }: Readonly<{
-  entry: {
-    date: Date;
-    careType: string;
-    notes: string;
-    otherCareType?: string;
-  };
+  entry: CareEntry;
 }>) {
   return (
     <div className="flex flex-row px-3 gap-3 items-center">
