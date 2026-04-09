@@ -1,25 +1,22 @@
-import { useEffect, useState } from 'react';
-import { useNavigate, useParams } from 'react-router-dom';
-import { useFormik } from 'formik';
-import * as Yup from 'yup';
-import { imageValidation } from '@utils/imageValidation';
-
 import Button from '@components/Button';
-import TextField from '@components/TextField';
-import { Callout, H1 } from '@components/Typography';
-
-import { getPlantDetails } from '../services/getPlantDetails';
-import { updatePlant } from '../services/updatePlant';
-import { uploadPlantImage } from '../services/uploadPlantImage';
-import ImagePicker from '@components/ImagePicker';
-
-import { useToast } from '@context/toast/useToast';
-import Spinner from '@components/Spinner';
-import { useAuth } from '@context/auth/useAuth';
-import updateWateringDates from '../utils/updateWateringDates';
 import ComboBox from '@components/ComboBox';
 import type { ComboBoxOption } from '@components/ComboBox/types';
-import { getAllSpecies } from '@features/encyclopedia/services/getAllSpecies';
+import ImagePicker from '@components/ImagePicker';
+import Spinner from '@components/Spinner';
+import TextField from '@components/TextField';
+import { Callout, H1 } from '@components/Typography';
+import { useAuth } from '@context/auth/useAuth';
+import { useToast } from '@context/toast/useToast';
+import useSpecies from '@features/encyclopedia/hooks/useSpecies';
+import { imageValidation } from '@utils/imageValidation';
+import { useFormik } from 'formik';
+import { useEffect, useState } from 'react';
+import { useNavigate, useParams } from 'react-router-dom';
+import * as Yup from 'yup';
+import usePlantDetails from '../hooks/usePlantDetails';
+import { updatePlant } from '../services/updatePlant';
+import { uploadPlantImage } from '../services/uploadPlantImage';
+import updateWateringDates from '../utils/updateWateringDates';
 
 const editPlantValidationSchema = Yup.object({
   name: Yup.string().required('Name is required'),
@@ -30,73 +27,24 @@ const editPlantValidationSchema = Yup.object({
   notes: Yup.string(),
 });
 
-type PlantDetails = {
-  id: string;
-  name: string;
-  speciesName: string;
-  speciesId: string | null;
-  wateringFrequency: number;
-  notes: string;
-  creationDate: Date | null;
-  imageUrl: string | null;
-};
-
 export default function EditPlant() {
   const navigate = useNavigate();
   const { id } = useParams();
   const { showError, showSuccess } = useToast();
   const { user } = useAuth();
 
-  const [plantDetails, setPlantDetails] = useState<PlantDetails | null>(null);
+  const { plantDetails, loading } = usePlantDetails();
   const [file, setFile] = useState<File | null>(null);
   const [previewUrl, setPreviewUrl] = useState<string | null>(null);
-  const [loading, setLoading] = useState(true);
   const [loadingSave, setLoadingSave] = useState(false);
   const [error, setError] = useState<string | null>(null);
-  const [speciesOptions, setSpeciesOptions] = useState<ComboBoxOption[]>([]);
-
-  useEffect(() => {
-    const fetchSpecies = async () => {
-      try {
-        const speciesData = await getAllSpecies();
-        setSpeciesOptions(
-          speciesData.map((species) => ({
-            id: species.id,
-            name: species.commonName,
-            description: species.family,
-            image: species.image,
-          }))
-        );
-      } catch (error) {
-        showError(
-          'Error loading species',
-          error instanceof Error ? error.message : 'Unknown error'
-        );
-      }
-    };
-
-    fetchSpecies();
-  }, [showError]);
-
-  useEffect(() => {
-    async function fetchPlant() {
-      if (!id) return;
-
-      try {
-        const details = await getPlantDetails(id, user?.id || '');
-        setPlantDetails(details);
-      } catch (error) {
-        showError(
-          'Error loading plant details',
-          error instanceof Error ? error.message : 'Unknown error'
-        );
-      } finally {
-        setLoading(false);
-      }
-    }
-
-    fetchPlant();
-  }, [id, showError, user]);
+  const { species } = useSpecies();
+  const comboBoxOptions: ComboBoxOption[] = species.map((s) => ({
+    id: s.id,
+    name: s.commonName,
+    description: s.family,
+    imageUrl: s.image,
+  }));
 
   useEffect(() => {
     return () => {
@@ -218,7 +166,7 @@ export default function EditPlant() {
 
           <ComboBox
             label="Species"
-            options={speciesOptions}
+            options={comboBoxOptions}
             placeholder="Species"
             value={formik.values.speciesName}
             onChange={(value) => formik.setFieldValue('speciesName', value)}

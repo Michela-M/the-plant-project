@@ -1,14 +1,13 @@
-import { useEffect, useMemo, useState } from 'react';
-import { getCareHistory } from '../services/getCareHistory';
-import { useAuth } from '@context/auth/useAuth';
-import { useToast } from '@context/toast/useToast';
-import Spinner from '@components/Spinner';
-import IconTile from '@components/IconTile';
-import wateringCan from '@assets/icons/watering-can.svg?react';
 import fertilizerIcon from '@assets/icons/fertilizer.svg?react';
 import repotIcon from '@assets/icons/plant-pot.svg?react';
 import seedlings from '@assets/icons/seedlings.svg?react';
+import wateringCan from '@assets/icons/watering-can.svg?react';
+import IconTile from '@components/IconTile';
+import Spinner from '@components/Spinner';
 import { H2, H3, Headline } from '@components/Typography';
+import { useMemo } from 'react';
+import useCareHistory from '../hooks/useCareHistory';
+import type { CareEntry } from '../type/careType';
 
 function getCareTypeIcon(careType: string) {
   switch (careType) {
@@ -38,56 +37,27 @@ const careLabels: Record<string, string> = {
   other: 'Other',
 };
 
-export default function PlantDetailsHistory({ plantId }: { plantId: string }) {
-  const [careHistory, setCareHistory] = useState<
-    {
-      id: string;
-      date: Date;
-      careType: string;
-      notes: string;
-      otherCareType?: string;
-    }[]
-  >([]);
-  const { user } = useAuth();
-  const { showError } = useToast();
-  const [loading, setLoading] = useState(true);
-
-  useEffect(() => {
-    const fetchCareHistory = async () => {
-      setLoading(true);
-      try {
-        const historyData = await getCareHistory(plantId, user?.id || '');
-        setCareHistory(historyData);
-      } catch (error) {
-        showError(
-          'Error loading care history',
-          error instanceof Error ? error.message : 'Unknown error'
-        );
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    if (plantId) {
-      fetchCareHistory();
-    }
-  }, [plantId, showError, user?.id]);
+export default function PlantDetailsHistory({
+  plantId,
+}: Readonly<{ plantId: string }>) {
+  const { careHistory, loading } = useCareHistory(plantId);
 
   const groupedCareHistory = useMemo(() => {
-    return careHistory.reduce<
-      Array<{ title: string; entries: typeof careHistory }>
-    >((groups, entry) => {
-      const title = entry.date.toLocaleDateString();
-      const existingGroup = groups.find((group) => group.title === title);
+    return careHistory.reduce<Array<{ title: string; entries: CareEntry[] }>>(
+      (groups, entry) => {
+        const title = entry.date.toLocaleDateString();
+        const existingGroup = groups.find((group) => group.title === title);
 
-      if (existingGroup) {
-        existingGroup.entries.push(entry);
-      } else {
-        groups.push({ title, entries: [entry] });
-      }
+        if (existingGroup) {
+          existingGroup.entries.push(entry);
+        } else {
+          groups.push({ title, entries: [entry] });
+        }
 
-      return groups;
-    }, []);
+        return groups;
+      },
+      []
+    );
   }, [careHistory]);
 
   if (loading) {
@@ -120,14 +90,9 @@ export default function PlantDetailsHistory({ plantId }: { plantId: string }) {
 
 function CareEntry({
   entry,
-}: {
-  entry: {
-    date: Date;
-    careType: string;
-    notes: string;
-    otherCareType?: string;
-  };
-}) {
+}: Readonly<{
+  entry: CareEntry;
+}>) {
   return (
     <div className="flex flex-row px-3 gap-3 items-center">
       {getCareTypeIcon(entry.careType)}

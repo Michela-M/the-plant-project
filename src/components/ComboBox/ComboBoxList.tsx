@@ -27,9 +27,9 @@ export function ComboBoxList({
             onSelect(option);
           }}
         >
-          {option.image && (
+          {option.imageUrl && (
             <img
-              src={option.image}
+              src={option.imageUrl}
               alt={option.name}
               className="w-16 h-16 rounded-sm object-cover"
             />

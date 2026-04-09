@@ -144,7 +144,7 @@ describe('ComboBox', () => {
         id: '1',
         name: 'Option One',
         description: 'This is the first option',
-        image: 'https://via.placeholder.com/40',
+        imageUrl: 'https://via.placeholder.com/40',
       },
     ];
 
