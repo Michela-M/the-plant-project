@@ -1,13 +1,12 @@
-import SpeciesCard from '../components/SpeciesCard';
 import ButtonRadio from '@components/ButtonRadio';
-import { LayoutGrid, LayoutList } from 'lucide-react';
-import { useEffect, useState } from 'react';
-import SpeciesListItem from '../components/SpeciesListItem';
-import { getAllSpecies } from '../services/getAllSpecies';
-import { useToast } from '@context/toast/useToast';
 import Spinner from '@components/Spinner';
-import { H1 } from '@components/Typography';
 import TextField from '@components/TextField';
+import { H1 } from '@components/Typography';
+import { LayoutGrid, LayoutList } from 'lucide-react';
+import { useState } from 'react';
+import SpeciesCard from '../components/SpeciesCard';
+import SpeciesListItem from '../components/SpeciesListItem';
+import useSpecies from '../hooks/useSpecies';
 
 export default function Encyclopedia() {
   const [selectedIndex, setSelectedIndex] = useState(0);
@@ -15,18 +14,7 @@ export default function Encyclopedia() {
     { Icon: LayoutGrid, id: 'grid', label: 'Grid view' },
     { Icon: LayoutList, id: 'list', label: 'List view' },
   ];
-  const [species, setSpecies] = useState<
-    {
-      id: string;
-      family: string;
-      commonName: string;
-      description: string;
-      tags: string[];
-      image: string;
-    }[]
-  >([]);
-  const [loading, setLoading] = useState(true);
-  const { showError } = useToast();
+  const { species, loading } = useSpecies();
   const [searchQuery, setSearchQuery] = useState('');
 
   const normalizedQuery = searchQuery.trim().toLowerCase();
@@ -38,25 +26,6 @@ export default function Encyclopedia() {
     return matchesCommonName || matchesFamily;
   });
   const hasSearch = normalizedQuery.length > 0;
-
-  useEffect(() => {
-    const fetchSpecies = async () => {
-      setLoading(true);
-      try {
-        const speciesData = await getAllSpecies();
-        setSpecies(speciesData);
-      } catch (error) {
-        showError(
-          'Error loading species',
-          error instanceof Error ? error.message : 'Unknown error'
-        );
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    fetchSpecies();
-  }, [showError]);
 
   if (loading) {
     return <Spinner label="Loading species..." />;

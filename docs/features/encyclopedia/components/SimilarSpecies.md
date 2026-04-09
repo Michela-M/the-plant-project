@@ -12,8 +12,8 @@ The **SimilarSpecies** component renders a linked preview card for one related s
 
 ## Behavior Notes
 
-- On mount (and when `speciesId` changes), calls `getSpeciesDetails(speciesId)`.
-- If `speciesId` is empty, fetch is skipped.
+- On mount (and when `speciesId` changes), the component uses the `useSpeciesDetails` hook to fetch species details by ID.
+- If `speciesId` is empty, fetch is skipped (handled by the hook).
 - On success, renders fetched values:
   - image (`similarSpecies.image`)
   - family (`similarSpecies.family`)
@@ -23,8 +23,8 @@ The **SimilarSpecies** component renders a linked preview card for one related s
   - image placeholder URL
   - `Unknown Family`
   - `Unknown`
-  - placeholder alt text generated from fetched data: `No photo available`
-- On fetch failure, shows toast error via `showError`.
+  - placeholder alt text: `No photo available`
+- On fetch failure, shows toast error via `showError` (from the toast context).
 - Entire card is wrapped in a route link to `/species/{speciesId}`.
 
 ## Accessibility Notes

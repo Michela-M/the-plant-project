@@ -1,6 +1,6 @@
-import { describe, it, expect, vi, beforeEach } from 'vitest';
 import { render, screen, waitFor } from '@testing-library/react';
 import { MemoryRouter } from 'react-router-dom';
+import { beforeEach, describe, expect, it, vi } from 'vitest';
 import SimilarSpecies from './SimilarSpecies';
 
 const { mockGetSpeciesDetails, mockShowError } = vi.hoisted(() => ({
@@ -102,7 +102,10 @@ describe('SimilarSpecies', () => {
     );
 
     await waitFor(() => {
-      expect(mockShowError).toHaveBeenCalledWith('Firestore error');
+      expect(mockShowError).toHaveBeenCalledWith(
+        'Error loading species details',
+        'Firestore error'
+      );
     });
   });
 });

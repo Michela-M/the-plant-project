@@ -9,46 +9,34 @@ import SpeciesDetailsMainContent from '../components/SpeciesDetailsMainContent';
 import SpeciesDetailsSidebar, {
   type UserPlant,
 } from '../components/SpeciesDetailsSidebar';
-import { getSpeciesDetails } from '../services/getSpeciesDetails';
+import useSpeciesDetails from '../hooks/useSpeciesDetails';
 import { getUserPlants } from '../services/getUserPlants';
-import type { SpeciesDetailsData } from '../types/speciesDetails';
 
 export default function SpeciesDetails() {
   const { id } = useParams();
   const { showError } = useToast();
-  const [speciesDetails, setSpeciesDetails] =
-    useState<SpeciesDetailsData | null>(null);
-  const [loading, setLoading] = useState(true);
+  const { speciesDetails, loading } = useSpeciesDetails(id);
   const { user } = useAuth();
   const [userPlants, setUserPlants] = useState<UserPlant[]>([]);
 
   useEffect(() => {
-    const fetchSpeciesDetails = async () => {
-      if (!id) {
-        setLoading(false);
+    const fetchUserPlants = async () => {
+      if (!id || !user) {
+        setUserPlants([]);
         return;
       }
-      setLoading(true);
       try {
-        const details = await getSpeciesDetails(id);
-        setSpeciesDetails(details);
-        if (user) {
-          const temp = await getUserPlants(user.id, id);
-          setUserPlants(temp);
-        } else {
-          setUserPlants([]);
-        }
+        const temp = await getUserPlants(user.id, id);
+        setUserPlants(temp);
       } catch (error) {
         showError(
-          'Error loading species details',
+          'Error loading user plants',
           error instanceof Error ? error.message : 'Unknown error'
         );
-      } finally {
-        setLoading(false);
       }
     };
 
-    fetchSpeciesDetails();
+    fetchUserPlants();
   }, [id, showError, user]);
 
   if (loading) {

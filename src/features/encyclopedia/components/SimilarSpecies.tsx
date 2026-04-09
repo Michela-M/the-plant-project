@@ -1,30 +1,12 @@
-import { useEffect } from 'react';
-import { getSpeciesDetails } from '../services/getSpeciesDetails';
-import { useState } from 'react';
-import { useToast } from '@context/toast/useToast';
-import { Link } from 'react-router-dom';
 import Tag from '@components/Tag';
-import type { SpeciesDetailsData } from '../types/speciesDetails';
 import { Callout } from '@components/Typography';
+import { Link } from 'react-router-dom';
+import useSpeciesDetails from '../hooks/useSpeciesDetails';
 
-export default function SimilarSpecies({ speciesId }: { speciesId: string }) {
-  const [similarSpecies, setSimilarSpecies] =
-    useState<SpeciesDetailsData | null>(null);
-  const { showError } = useToast();
-
-  useEffect(() => {
-    const fetchSimilarSpecies = async () => {
-      if (!speciesId) return;
-      try {
-        const speciesDetails = await getSpeciesDetails(speciesId);
-        setSimilarSpecies(speciesDetails);
-      } catch (error) {
-        showError(error instanceof Error ? error.message : 'Unknown error');
-      }
-    };
-
-    fetchSimilarSpecies();
-  }, [speciesId, showError]);
+export default function SimilarSpecies({
+  speciesId,
+}: Readonly<{ speciesId: string }>) {
+  const { speciesDetails: similarSpecies } = useSpeciesDetails(speciesId);
 
   return (
     <Link to={`/species/${speciesId}`}>

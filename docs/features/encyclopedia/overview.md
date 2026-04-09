@@ -32,7 +32,7 @@ This feature currently includes:
 
 1. User opens the encyclopedia page.
 2. Default mode is grid view.
-3. Page calls `getAllSpecies()` to load species from Firestore.
+3. Page uses the `useSpecies` custom hook to load species from Firestore (which internally calls `getAllSpecies()`).
 4. Species render as cards or list items based on selected view mode.
 
 ### Toggle View Mode
@@ -52,7 +52,7 @@ This feature currently includes:
 
 1. User clicks a species card or list item.
 2. App navigates to `/species/:id`.
-3. Details page calls `getSpeciesDetails(id)`.
+3. Details page uses the `useSpeciesDetails` hook to fetch species details by ID (the hook internally calls `getSpeciesDetails(id)`).
 4. Page renders:
    - `SpeciesDetailsHeader`
    - `SpeciesDetailsMainContent`
@@ -82,8 +82,8 @@ This feature currently includes:
 ## Data Source (Current State)
 
 - Data is loaded from Firestore (`species` collection).
-- Browse page uses `getAllSpecies()` with `orderBy('commonName', 'asc')`.
-- Details page and similar-species cards use `getSpeciesDetails(speciesId)`.
+- Browse page uses the `useSpecies` hook (which calls `getAllSpecies()` with `orderBy('commonName', 'asc')`).
+- Details page and similar-species cards use the `useSpeciesDetails` hook to load species detail data.
 - Missing field values are normalized to safe defaults in service mapping.
 
 ## Dependencies
@@ -100,7 +100,7 @@ This feature currently includes:
 
 - Browse fetch errors call `showError('Error loading species', details)`.
 - Species-details fetch errors call `showError('Error loading species details', details)`.
-- Similar-species fetch errors call `showError(message)`.
+- Similar-species fetch errors call `showError('Error loading similar species', details)`.
 - Fallback values still protect UI rendering when data fields are missing.
 
 ## Current Limitations
