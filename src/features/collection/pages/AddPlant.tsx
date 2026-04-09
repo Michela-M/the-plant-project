@@ -1,17 +1,17 @@
-import { useFormik } from 'formik';
-import { useNavigate } from 'react-router-dom';
-import * as Yup from 'yup';
 import Button from '@components/Button';
-import TextField from '@components/TextField';
-import { useToast } from '@context/toast/useToast';
-import { addPlant } from '../services/addPlant';
-import { useEffect, useState } from 'react';
-import { useAuth } from '@context/auth/useAuth';
-import { H1 } from '@components/Typography';
-import { calculateNextWateringDate } from '../utils/wateringUtils';
 import ComboBox from '@components/ComboBox';
 import type { ComboBoxOption } from '@components/ComboBox/types';
-import { getAllSpecies } from '@features/encyclopedia/services/getAllSpecies';
+import TextField from '@components/TextField';
+import { H1 } from '@components/Typography';
+import { useAuth } from '@context/auth/useAuth';
+import { useToast } from '@context/toast/useToast';
+import useSpecies from '@features/encyclopedia/hooks/useSpecies';
+import { useFormik } from 'formik';
+import { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
+import * as Yup from 'yup';
+import { addPlant } from '../services/addPlant';
+import { calculateNextWateringDate } from '../utils/wateringUtils';
 
 const addPlantValidationSchema = Yup.object({
   name: Yup.string().required('Name is required'),
@@ -29,31 +29,14 @@ export default function AddPlant() {
   const navigate = useNavigate();
   const { showSuccess, showError } = useToast();
   const [loading, setLoading] = useState(false);
-  const [speciesOptions, setSpeciesOptions] = useState<ComboBoxOption[]>([]);
   const { user } = useAuth();
-
-  useEffect(() => {
-    const fetchSpecies = async () => {
-      try {
-        const speciesData = await getAllSpecies();
-        setSpeciesOptions(
-          speciesData.map((species) => ({
-            id: species.id,
-            name: species.commonName,
-            description: species.family,
-            image: species.image || '/images/placeholder.jpg',
-          }))
-        );
-      } catch (error) {
-        showError(
-          'Error loading species',
-          error instanceof Error ? error.message : 'Unknown error'
-        );
-      }
-    };
-
-    fetchSpecies();
-  }, [showError]);
+  const { species } = useSpecies();
+  const comboBoxOptions: ComboBoxOption[] = species.map((s) => ({
+    id: s.id,
+    name: s.commonName,
+    description: s.family,
+    imageUrl: s.image,
+  }));
 
   const formik = useFormik({
     initialValues: {
@@ -126,7 +109,7 @@ export default function AddPlant() {
         />
         <ComboBox
           label="Species"
-          options={speciesOptions}
+          options={comboBoxOptions}
           placeholder="Species"
           value={formik.values.species}
           onChange={(value) => formik.setFieldValue('species', value)}

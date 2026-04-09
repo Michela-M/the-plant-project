@@ -1,53 +1,13 @@
-import { useEffect, useState } from 'react';
-import { useParams } from 'react-router-dom';
-import Link from '@components/Link';
-import { getPlantDetails } from '../services/getPlantDetails';
-import PlantDetailsHeader from '../components/PlantDetailsHeader';
 import ImagePreview from '@components/ImagePreview';
-import PlantDetailsSchedule from '../components/PlantDetailsSchedule';
-import { useToast } from '@context/toast/useToast';
+import Link from '@components/Link';
 import Spinner from '@components/Spinner';
-import { useAuth } from '@context/auth/useAuth';
+import PlantDetailsHeader from '../components/PlantDetailsHeader';
 import PlantDetailsHistory from '../components/PlantDetailsHistory';
+import PlantDetailsSchedule from '../components/PlantDetailsSchedule';
+import usePlantDetails from '../hooks/usePlantDetails';
 
 export default function PlantDetails() {
-  const { id } = useParams();
-  const { user } = useAuth();
-  const { showError } = useToast();
-  const [plantDetails, setPlantDetails] = useState<{
-    id: string;
-    name: string;
-    speciesId: string | null;
-    speciesName: string;
-    wateringFrequency: number;
-    lastWateredDate: Date | null;
-    notes: string;
-    creationDate: Date | null;
-    imageUrl: string | null;
-    trackWatering: boolean;
-  } | null>(null);
-
-  const [loading, setLoading] = useState(true);
-
-  useEffect(() => {
-    const fetchPlantDetails = async () => {
-      if (!id) return;
-      setLoading(true);
-      try {
-        const details = await getPlantDetails(id, user?.id || '');
-        setPlantDetails(details);
-      } catch (error) {
-        showError(
-          'Error loading plant details',
-          error instanceof Error ? error.message : 'Unknown error'
-        );
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    fetchPlantDetails();
-  }, [id, showError, user?.id]);
+  const { plantDetails, loading, setPlantDetails } = usePlantDetails();
 
   if (loading) {
     return <Spinner label="Loading plant details..." />;
