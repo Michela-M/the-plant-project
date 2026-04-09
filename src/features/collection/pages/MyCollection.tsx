@@ -1,56 +1,26 @@
 import Button from '@components/Button';
-import PlantCard from '../components/PlantCard';
-import { useEffect, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
-import { getAllPlants } from '../services/getAllPlants';
-import { useToast } from '@context/toast/useToast';
 import Spinner from '@components/Spinner';
-import { useAuth } from '@context/auth/useAuth';
-import { H1 } from '@components/Typography';
 import TextField from '@components/TextField';
+import { H1 } from '@components/Typography';
+import { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
+import PlantCard from '../components/PlantCard';
+import useAllPlants from '../hooks/useAllPlants';
 
 export default function MyCollection() {
-  const [plants, setPlants] = useState<
-    {
-      id: string;
-      name: string;
-      speciesName: string;
-      imageUrl?: string | null;
-    }[]
-  >([]);
-  const { showError } = useToast();
+  const { plants, loading } = useAllPlants();
   const navigate = useNavigate();
-  const [loading, setLoading] = useState(true);
-  const { user } = useAuth();
   const [searchQuery, setSearchQuery] = useState('');
 
   const normalizedQuery = searchQuery.trim().toLowerCase();
   const filteredPlants = plants.filter((plant) => {
     const matchesName = plant.name.toLowerCase().includes(normalizedQuery);
     const matchesSpecies = plant.speciesName
-      .toLowerCase()
+      ?.toLowerCase()
       .includes(normalizedQuery);
     return matchesName || matchesSpecies;
   });
   const hasSearch = normalizedQuery.length > 0;
-
-  useEffect(() => {
-    const fetchPlants = async () => {
-      setLoading(true);
-      try {
-        const plantsData = await getAllPlants(user?.id || '');
-        setPlants(plantsData);
-      } catch (error) {
-        showError(
-          'Error loading plants',
-          error instanceof Error ? error.message : 'Unknown error'
-        );
-      } finally {
-        setLoading(false);
-      }
-    };
-    fetchPlants();
-  }, [showError, user]);
 
   if (loading) {
     return <Spinner label="Loading plants..." />;

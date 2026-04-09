@@ -1,4 +1,5 @@
 import ComboBox from '@components/ComboBox';
+import type { ComboBoxOption } from '@components/ComboBox/types';
 import Modal from '@components/Modal';
 import RadioGroup, { RadioButton } from '@components/Radio';
 import Spinner from '@components/Spinner';
@@ -6,20 +7,12 @@ import TextField from '@components/TextField';
 import { useAuth } from '@context/auth/useAuth';
 import { useToast } from '@context/toast/useToast';
 import { addCareEntry } from '@features/collection/services/addCareEntry';
-import { getAllPlants } from '@features/collection/services/getAllPlants';
 import combineDateWithCurrentTime from '@utils/combineDateWithCurrentTime';
 import getLocalDateInputValue from '@utils/getLocalDateInputValue';
 import { useFormik } from 'formik';
-import { useEffect, useState } from 'react';
 import * as Yup from 'yup';
+import useAllPlants from '../hooks/useAllPlants';
 import updateWateringDates from '../utils/updateWateringDates';
-
-type PlantOption = {
-  id: string;
-  name: string;
-  description?: string;
-  image?: string;
-};
 
 export default function CareModal({
   setShowCareModal,
@@ -28,10 +21,15 @@ export default function CareModal({
   setShowCareModal: (show: boolean) => void;
   plantId?: string;
 }>) {
-  const [plants, setPlants] = useState<PlantOption[]>([]);
-  const [loadingPlants, setLoadingPlants] = useState(!plantId);
+  const { plants, loading } = useAllPlants(plantId);
   const { showError, showSuccess } = useToast();
   const { user } = useAuth();
+  const comboBoxOptions: ComboBoxOption[] = plants.map((p) => ({
+    id: p.id,
+    name: p.name,
+    description: p.speciesName,
+    imageUrl: p.imageUrl,
+  }));
 
   const addCareValidationSchema = Yup.object().shape({
     date: Yup.date()
@@ -51,41 +49,6 @@ export default function CareModal({
       : Yup.string().required('Please select a plant'),
     notes: Yup.string(),
   });
-
-  useEffect(() => {
-    if (plantId) {
-      setLoadingPlants(false);
-      return;
-    }
-
-    if (!user?.id) {
-      setLoadingPlants(true);
-      return;
-    }
-
-    const fetchPlants = async () => {
-      setLoadingPlants(true);
-      try {
-        const plantsData = await getAllPlants(user.id);
-        setPlants(
-          plantsData.map((plant) => ({
-            id: plant.id,
-            name: plant.name,
-            description: plant.speciesName,
-            image: plant.imageUrl || '/images/placeholder.jpg',
-          }))
-        );
-      } catch (error) {
-        showError(
-          'Error loading plants',
-          error instanceof Error ? error.message : 'Unknown error'
-        );
-      } finally {
-        setLoadingPlants(false);
-      }
-    };
-    fetchPlants();
-  }, [plantId, showError, user?.id]);
 
   const formik = useFormik({
     initialValues: {
@@ -141,7 +104,7 @@ export default function CareModal({
       label="Create"
       onConfirm={formik.handleSubmit}
     >
-      {loadingPlants ? (
+      {loading ? (
         <Spinner label="Loading plants..." />
       ) : (
         <div className="flex flex-col gap-4">
@@ -158,7 +121,7 @@ export default function CareModal({
             <ComboBox
               label="Select plant"
               placeholder="Select plant"
-              options={plants}
+              options={comboBoxOptions}
               value={formik.values.plant}
               onBlur={() => formik.setFieldTouched('plant', true)}
               onSelectionChange={(selection) => {
