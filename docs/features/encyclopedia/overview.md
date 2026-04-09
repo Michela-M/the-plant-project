@@ -83,7 +83,7 @@ This feature currently includes:
 
 - Data is loaded from Firestore (`species` collection).
 - Browse page uses the `useSpecies` hook (which calls `getAllSpecies()` with `orderBy('commonName', 'asc')`).
-- Details page and similar-species cards use `getSpeciesDetails(speciesId)`.
+- Details page and similar-species cards use the `useSpeciesDetails` hook to load species detail data.
 - Missing field values are normalized to safe defaults in service mapping.
 
 ## Dependencies
@@ -100,7 +100,7 @@ This feature currently includes:
 
 - Browse fetch errors call `showError('Error loading species', details)`.
 - Species-details fetch errors call `showError('Error loading species details', details)`.
-- Similar-species fetch errors call `showError(message)`.
+- Similar-species fetch errors call `showError('Error loading similar species', details)`.
 - Fallback values still protect UI rendering when data fields are missing.
 
 ## Current Limitations

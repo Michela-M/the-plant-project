@@ -12,15 +12,21 @@ export default function useSpeciesDetails(id: string | undefined) {
   useEffect(() => {
     const fetchSpeciesDetails = async () => {
       if (!id) {
+        setSpeciesDetails(null);
         setLoading(false);
         return;
       }
+      setSpeciesDetails(null);
+      setLoading(true);
 
       try {
         const details = await getSpeciesDetails(id);
         setSpeciesDetails(details);
       } catch (error) {
-        showError(error instanceof Error ? error.message : 'Unknown error');
+        showError(
+          'Error loading species details',
+          error instanceof Error ? error.message : 'Unknown error'
+        );
       } finally {
         setLoading(false);
       }
