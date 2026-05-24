@@ -13,7 +13,7 @@
     "format": "prettier --write \"src/**/*.{ts,tsx,js,jsx,json,css,md}\""
   },
   "dependencies": {
-    "@tailwindcss/vite": "4.2.4",
+    "@tailwindcss/vite": "4.3.0",
     "clsx": "2.1.1",
     "firebase": "12.13.0",
     "formik": "2.4.9",
@@ -21,7 +21,7 @@
     "react": "19.2.5",
     "react-dom": "19.2.5",
     "react-router-dom": "7.15.1",
-    "tailwindcss": "4.2.4",
+    "tailwindcss": "4.3.0",
     "yup": "1.7.1"
   },
   "devDependencies": {
