@@ -17,6 +17,7 @@ type BaseTextFieldProps = {
   error?: string;
   name?: string;
   required?: boolean;
+  fullWidth?: boolean;
 };
 
 type TextFieldProps =
@@ -43,6 +44,7 @@ export default function TextField({
   error,
   name,
   required,
+  fullWidth = true,
 }: Readonly<TextFieldProps>) {
   const hasError = Boolean(error);
 
@@ -53,7 +55,7 @@ export default function TextField({
   const accessibleLabel = label ?? ariaLabel;
 
   const inputClasses = clsx(
-    'px-3 py-2 rounded-md w-full border placeholder-stone-400 transition-colors',
+    'px-3 py-2 rounded-md border placeholder-stone-400 transition-colors',
     'focus:outline-green-800 focus:outline-2 focus:outline-offset-2',
     {
       // normal
@@ -68,6 +70,10 @@ export default function TextField({
 
       // icon padding
       'pr-10': icon,
+    },
+    // full width
+    {
+      'w-full': fullWidth,
     }
   );
 
@@ -82,7 +88,7 @@ export default function TextField({
   });
 
   return (
-    <div className="flex flex-col w-full">
+    <div className="flex flex-col">
       {label && (
         <label htmlFor={inputId} className={labelClasses}>
           {label}

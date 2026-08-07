@@ -35,6 +35,7 @@ It is intended as a foundational form component for your UI.
 | `error`       | `string`                                                                  | No       | —        | Error message; when provided, the input is marked invalid and styled accordingly     |
 | `name`        | `string`                                                                  | No       | —        | Input name and `id`, used to associate the label                                     |
 | `required`    | `boolean`                                                                 | No       | —        | Displays a red asterisk next to the label when `true`                                |
+| `fullWidth`   | `boolean`                                                                 | No       | `true`   | When `false`, the input will not expand to fill the container width                 |
 
 \* Provide either `label` or `ariaLabel`.
 
@@ -102,6 +103,25 @@ It is intended as a foundational form component for your UI.
 />
 ```
 
+### Full-width input
+
+```jsx
+<TextField
+  label="Full name"
+  name="fullName"
+  fullWidth={true}
+/>
+```
+
+### Fixed-width input
+
+```jsx
+<TextField
+  label="Nickname"
+  name="nickname"
+  fullWidth={false}
+/>
+```
 ### With trailing icon
 
 ```tsx
