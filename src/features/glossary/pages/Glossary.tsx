@@ -1,3 +1,4 @@
+import Spinner from '@components/Spinner';
 import TextField from '@components/TextField';
 import { H1 } from '@components/Typography';
 import { useEffect, useState } from 'react';
@@ -16,19 +17,23 @@ export default function Glossary() {
     }[]
   >([]);
 
+  const [loading, setLoading] = useState(true);
   const [searchQuery, setSearchQuery] = useState('');
+
   const normalizedQuery = searchQuery.trim().toLowerCase();
-  const filteredTerms = terms.filter((term) => {
-    const matchesTerm = term.term.toLowerCase().includes(normalizedQuery);
-    return matchesTerm;
-  });
-  const filteredTermsByLetter = groupTermsByLetter(filteredTerms);
   const hasSearch = normalizedQuery.length > 0;
+
+  const filteredTerms = terms.filter((term) =>
+    term.term.toLowerCase().includes(normalizedQuery)
+  );
+
+  const filteredTermsByLetter = groupTermsByLetter(filteredTerms);
 
   useEffect(() => {
     const fetchTerms = async () => {
       const data = await getTerms();
       setTerms(data);
+      setLoading(false);
     };
 
     fetchTerms();
@@ -51,15 +56,36 @@ export default function Glossary() {
         This glossary defines key plant‑related terms used on the site. Use it
         as a reference whenever you need clarification.
       </p>
-      <AlphabetNav termsByLetter={filteredTermsByLetter} />
-      <div className="flex flex-col gap-4">
-        {Object.entries(filteredTermsByLetter).map(([letter, letterTerms]) => (
-          <div key={letter}>
-            <LetterSection letter={letter} terms={letterTerms} />
+
+      {/* LOADING */}
+      {loading && <Spinner label="Loading definitions..." />}
+
+      {/* NO DATA AT ALL */}
+      {!loading && terms.length === 0 && <p>No glossary terms available.</p>}
+
+      {/* SEARCH WITH NO RESULTS */}
+      {!loading && hasSearch && filteredTerms.length === 0 && (
+        <p>No results found for "{searchQuery}".</p>
+      )}
+
+      {/* NORMAL RENDER */}
+      {!loading && filteredTerms.length > 0 && (
+        <>
+          <AlphabetNav termsByLetter={filteredTermsByLetter} />
+
+          <div className="flex flex-col gap-4">
+            {Object.entries(filteredTermsByLetter).map(
+              ([letter, letterTerms]) => (
+                <div key={letter}>
+                  <LetterSection letter={letter} terms={letterTerms} />
+                </div>
+              )
+            )}
           </div>
-        ))}
-      </div>
-      <AlphabetNav termsByLetter={filteredTermsByLetter} />
+
+          <AlphabetNav termsByLetter={filteredTermsByLetter} />
+        </>
+      )}
     </div>
   );
 }
