@@ -1,11 +1,19 @@
-// This code will take the list of terms and group them by the first letter of the term, which can be taken from the id which is structure like this example: C-chlorophyll. The result will be a map where the key is the first letter and the value is an array of terms that start with that letter.
-
 export const groupTermsByLetter = (
-  terms: { id: string; term: string; definition: string }[]
+  terms: {
+    id: string;
+    term: string;
+    definition: string;
+    images: { url: string; caption: string; shape: '1:1' | '2:3' | '1:2' }[];
+  }[]
 ) => {
   const groupedTerms: Record<
     string,
-    { id: string; term: string; definition: string }[]
+    {
+      id: string;
+      term: string;
+      definition: string;
+      images: { url: string; caption: string; shape: '1:1' | '2:3' | '1:2' }[];
+    }[]
   > = {};
 
   terms.forEach((term) => {
