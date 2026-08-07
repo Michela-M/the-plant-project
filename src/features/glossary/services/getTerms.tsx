@@ -13,6 +13,7 @@ export const getTerms = async () => {
       id: doc.id,
       term: data.term ?? '',
       definition: data.definition ?? '',
+      images: data.images ?? [],
     };
   });
 };

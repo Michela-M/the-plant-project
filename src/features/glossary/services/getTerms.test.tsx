@@ -33,6 +33,13 @@ describe('getTerms', () => {
           term: 'Photosynthesis',
           definition:
             'The process by which green plants and some other organisms use sunlight to synthesize foods from carbon dioxide and water.',
+          images: [
+            {
+              url: 'https://example.com/image1.jpg',
+              caption: 'Example image 1',
+              shape: '1:1',
+            },
+          ],
         }),
         id: '1',
       },
@@ -56,6 +63,13 @@ describe('getTerms', () => {
         term: 'Photosynthesis',
         definition:
           'The process by which green plants and some other organisms use sunlight to synthesize foods from carbon dioxide and water.',
+        images: [
+          {
+            url: 'https://example.com/image1.jpg',
+            caption: 'Example image 1',
+            shape: '1:1',
+          },
+        ],
       },
     ]);
   });
@@ -93,7 +107,7 @@ describe('getTerms', () => {
       {
         data: () => ({
           term: 'Photosynthesis',
-          // definition is missing
+          // definition & images are missing
         }),
         id: '1',
       },
@@ -108,6 +122,7 @@ describe('getTerms', () => {
         id: '1',
         term: 'Photosynthesis',
         definition: '', // default to empty string
+        images: [], // default to empty array
       },
     ]);
   });
