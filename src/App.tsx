@@ -1,20 +1,21 @@
-import './App.css';
 import { BrowserRouter, Route, Routes } from 'react-router-dom';
+import './App.css';
 
-import AddPlant from '@features/collection/pages/AddPlant';
 import { AuthProvider } from '@context/auth/AuthContext';
-import Dashboard from '@features/dashboard/pages/Dashboard';
+import AddPlant from '@features/collection/pages/AddPlant';
 import EditPlant from '@features/collection/pages/EditPlant';
+import Dashboard from '@features/dashboard/pages/Dashboard';
 import Encyclopedia from '@features/encyclopedia/pages/Encyclopedia';
 
-import Login from '@features/auth/pages/Login';
-import MyCollection from '@features/collection/pages/MyCollection';
-import Navigation from './navigation/Navigation';
-import PlantDetails from '@features/collection/pages/PlantDetails';
-import ProtectedRoute from '@features/auth/components/ProtectedRoute';
-import SignUp from '@features/auth/pages/SignUp';
 import { ToastProvider } from '@context/toast/ToastContext';
+import ProtectedRoute from '@features/auth/components/ProtectedRoute';
+import Login from '@features/auth/pages/Login';
+import SignUp from '@features/auth/pages/SignUp';
+import MyCollection from '@features/collection/pages/MyCollection';
+import PlantDetails from '@features/collection/pages/PlantDetails';
 import SpeciesDetails from '@features/encyclopedia/pages/SpeciesDetails';
+import Glossary from '@features/glossary/pages/Glossary';
+import Navigation from './navigation/Navigation';
 
 function App() {
   return (
@@ -70,6 +71,7 @@ function App() {
                   </ProtectedRoute>
                 }
               />
+              <Route path="/glossary" element={<Glossary />} />
             </Routes>
           </BrowserRouter>
         </div>

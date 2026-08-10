@@ -1,6 +1,6 @@
 import { render, screen } from '@testing-library/react';
-import { describe, expect, it, vi } from 'vitest';
 import userEvent from '@testing-library/user-event';
+import { describe, expect, it, vi } from 'vitest';
 import TextField from './TextField';
 
 describe('TextField', () => {
@@ -116,6 +116,12 @@ describe('TextField', () => {
     const textarea = screen.getByLabelText('Description');
     expect(textarea).toBeInTheDocument();
     expect(textarea.tagName).toBe('TEXTAREA');
+  });
+
+  it('does not force full width when fullWidth is false', () => {
+    render(<TextField label="Name" name="name" fullWidth={false} />);
+
+    expect(screen.getByLabelText('Name')).not.toHaveClass('w-full');
   });
 
   it('calls onChange handler when input value changes', async () => {
